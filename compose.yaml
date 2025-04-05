@@ -1,0 +1,6 @@
+﻿services:
+  printbase.webapi:
+    image: printbase.webapi
+    build:
+      context: .
+      dockerfile: src/Printbase.WebApi/Dockerfile

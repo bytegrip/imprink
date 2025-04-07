@@ -1,15 +1,17 @@
 ﻿services:
   printbase.webapi:
+    container_name: printbase-webapi
     image: printbase.webapi
     build:
       context: .
       dockerfile: src/Printbase.WebApi/Dockerfile
     ports:
-      - "${WEBAPI_PORT}:80"
+      - "${WEBAPI_PORT}:8080"
     depends_on:
       - db
 
   webui:
+    container_name: printbase-webui
     build:
       context: ./webui
       dockerfile: Dockerfile
@@ -21,8 +23,8 @@
       - printbase.webapi
 
   db:
+    container_name: printbase-db
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
     environment:
       SA_PASSWORD: "${SA_PASSWORD}"
       ACCEPT_EULA: "Y"

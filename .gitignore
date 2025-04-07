@@ -12,3 +12,4 @@ riderModule.iml
 *.suo
 *.sln.docstates
 *.csproj.user
+.env

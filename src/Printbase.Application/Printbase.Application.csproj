@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <Folder Include="Abstractions\" />
+      <Folder Include="Common\" />
     </ItemGroup>
 
 </Project>

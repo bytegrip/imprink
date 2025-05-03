@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Printbase.Application\Printbase.Application.csproj" />
       <ProjectReference Include="..\Printbase.Infrastructure\Printbase.Infrastructure.csproj" />
     </ItemGroup>
 

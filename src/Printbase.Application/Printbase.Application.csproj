@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions\" />
+      <Folder Include="Products\Commands\" />
+      <Folder Include="Products\Queries\" />
     </ItemGroup>
 
     <ItemGroup>

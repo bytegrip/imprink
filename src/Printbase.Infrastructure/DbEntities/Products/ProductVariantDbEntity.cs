@@ -7,26 +7,26 @@ namespace Printbase.Infrastructure.DbEntities.Products;
 public class ProductVariantDbEntity
 {
     [Key, Required]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     
     [Required]
-    public Guid ProductId { get; set; }
+    public Guid ProductId { get; init; }
     
     [MaxLength(50)]
-    public string? Color { get; set; }
+    public string? Color { get; init; }
     
     [MaxLength(20)]
-    public string? Size { get; set; }
+    public string? Size { get; init; }
     
     [Column(TypeName = "decimal(18,2)"), Required]
-    public decimal Price { get; set; }
+    public decimal Price { get; init; }
     
     [Column(TypeName = "decimal(18,2)")]
-    public decimal? Discount { get; set; }
+    public decimal? Discount { get; init; }
     
     [Required]
-    public int Stock { get; set; }
+    public int Stock { get; init; }
     
     [ForeignKey(nameof(ProductId)), Required]
-    public required ProductDbEntity Product { get; set; }
+    public required ProductDbEntity Product { get; init; }
 }

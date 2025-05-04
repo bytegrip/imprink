@@ -32,10 +32,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(t => t.GroupId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<ProductDbEntity>()
-            .Property(p => p.Discount)
-            .HasPrecision(18, 2);
-        
         modelBuilder.Entity<ProductVariantDbEntity>()
             .Property(v => v.Price)
             .HasPrecision(18, 2);

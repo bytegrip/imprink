@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Printbase.Infrastructure\Printbase.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

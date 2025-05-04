@@ -12,80 +12,69 @@ public class ProductGroupRepository(ApplicationDbContext dbContext, IMapper mapp
     private readonly ApplicationDbContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
-    public async Task<ProductGroup?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<ProductGroup?> GetByIdAsync(Guid id, bool includeRelations = false, CancellationToken cancellationToken = default)
     {
-        var dbEntity = await _dbContext.Set<ProductGroupDbEntity>()
-            .Include(g => g.Types)
-            .FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
+        IQueryable<ProductGroupDbEntity> query = _dbContext.ProductGroups;
         
-        return dbEntity != null ? _mapper.Map<ProductGroup>(dbEntity) : null;
+        if (includeRelations) query = query.Include(g => g.Types);
+        
+        var dbEntity = await query.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
+        
+        return dbEntity == null ? null : _mapper.Map<ProductGroup>(dbEntity);
     }
 
-    public async Task<IEnumerable<ProductGroup>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ProductGroup>> GetAllAsync(bool includeRelations = false, CancellationToken cancellationToken = default)
     {
-        var dbEntities = await _dbContext.Set<ProductGroupDbEntity>()
-            .Include(g => g.Types)
-            .ToListAsync(cancellationToken);
+        IQueryable<ProductGroupDbEntity> query = _dbContext.ProductGroups;
+        
+        if (includeRelations) query = query.Include(g => g.Types);
+        
+        var dbEntities = await query.ToListAsync(cancellationToken);
         
         return _mapper.Map<IEnumerable<ProductGroup>>(dbEntities);
     }
 
+    public async Task<ProductGroup> AddAsync(ProductGroup group, CancellationToken cancellationToken = default)
+    {
+        var dbEntity = _mapper.Map<ProductGroupDbEntity>(group);
+        
+        _dbContext.ProductGroups.Add(dbEntity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        return _mapper.Map<ProductGroup>(dbEntity);
+    }
+
+    public async Task<ProductGroup> UpdateAsync(ProductGroup group, CancellationToken cancellationToken = default)
+    {
+        var existingEntity = await _dbContext.ProductGroups
+            .Include(g => g.Types)
+            .FirstOrDefaultAsync(g => g.Id == group.Id, cancellationToken);
+            
+        if (existingEntity == null) throw new KeyNotFoundException($"ProductGroup with ID {group.Id} not found");
+        
+        _mapper.Map(group, existingEntity);
+        
+        existingEntity.UpdatedAt = DateTime.UtcNow;
+        
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        return _mapper.Map<ProductGroup>(existingEntity);
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dbContext.ProductGroups.FindAsync([id], cancellationToken);
+        
+        if (entity == null) return false;
+        
+        _dbContext.ProductGroups.Remove(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        return true;
+    }
+
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<ProductGroupDbEntity>()
-            .AnyAsync(g => g.Id == id, cancellationToken);
-    }
-
-    public async Task AddAsync(ProductGroup productGroup, CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(productGroup);
-        
-        var dbEntity = _mapper.Map<ProductGroupDbEntity>(productGroup);
-        await _dbContext.Set<ProductGroupDbEntity>().AddAsync(dbEntity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task UpdateAsync(ProductGroup productGroup, CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(productGroup);
-        
-        var dbEntity = await _dbContext.Set<ProductGroupDbEntity>()
-            .Include(g => g.Types)
-            .FirstOrDefaultAsync(g => g.Id == productGroup.Id, cancellationToken);
-        
-        if (dbEntity == null)
-            throw new KeyNotFoundException($"ProductGroup with ID {productGroup.Id} not found");
-        
-        _mapper.Map(productGroup, dbEntity);
-        
-        var existingTypeIds = dbEntity.Types.Select(t => t.Id).ToList();
-        var updatedTypeIds = productGroup.Types.Select(t => t.Id).ToList();
-        
-        var typesToRemove = dbEntity.Types.Where(t => !updatedTypeIds.Contains(t.Id)).ToList();
-        foreach (var type in typesToRemove)
-        {
-            dbEntity.Types.Remove(type);
-        }
-        
-        foreach (var type in productGroup.Types)
-        {
-            if (existingTypeIds.Contains(type.Id)) continue;
-            var newType = _mapper.Map<ProductTypeDbEntity>(type);
-            dbEntity.Types.Add(newType);
-        }
-        
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        var dbEntity = await _dbContext.Set<ProductGroupDbEntity>()
-            .FindAsync([id], cancellationToken);
-        
-        if (dbEntity == null)
-            return;
-        
-        _dbContext.Set<ProductGroupDbEntity>().Remove(dbEntity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return await _dbContext.ProductGroups.AnyAsync(g => g.Id == id, cancellationToken);
     }
 }

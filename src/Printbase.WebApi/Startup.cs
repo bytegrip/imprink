@@ -7,7 +7,7 @@ using Printbase.Infrastructure.Repositories;
 
 namespace Printbase.WebApi;
 
-public class Startup
+public static class Startup
 {
     public static void ConfigureServices(WebApplicationBuilder builder)
     {
@@ -32,6 +32,22 @@ public class Startup
 
     public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        if (app is WebApplication application)
+        {
+            using var scope = application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            try
+            {
+                dbContext.Database.Migrate();
+                Console.WriteLine("Database migrations applied successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while applying migrations: {ex.Message}");
+            }
+        }
+        
+        
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Printbase.Application.Products.Commands.CreateProduct;
 using Printbase.Domain.Repositories;
 using Printbase.Infrastructure.Database;
 using Printbase.Infrastructure.Mapping;
@@ -18,7 +19,11 @@ public static class Startup
                 builder.Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddMediatR(cfg => {
+            cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly);
+                
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        });
 
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
@@ -26,7 +31,8 @@ public static class Startup
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
 
         services.AddAutoMapper(typeof(ProductMappingProfile).Assembly);
-
+        services.AddSwaggerGen();
+        services.AddControllers();
         services.AddOpenApi();
     }
 
@@ -47,13 +53,16 @@ public static class Startup
             }
         }
         
-        
         if (env.IsDevelopment())
         {
+            Console.WriteLine("Development environment variables applied");
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
         }
         else
         {
+            Console.WriteLine("Production environment variables applied");
             app.UseExceptionHandler("/Error");
             app.UseHsts();
             app.UseHttpsRedirection();

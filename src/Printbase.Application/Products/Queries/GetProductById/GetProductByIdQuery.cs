@@ -1,7 +1,7 @@
 using MediatR;
 using Printbase.Application.Products.Dtos;
 
-namespace Printbase.Application.Products.Queries;
+namespace Printbase.Application.Products.Queries.GetProductById;
 
 public class GetProductByIdQuery(Guid id, bool includeVariants = true) : IRequest<ProductDto?>
 {

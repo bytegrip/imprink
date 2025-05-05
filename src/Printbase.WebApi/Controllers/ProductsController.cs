@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Printbase.Application.Products.Commands.CreateProduct;
 using Printbase.Application.Products.Queries;
+using Printbase.Application.Products.Queries.GetProductById;
 
 namespace Printbase.WebApi.Controllers;
 
@@ -11,7 +12,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProductById(Guid id, [FromQuery] bool includeVariants = true)

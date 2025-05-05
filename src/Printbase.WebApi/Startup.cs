@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Printbase.Application.Products.Commands.CreateProduct;
 using Printbase.Domain.Repositories;
 using Printbase.Infrastructure.Database;
-using Printbase.Infrastructure.Mapping;
+using Printbase.Infrastructure.Mappings;
 using Printbase.Infrastructure.Repositories;
 
 namespace Printbase.WebApi;
@@ -21,7 +21,6 @@ public static class Startup
 
         services.AddMediatR(cfg => {
             cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly);
-                
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
 
@@ -30,7 +29,10 @@ public static class Startup
         services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
 
-        services.AddAutoMapper(typeof(ProductMappingProfile).Assembly);
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<ProductMappingProfile>();
+        }, typeof(ProductMappingProfile).Assembly);
         services.AddSwaggerGen();
         services.AddControllers();
         services.AddOpenApi();

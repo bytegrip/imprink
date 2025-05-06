@@ -8,7 +8,7 @@ public class ProductDto
     public Guid TypeId { get; set; }
     public string TypeName { get; set; } = string.Empty;
     public string GroupName { get; set; } = string.Empty;
-    public ICollection<ProductVariantDto>? Variants { get; set; }
+    public ICollection<ProductVariantDto> Variants { get; set; } = new List<ProductVariantDto>();
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public bool IsActive { get; set; }

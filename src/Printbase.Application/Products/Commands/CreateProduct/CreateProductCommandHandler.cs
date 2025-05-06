@@ -83,7 +83,7 @@ public class CreateProductCommandHandler(
         return productDto;
     }
 
-    private static string GenerateSku(string productName, string? color, string? size)
+    public static string GenerateSku(string productName, string? color, string? size)
     {
         var prefix = productName.Length >= 3 ? productName[..3].ToUpper() : productName.ToUpper();
         var colorPart = !string.IsNullOrEmpty(color) ? color[..Math.Min(3, color.Length)].ToUpper() : "XXX";

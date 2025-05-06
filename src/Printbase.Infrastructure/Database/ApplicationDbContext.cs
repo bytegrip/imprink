@@ -3,7 +3,7 @@ using Printbase.Infrastructure.DbEntities.Products;
 
 namespace Printbase.Infrastructure.Database;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>? options) : DbContext(options)
 {
     public DbSet<ProductDbEntity> Products { get; set; } = null!;
     public DbSet<ProductVariantDbEntity> ProductVariants { get; set; } = null!;

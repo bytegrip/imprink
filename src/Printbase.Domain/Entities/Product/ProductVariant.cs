@@ -1,4 +1,6 @@
-namespace Printbase.Domain.Entities;
+using Printbase.Domain.Entities.Orders;
+
+namespace Printbase.Domain.Entities.Product;
 
 public class ProductVariant : EntityBase
 {

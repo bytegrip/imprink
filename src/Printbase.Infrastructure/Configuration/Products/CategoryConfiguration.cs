@@ -1,9 +1,8 @@
-using Printbase.Domain.Entities;
-
-namespace Printbase.Infrastructure.Configuration;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Printbase.Domain.Entities.Product;
+
+namespace Printbase.Infrastructure.Configuration.Products;
 
 public class CategoryConfiguration : EntityBaseConfiguration<Category>
 {

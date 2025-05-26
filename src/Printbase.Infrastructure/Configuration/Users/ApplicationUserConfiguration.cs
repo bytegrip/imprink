@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Printbase.Domain.Entities.Users;
 
-namespace Printbase.Infrastructure.Configuration;
+namespace Printbase.Infrastructure.Configuration.Users;
 
 public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {

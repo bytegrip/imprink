@@ -1,4 +1,4 @@
-namespace Printbase.Domain.Entities;
+namespace Printbase.Domain.Entities.Users;
 
 public class Address : EntityBase
 {

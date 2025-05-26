@@ -1,4 +1,6 @@
-namespace Printbase.Domain.Entities;
+using Printbase.Domain.Entities.Product;
+
+namespace Printbase.Domain.Entities.Orders;
 
 public class OrderItem : EntityBase
 {
@@ -12,6 +14,6 @@ public class OrderItem : EntityBase
     public string CustomizationDescription { get; set; }
         
     public virtual Order Order { get; set; }
-    public virtual Product Product { get; set; }
+    public virtual Product.Product Product { get; set; }
     public virtual ProductVariant ProductVariant { get; set; }
 }

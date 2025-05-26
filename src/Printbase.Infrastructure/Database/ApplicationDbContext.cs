@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Printbase.Domain.Entities;
+using Printbase.Domain.Entities.Orders;
+using Printbase.Domain.Entities.Product;
 using Printbase.Domain.Entities.Users;
 using Printbase.Infrastructure.Configuration;
+using Printbase.Infrastructure.Configuration.Orders;
+using Printbase.Infrastructure.Configuration.Products;
+using Printbase.Infrastructure.Configuration.Users;
 
 namespace Printbase.Infrastructure.Database;
 

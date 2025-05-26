@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Printbase.Domain.Entities;
+using Printbase.Domain.Entities.Product;
 
-namespace Printbase.Infrastructure.Configuration;
+namespace Printbase.Infrastructure.Configuration.Products;
 
 public class ProductConfiguration : EntityBaseConfiguration<Product>
 {

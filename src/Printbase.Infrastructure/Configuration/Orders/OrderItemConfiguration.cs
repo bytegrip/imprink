@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Printbase.Domain.Entities;
+using Printbase.Domain.Entities.Orders;
 
-namespace Printbase.Infrastructure.Configuration;
+namespace Printbase.Infrastructure.Configuration.Orders;
 
 public class OrderItemConfiguration : EntityBaseConfiguration<OrderItem>
     {

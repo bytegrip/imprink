@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Printbase.Application.Products.Handlers;
 using Printbase.Domain.Entities.Users;
 using Printbase.Infrastructure.Database;
 
@@ -15,6 +16,11 @@ public static class Startup
             options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+        
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly);
+        });
         
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {

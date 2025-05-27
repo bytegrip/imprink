@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Printbase.Application;
 using Printbase.Application.Products.Handlers;
 using Printbase.Domain.Entities.Users;
+using Printbase.Domain.Repositories;
+using Printbase.Infrastructure;
 using Printbase.Infrastructure.Database;
+using Printbase.Infrastructure.Repositories;
 
 namespace Printbase.WebApi;
 
@@ -11,6 +15,11 @@ public static class Startup
     public static void ConfigureServices(WebApplicationBuilder builder)
     {
         var services = builder.Services;
+
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
@@ -67,6 +76,9 @@ public static class Startup
                 policy.RequireRole("Administrator", "ProductManager"))
                     .AddPolicy("CustomerPolicy", policy => 
                 policy.RequireRole("Customer", "Administrator", "OrderManager", "ProductManager"));
+
+        services.AddControllers();
+        services.AddSwaggerGen();
     }
 
     public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -86,18 +98,22 @@ public static class Startup
             }
         }
         
-        if (env.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            app.UseDeveloperExceptionPage();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Error");
-            app.UseHsts();
-            app.UseHttpsRedirection();
-        }
+        // if (env.IsDevelopment())
+        // {
+        //     app.UseSwagger();
+        //     app.UseSwaggerUI();
+        //     app.UseDeveloperExceptionPage();
+        // }
+        // else
+        // {
+        //     app.UseExceptionHandler("/Error");
+        //     app.UseHsts();
+        //     app.UseHttpsRedirection();
+        // }
+        
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.UseDeveloperExceptionPage();
 
         app.UseRouting();
         

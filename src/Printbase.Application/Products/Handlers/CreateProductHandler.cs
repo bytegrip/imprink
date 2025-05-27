@@ -26,7 +26,6 @@ public class CreateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<Crea
             };
 
             var createdProduct = await unitOfWork.ProductRepository.AddAsync(product, cancellationToken);
-            await unitOfWork.CommitTransactionAsync();
 
             var categoryDto = new CategoryDto
             {
@@ -40,6 +39,8 @@ public class CreateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<Crea
                 CreatedAt = createdProduct.Category.CreatedAt,
                 ModifiedAt = createdProduct.Category.ModifiedAt
             };
+            
+            await unitOfWork.CommitTransactionAsync();
 
             return new ProductDto
             {

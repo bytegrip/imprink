@@ -75,10 +75,12 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
 
         query = filterParameters.SortBy.ToLower() switch
         {
-            "price" => filterParameters.SortDirection.ToUpper() == "DESC" 
+            "price" => filterParameters.SortDirection.Equals("DESC"
+                    , StringComparison.CurrentCultureIgnoreCase)
                 ? query.OrderByDescending(p => p.BasePrice)
                 : query.OrderBy(p => p.BasePrice),
-            "name" => filterParameters.SortDirection.ToUpper() == "DESC"
+            "name" => filterParameters.SortDirection.Equals("DESC"
+                    , StringComparison.CurrentCultureIgnoreCase)
                 ? query.OrderByDescending(p => p.Name)
                 : query.OrderBy(p => p.Name),
             _ => query.OrderBy(p => p.Name)
@@ -123,9 +125,17 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         product.Id = Guid.NewGuid();
         product.CreatedAt = DateTime.UtcNow;
         product.ModifiedAt = DateTime.UtcNow;
-
+        
         context.Products.Add(product);
         await context.SaveChangesAsync(cancellationToken);
+        
+        if (product.CategoryId.HasValue)
+        {
+            await context.Entry(product)
+                .Reference(p => p.Category)
+                .LoadAsync(cancellationToken);
+        }
+        
         return product;
     }
 

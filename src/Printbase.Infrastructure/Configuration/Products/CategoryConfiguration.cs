@@ -59,8 +59,10 @@ public class CategoryConfiguration : EntityBaseConfiguration<Category>
                 Description = "Textile and fabric-based products",
                 IsActive = true,
                 SortOrder = 1,
-                CreatedAt = DateTime.UtcNow,
-                ModifiedAt = DateTime.UtcNow
+                CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                ModifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                CreatedBy = "system@printbase.com",
+                ModifiedBy = "system@printbase.com"
             },
             new Category
             {
@@ -69,8 +71,10 @@ public class CategoryConfiguration : EntityBaseConfiguration<Category>
                 Description = "Products for hard surface printing",
                 IsActive = true,
                 SortOrder = 2,
-                CreatedAt = DateTime.UtcNow,
-                ModifiedAt = DateTime.UtcNow
+                CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                ModifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                CreatedBy = "system@printbase.com",
+                ModifiedBy = "system@printbase.com"
             },
             new Category
             {
@@ -79,8 +83,10 @@ public class CategoryConfiguration : EntityBaseConfiguration<Category>
                 Description = "Paper-based printing products",
                 IsActive = true,
                 SortOrder = 3,
-                CreatedAt = DateTime.UtcNow,
-                ModifiedAt = DateTime.UtcNow
+                CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                ModifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                CreatedBy = "system@printbase.com",
+                ModifiedBy = "system@printbase.com"
             }
         );
     }

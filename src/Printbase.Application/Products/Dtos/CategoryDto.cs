@@ -9,6 +9,6 @@ public class CategoryDto
     public int SortOrder { get; set; }
     public bool IsActive { get; set; }
     public Guid? ParentCategoryId { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
 }

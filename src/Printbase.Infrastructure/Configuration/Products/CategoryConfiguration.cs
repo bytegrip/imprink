@@ -30,6 +30,18 @@ public class CategoryConfiguration : EntityBaseConfiguration<Category>
             
         builder.Property(c => c.ParentCategoryId)
             .IsRequired(false);
+        
+        builder.Property(c => c.CreatedAt)
+            .IsRequired(false);
+        
+        builder.Property(c => c.CreatedBy)
+            .IsRequired(false);
+        
+        builder.Property(c => c.ModifiedAt)
+            .IsRequired(false);
+        
+        builder.Property(c => c.ModifiedBy)
+            .IsRequired(false);
 
         builder.HasOne(c => c.ParentCategory)
             .WithMany(c => c.SubCategories)

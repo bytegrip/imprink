@@ -37,6 +37,18 @@ public class ProductVariantConfiguration : EntityBaseConfiguration<ProductVarian
         builder.Property(pv => pv.IsActive)
             .IsRequired()
             .HasDefaultValue(true);
+        
+        builder.Property(c => c.CreatedAt)
+            .IsRequired(false);
+        
+        builder.Property(c => c.CreatedBy)
+            .IsRequired(false);
+        
+        builder.Property(c => c.ModifiedAt)
+            .IsRequired(false);
+        
+        builder.Property(c => c.ModifiedBy)
+            .IsRequired(false);
 
         builder.HasOne(pv => pv.Product)
             .WithMany(p => p.ProductVariants)

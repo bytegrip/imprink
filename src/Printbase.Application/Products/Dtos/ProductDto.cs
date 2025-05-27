@@ -11,6 +11,6 @@ public class ProductDto
     public string? ImageUrl { get; set; }
     public Guid? CategoryId { get; set; }
     public CategoryDto? Category { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
 }

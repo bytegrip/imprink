@@ -12,6 +12,6 @@ public class ProductVariantDto
     public int StockQuantity { get; set; }
     public bool IsActive { get; set; }
     public ProductDto? Product { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
 }

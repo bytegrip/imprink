@@ -26,7 +26,7 @@ public class ProductVariantConfiguration : EntityBaseConfiguration<ProductVarian
         builder.Property(pv => pv.ImageUrl)
             .HasMaxLength(500);
                 
-        builder.Property(pv => pv.SKU)
+        builder.Property(pv => pv.Sku)
             .IsRequired()
             .HasMaxLength(100);
                 
@@ -46,7 +46,7 @@ public class ProductVariantConfiguration : EntityBaseConfiguration<ProductVarian
         builder.HasIndex(pv => pv.ProductId)
             .HasDatabaseName("IX_ProductVariant_ProductId");
                 
-        builder.HasIndex(pv => pv.SKU)
+        builder.HasIndex(pv => pv.Sku)
             .IsUnique()
             .HasDatabaseName("IX_ProductVariant_SKU");
                 

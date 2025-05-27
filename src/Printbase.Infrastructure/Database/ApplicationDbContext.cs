@@ -22,6 +22,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Address> Addresses { get; set; }
     public DbSet<OrderStatus> OrderStatuses { get; set; }
     public DbSet<ShippingStatus> ShippingStatuses { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,5 +39,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.ApplyConfiguration(new AddressConfiguration());
         modelBuilder.ApplyConfiguration(new OrderStatusConfiguration());
         modelBuilder.ApplyConfiguration(new ShippingStatusConfiguration());
+        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
     }
 }

@@ -4,15 +4,13 @@ namespace Printbase.Domain.Entities.Users;
 
 public class ApplicationRole : IdentityRole
 {
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public bool IsActive { get; set; }
         
-    public ApplicationRole() : base()
-    {
-    }
+    public ApplicationRole()
+    {}
         
     public ApplicationRole(string roleName) : base(roleName)
-    {
-    }
+    {}
 }

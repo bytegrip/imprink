@@ -2,13 +2,13 @@ namespace Printbase.Domain.Entities.Users;
 
 public class Address : EntityBase
 {
-    public string UserId { get; set; }
-    public string AddressType { get; set; }
-    public string Street { get; set; }
-    public string City { get; set; }
-    public string State { get; set; }
-    public string PostalCode { get; set; }
-    public string Country { get; set; }
-    public bool IsDefault { get; set; }
-    public bool IsActive { get; set; }
+    public required string UserId { get; set; }
+    public required string AddressType { get; set; }
+    public required string Street { get; set; }
+    public required string City { get; set; }
+    public required string State { get; set; }
+    public required string PostalCode { get; set; }
+    public required string Country { get; set; }
+    public required bool IsDefault { get; set; }
+    public required bool IsActive { get; set; }
 }

@@ -1,6 +1,0 @@
-@Printbase.WebApi_HostAddress = http://localhost:5220
-
-GET {{Printbase.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

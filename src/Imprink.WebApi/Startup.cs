@@ -1,11 +1,9 @@
 using Imprink.Application;
 using Imprink.Application.Products.Handlers;
-using Imprink.Domain.Entities.Users;
 using Imprink.Domain.Repositories;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imprink.WebApi;
@@ -30,52 +28,6 @@ public static class Startup
         {
             cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly);
         });
-        
-        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-            {
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequiredUniqueChars = 1;
-
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = true;
-
-                options.SignIn.RequireConfirmedEmail = true;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
-            })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
-        
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-            options.LoginPath = "/Account/Login";
-            options.AccessDeniedPath = "/Account/AccessDenied";
-            options.SlidingExpiration = true;
-        });
-        
-        services.Configure<DataProtectionTokenProviderOptions>(options =>
-        {
-            options.TokenLifespan = TimeSpan.FromHours(24);
-        });
-        
-        services.AddAuthorizationBuilder()
-                    .AddPolicy("AdminPolicy", policy => 
-                policy.RequireRole("Administrator"))
-                    .AddPolicy("OrderManagementPolicy", policy => 
-                policy.RequireRole("Administrator", "OrderManager"))
-                    .AddPolicy("ProductManagementPolicy", policy => 
-                policy.RequireRole("Administrator", "ProductManager"))
-                    .AddPolicy("CustomerPolicy", policy => 
-                policy.RequireRole("Customer", "Administrator", "OrderManager", "ProductManager"));
 
         services.AddControllers();
         services.AddSwaggerGen();

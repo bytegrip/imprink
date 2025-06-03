@@ -45,11 +45,6 @@ public class AddressConfiguration : EntityBaseConfiguration<Address>
             .IsRequired()
             .HasDefaultValue(true);
 
-        builder.HasOne<ApplicationUser>()
-            .WithMany(u => u.Addresses)
-            .HasForeignKey(a => a.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.HasIndex(a => a.UserId)
             .HasDatabaseName("IX_Address_UserId");
                 

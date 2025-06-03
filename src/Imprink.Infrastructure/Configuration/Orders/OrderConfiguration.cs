@@ -35,11 +35,6 @@ public class OrderConfiguration : EntityBaseConfiguration<Order>
             builder.Property(o => o.Notes)
                 .HasMaxLength(1000);
 
-            builder.HasOne<ApplicationUser>()
-                .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.HasOne(o => o.OrderStatus)
                 .WithMany(os => os.Orders)
                 .HasForeignKey(o => o.OrderStatusId)

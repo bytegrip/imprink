@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Printbase.Infrastructure.Migrations
+namespace Imprink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,113 +22,7 @@ namespace Printbase.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.Order", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -213,7 +107,7 @@ namespace Printbase.Infrastructure.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.OrderAddress", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderAddress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,7 +178,7 @@ namespace Printbase.Infrastructure.Migrations
                     b.ToTable("OrderAddresses");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.OrderItem", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -365,7 +259,7 @@ namespace Printbase.Infrastructure.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.OrderStatus", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderStatus", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -406,7 +300,7 @@ namespace Printbase.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.ShippingStatus", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.ShippingStatus", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -447,7 +341,7 @@ namespace Printbase.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.Category", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -564,7 +458,7 @@ namespace Printbase.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.Product", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -648,7 +542,7 @@ namespace Printbase.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.ProductVariant", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.ProductVariant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -734,7 +628,7 @@ namespace Printbase.Infrastructure.Migrations
                     b.ToTable("ProductVariants");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Users.Address", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Users.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -827,254 +721,17 @@ namespace Printbase.Infrastructure.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Users.ApplicationRole", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsActive")
-                        .HasDatabaseName("IX_ApplicationRole_IsActive");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Full system access",
-                            IsActive = true,
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Standard customer access",
-                            IsActive = true,
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Manage orders and fulfillment",
-                            IsActive = true,
-                            Name = "OrderManager",
-                            NormalizedName = "ORDERMANAGER"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Manage products and inventory",
-                            IsActive = true,
-                            Name = "ProductManager",
-                            NormalizedName = "PRODUCTMANAGER"
-                        });
-                });
-
-            modelBuilder.Entity("Printbase.Domain.Entities.Users.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("LastLoginAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProfileImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.Order", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Orders.OrderStatus", "OrderStatus")
+                    b.HasOne("Imprink.Domain.Entities.Orders.OrderStatus", "OrderStatus")
                         .WithMany("Orders")
                         .HasForeignKey("OrderStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Printbase.Domain.Entities.Orders.ShippingStatus", "ShippingStatus")
+                    b.HasOne("Imprink.Domain.Entities.Orders.ShippingStatus", "ShippingStatus")
                         .WithMany("Orders")
                         .HasForeignKey("ShippingStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationUser", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1083,32 +740,32 @@ namespace Printbase.Infrastructure.Migrations
                     b.Navigation("ShippingStatus");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.OrderAddress", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderAddress", b =>
                 {
-                    b.HasOne("Printbase.Domain.Entities.Orders.Order", "Order")
+                    b.HasOne("Imprink.Domain.Entities.Orders.Order", "Order")
                         .WithOne("OrderAddress")
-                        .HasForeignKey("Printbase.Domain.Entities.Orders.OrderAddress", "OrderId")
+                        .HasForeignKey("Imprink.Domain.Entities.Orders.OrderAddress", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.OrderItem", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderItem", b =>
                 {
-                    b.HasOne("Printbase.Domain.Entities.Orders.Order", "Order")
+                    b.HasOne("Imprink.Domain.Entities.Orders.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Printbase.Domain.Entities.Product.Product", "Product")
+                    b.HasOne("Imprink.Domain.Entities.Product.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Printbase.Domain.Entities.Product.ProductVariant", "ProductVariant")
+                    b.HasOne("Imprink.Domain.Entities.Product.ProductVariant", "ProductVariant")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1120,9 +777,9 @@ namespace Printbase.Infrastructure.Migrations
                     b.Navigation("ProductVariant");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.Category", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.Category", b =>
                 {
-                    b.HasOne("Printbase.Domain.Entities.Product.Category", "ParentCategory")
+                    b.HasOne("Imprink.Domain.Entities.Product.Category", "ParentCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1130,9 +787,9 @@ namespace Printbase.Infrastructure.Migrations
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.Product", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.Product", b =>
                 {
-                    b.HasOne("Printbase.Domain.Entities.Product.Category", "Category")
+                    b.HasOne("Imprink.Domain.Entities.Product.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -1140,9 +797,9 @@ namespace Printbase.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.ProductVariant", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.ProductVariant", b =>
                 {
-                    b.HasOne("Printbase.Domain.Entities.Product.Product", "Product")
+                    b.HasOne("Imprink.Domain.Entities.Product.Product", "Product")
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1151,16 +808,7 @@ namespace Printbase.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Users.Address", b =>
-                {
-                    b.HasOne("Printbase.Domain.Entities.Users.ApplicationUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.Order", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
                 {
                     b.Navigation("OrderAddress")
                         .IsRequired();
@@ -1168,40 +816,33 @@ namespace Printbase.Infrastructure.Migrations
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.OrderStatus", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderStatus", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Orders.ShippingStatus", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Orders.ShippingStatus", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.Category", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.Category", b =>
                 {
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.Product", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.Product", b =>
                 {
                     b.Navigation("OrderItems");
 
                     b.Navigation("ProductVariants");
                 });
 
-            modelBuilder.Entity("Printbase.Domain.Entities.Product.ProductVariant", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Product.ProductVariant", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("Printbase.Domain.Entities.Users.ApplicationUser", b =>
-                {
-                    b.Navigation("Addresses");
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

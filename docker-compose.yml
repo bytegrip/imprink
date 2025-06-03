@@ -1,0 +1,43 @@
+services:
+  webapi:
+    build:
+      context: .
+      dockerfile: ./src/Imprink.WebApi/Dockerfile
+    expose:
+      - "80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Printbase;User Id=sa;Password=YourStrong(!)Password;Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;
+    depends_on:
+      - mssql
+
+  webui:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./webui:/app
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=development
+    command: "sh -c 'npm install && npm run dev'"
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourStrong(!)Password"
+      ACCEPT_EULA: "Y"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - webapi
+      - webui

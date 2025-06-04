@@ -1,10 +1,13 @@
+using System.Security.Claims;
 using Imprink.Application;
 using Imprink.Application.Products.Handlers;
 using Imprink.Domain.Repositories;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Imprink.WebApi;
 
@@ -28,6 +31,19 @@ public static class Startup
         {
             cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly);
         });
+        
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}/";
+                options.Audience = builder.Configuration["Auth0:Audience"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = ClaimTypes.NameIdentifier
+                };
+            });
+
+        builder.Services.AddAuthorization();
 
         services.AddControllers();
         services.AddSwaggerGen();

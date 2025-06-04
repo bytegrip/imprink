@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link rel="icon" href="https://i.ibb.co/gbthcbnP/logo-sm.png" type="image/png" />
+  <title>Sign In | Imprink</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.cdnfonts.com/css/scanno-hanley-pro-sans" rel="stylesheet">
+</head>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      background-image: url('https://i.ibb.co/BDSg5pD/vecteezy-abstract-arrows-ribbons-crowns-hearts-explosions-and-5891677.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(135deg, 
+        rgba(108, 92, 231, 0.4), 
+        rgba(0, 184, 148, 0.4)
+      );
+      z-index: 0;
+    }
+
+    .invisible {
+      display: none !important;
+    }
+
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+      padding: 0 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: clamp(20px, 5vw, 150px);
+    }
+
+    .logo-section {
+      flex: 0 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: slideLeft 1s ease-out;
+      position: relative;
+      z-index: 0;
+    }
+
+    .logo-section img {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .login-section {
+      flex: 0 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: slideRight 1s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-box {
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                  0 2px 8px rgba(0, 0, 0, 0.05),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                  0 0 20px rgba(108, 92, 231, 0.2),
+                  0 0 40px rgba(0, 184, 148, 0.1);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      min-width: 360px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .login-header h3 {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-size: 28px;
+      color: #2d3436;
+      margin: 15px 0 5px;
+      font-weight: 500;
+    }
+
+    .login-header h5 {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-size: 14px;
+      color: #636e72;
+      font-weight: 500;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+
+    .login-header img {
+      width: 80%;
+      animation: slideIn 0.8s ease-out forwards;
+      transform-origin: center;
+    }
+
+    .login-header .mobile-logo {
+      display: none;
+    }
+
+    #error-message {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      display: none;
+      white-space: break-spaces;
+    }
+
+    #success-message {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      display: none;
+      white-space: break-spaces;
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .divider {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 25px 0;
+      color: #636e72;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .divider::before {
+      margin-right: 15px;
+    }
+
+    .divider::after {
+      margin-left: 15px;
+    }
+
+    .social-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e0e0e0;
+      background: white;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .social-btn img {
+      width: 35px;
+      height: 35px;
+      object-fit: contain;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-google:hover {
+      background: #DB4437;
+      border-color: #DB4437;
+    }
+
+    .btn-github:hover {
+      background: #333;
+      border-color: #333;
+    }
+
+    .btn-facebook:hover {
+      background: #4267B2;
+      border-color: #4267B2;
+    }
+
+    .btn-linkedin:hover {
+      background: #0077B5;
+      border-color: #0077B5;
+    }
+
+    .btn-windows:hover {
+      background: #00A4EF;
+      border-color: #00A4EF;
+    }
+
+    #link-signup-login {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      cursor: pointer;
+      color: #6c5ce7;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    #link-signup-login:hover {
+      color: #5f4dd0;
+      text-decoration: none;
+    }
+
+    #btn-signup {
+      background-color: #00b894;
+      color: white;
+      border: none;
+    }
+
+    #btn-signup:hover {
+      background-color: #00a884;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 184, 148, 0.2);
+    }
+
+    .form-control {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 100%;
+      padding: 16px;
+      height: 40px;
+      border: 1.5px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      width: 100%;
+      font-size: 14px;
+      background-color: #fff;
+      color: #2d3436;
+    }
+
+    .form-control:focus {
+      border-color: #6c5ce7;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+    }
+
+    .form-control::placeholder {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: #b2bec3;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #2d3436;
+      font-size: 14px;
+      display: block;
+      letter-spacing: 0.3px;
+    }
+
+    .btn {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      height: auto;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background-color: #6c5ce7;
+      border: none;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #5f4dd0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+    }
+
+    @keyframes slideLeft {
+      0% {
+        transform: translateX(50%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideRight {
+      0% {
+        transform: translateX(-50%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .login-container {
+        flex-direction: column;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .logo-section {
+        display: none !important;
+      }
+      
+      .login-section {
+        width: 100%;
+        animation: none;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .login-box {
+        width: 100%;
+        max-width: 400px;
+        animation: none;
+        margin: 0 auto;
+      }
+
+      .login-header .mobile-logo {
+        display: block;
+        width: 80%;
+        margin: 0 auto 20px auto;
+      }
+    }
+
+    @keyframes slideUp {
+      0% {
+        transform: translateY(50px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    .forgot-password a {
+      font-family: 'Scanno Hanley Pro Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: #6c5ce7;
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .forgot-password a:hover {
+      color: #5f4dd0;
+      text-decoration: none;
+    }
+  </style>
+<body>
+  <div class="login-container">
+    <div class="logo-section">
+      <img src="https://i.ibb.co/0RK5CM5Q/logo-light.png" class="img-fluid"/>
+    </div>
+    <div class="login-section">
+      <div class="login-box">
+        <div class="login-header">
+          <img src="https://i.ibb.co/0RK5CM5Q/logo-light.png" class="img-fluid mobile-logo"/>
+          <h3>Welcome</h3>
+          <h5>PLEASE LOG IN</h5>
+        </div>
+        <div id="error-message" class="alert alert-danger"></div>
+        <div id="success-message" class="alert alert-success"></div>
+        <form onsubmit="return false;" method="post">
+          <div class="form-group">
+           <label for="name">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="name">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Enter your password">
+            <div class="forgot-password">
+              <a href="#" id="forgot-password-link">Forgot your password?</a>
+            </div>
+          </div>
+          <div class="captcha-container form-group"></div>
+          <button
+            type="submit"
+            id="btn-login"
+            class="btn btn-primary btn-block">
+              Log In
+          </button>
+           <button
+            type="button"
+            id="btn-signup"
+            class="btn btn-default btn-block invisible">
+              Sign Up
+          </button>
+          <div class="divider" id="divider">or continue with</div>
+          <div class="social-buttons" id="social-buttons">
+            <button
+              type="button"
+              id="btn-google"
+              class="social-btn btn-google"
+              title="Sign in with Google">
+                <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png" alt="Google">
+            </button>
+            <button
+              type="button"
+              id="btn-github"
+              class="social-btn btn-github"
+              title="Sign in with GitHub">
+                <img src="https://img.icons8.com/m_outlined/512/github.png" alt="GitHub">
+            </button>
+            <button
+              type="button"
+              id="btn-facebook"
+              class="social-btn btn-facebook"
+              title="Sign in with Facebook">
+                <img src="https://www.freeiconspng.com/uploads/facebook-png-icon-follow-us-facebook-1.png" alt="Facebook">
+            </button>
+            <button
+              type="button"
+              id="btn-linkedin"
+              class="social-btn btn-linkedin"
+              title="Sign in with LinkedIn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1024px-LinkedIn_icon.svg.png" alt="LinkedIn">
+            </button>
+            <button
+              type="button"
+              id="btn-windows"
+              class="social-btn btn-windows"
+              title="Sign in with Microsoft">
+                <img src="https://cdn-icons-png.freepik.com/256/11378/11378754.png?semt=ais_hybrid" alt="Microsoft">
+            </button>
+          </div>
+          <hr>
+          <div class="form-group">
+            <span id="login-signup-msg">Don't have an account?</span> <a id="link-signup-login"> Sign Up </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
+  <![endif]-->
+
+  <script src="https://cdn.auth0.com/js/auth0/9.28/auth0.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
+  <script>
+    function capitalizeFirstLetter(str) {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    window.addEventListener('load', function() {
+
+      var config = JSON.parse(
+        decodeURIComponent(escape(window.atob('@@config@@')))
+      );
+
+      var leeway = config.internalOptions.leeway;
+      if (leeway) {
+        var convertedLeeway = parseInt(leeway);
+
+        if (!isNaN(convertedLeeway)) {
+          config.internalOptions.leeway = convertedLeeway;
+        }
+      }
+
+      var params =  {
+        overrides: {
+          __tenant: config.auth0Tenant,
+          __token_issuer: config.authorizationServer.issuer
+        },
+        domain: config.auth0Domain,
+        clientID: config.clientID,
+        redirectUri: config.callbackURL,
+        responseType: 'code',
+        scope: config.internalOptions.scope,
+        _csrf: config.internalOptions._csrf,
+        state: config.internalOptions.state,
+        _intstate: config.internalOptions._intstate
+      };
+
+      var triggerCaptcha = null;
+      var signupCaptcha = null;
+      var webAuth = new auth0.WebAuth(params);
+      var databaseConnection = 'Username-Password-Authentication';
+      var captcha = webAuth.renderCaptcha(
+        document.querySelector('.captcha-container'),
+        null,
+        (error, payload) => {
+          if (payload) {
+            triggerCaptcha = payload.triggerCaptcha;
+          }
+        }
+      );
+
+      function login(e) {
+        e.preventDefault();
+        var button = this;
+        var username = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        button.disabled = true;
+
+        var request = () => {
+          webAuth.login({
+            realm: databaseConnection,
+            username: username,
+            password: password,
+            captcha: captcha.getValue()
+          }, function(err) {
+            if (err) displayError(err);
+            button.disabled = false;
+          });
+        };
+
+        if (triggerCaptcha) {
+          triggerCaptcha(request);
+        } else {
+          request();
+        }
+      }
+
+      function toggleSignupLogin(e) {
+        e.preventDefault();
+        var loginSignupLink = e.target;
+        var loginBtn = document.getElementById('btn-login');
+        var signupBtn = document.getElementById('btn-signup');
+        var msg = document.getElementById('login-signup-msg');
+        var socialButtons = document.getElementById('social-buttons');
+        var divider = document.getElementById('divider');
+        
+        loginBtn.classList.toggle('invisible');
+        signupBtn.classList.toggle('invisible');
+        socialButtons.classList.toggle('invisible');
+        divider.classList.toggle('invisible');
+
+        if (signupBtn.classList.contains('invisible')) {
+          loginSignupLink.innerHTML = "Sign Up";
+          msg.innerHTML = "Don't have an account?";
+        } else {
+          loginSignupLink.innerHTML = "Log In";
+          msg.innerHTML = "Already have an account?";
+        }
+
+        if (signupBtn.classList.contains('invisible')) {
+          captcha = webAuth.renderCaptcha(
+            document.querySelector('.captcha-container'),
+            null,
+            (error, payload) => {
+              if (payload) {
+                triggerCaptcha = payload.triggerCaptcha;
+              }
+            }
+          );
+        } else {
+          signupCaptcha = webAuth.renderSignupCaptcha(
+            document.querySelector('.captcha-container'),
+            null,
+            (error, payload) => {
+              if (payload) {
+                triggerCaptcha = payload.triggerCaptcha;
+              }
+            }
+          );
+        }
+      }
+
+      function signup() {
+        var button = this;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        button.disabled = true;
+
+        var request = () => {
+          webAuth.redirect.signupAndLogin({
+            connection: databaseConnection,
+            email: email,
+            password: password,
+            captcha: signupCaptcha.getValue()
+          }, function(err) {
+            if (err) displayError(err);
+            button.disabled = false;
+          });
+        };
+
+        if (triggerCaptcha) {
+          triggerCaptcha(request);
+        } else {
+          request();
+        }
+      }
+
+      function loginWithGoogle() {
+        webAuth.authorize({
+          connection: 'google-oauth2'
+        }, function(err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function loginWithGithub() {
+        webAuth.authorize({
+          connection: 'github'
+        }, function(err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function loginWithFacebook() {
+        webAuth.authorize({
+          connection: 'facebook'
+        }, function(err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function loginWithLinkedIn() {
+        webAuth.authorize({
+          connection: 'linkedin'
+        }, function(err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function loginWithWindows() {
+        webAuth.authorize({
+          connection: 'windowslive'
+        }, function(err) {
+          if (err) displayError(err);
+        });
+      }
+
+      function displayError(err) {
+        captcha.reload();
+        var successMessage = document.getElementById('success-message');
+        successMessage.style.display = 'none';
+        var errorMessage = document.getElementById('error-message');
+        errorMessage.innerText = capitalizeFirstLetter(err.policy) || capitalizeFirstLetter(err.description);
+        errorMessage.style.display = 'block';
+      }
+
+      function displaySuccess(text) {
+        captcha.reload();
+        var errorMessage = document.getElementById('error-message');
+        errorMessage.style.display = 'none';
+        var successMessage = document.getElementById('success-message');
+        successMessage.innerText = text;
+        successMessage.style.display = 'block';
+      }
+
+      function forgotPassword(e) {
+        e.preventDefault();
+        try {
+          var config = JSON.parse(
+            decodeURIComponent(escape(window.atob('@@config@@')))
+          );
+
+          webAuth.changePassword({
+            connection: databaseConnection,
+            email: document.getElementById('email').value
+          }, function(err) {
+            if (err) {
+              console.error('Error:', err);
+              displayError(err);
+            } else {
+              displaySuccess('Password reset email sent! Please check your inbox.');
+              console.log('Password reset email sent');
+            }
+          });
+
+        } catch (error) {
+          console.error('Error in forgot password:', error);
+          displayError({ description: 'Unable to process password reset request. Please try again.' });
+        }
+      }
+
+      document.getElementById('btn-login').addEventListener('click', login);
+      document.getElementById('btn-google').addEventListener('click', loginWithGoogle);
+      document.getElementById('btn-github').addEventListener('click', loginWithGithub);
+      document.getElementById('btn-facebook').addEventListener('click', loginWithFacebook);
+      document.getElementById('btn-linkedin').addEventListener('click', loginWithLinkedIn);
+      document.getElementById('btn-windows').addEventListener('click', loginWithWindows);
+      document.getElementById('btn-signup').addEventListener('click', signup);
+      document.getElementById('link-signup-login').addEventListener('click', toggleSignupLogin);
+      document.getElementById('forgot-password-link').addEventListener('click', forgotPassword);
+    });
+  </script>
+</body>
+</html>

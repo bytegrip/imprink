@@ -6,11 +6,15 @@ services:
     expose:
       - "80"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ConnectionStrings__DefaultConnection=Server=${SQL_SERVER};Database=${SQL_DATABASE};User Id=${SQL_USER_ID};Password=${SQL_PASSWORD};Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
       - Auth0__Authority=${AUTH0_DOMAIN}
       - Auth0__Audience=${AUTH0_AUDIENCE}
+      - Logging__LogLevel__Default=${ASPNETCORE_LOGGING_LEVEL_DEFAULT}
+      - Logging__LogLevel__Microsoft.AspNetCore=${ASPNETCORE_LOGGING_LEVEL}
+      - Logging__LogLevel__Microsoft.EntityFrameworkCore=${ASPNETCORE_LOGGING_LEVEL_EFCORE}
+      - DatabaseOptions__ApplyMigrationsAtStartup=${ASPNETCORE_APPLY_MIGRATIONS_AT_STARTUP}
     depends_on:
       - mssql
     networks:
@@ -23,7 +27,7 @@ services:
       - ./webui:/app
       - /app/node_modules
     ports:
-      - "3000:3000"
+      - "3000"
     environment:
       - NODE_ENV=development
       - AUTH0_SECRET=${AUTH0_SECRET}

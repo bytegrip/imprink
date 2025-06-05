@@ -9,7 +9,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=${SQL_SERVER};Database=${SQL_DATABASE};User Id=${SQL_USER_ID};Password=${SQL_PASSWORD};Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;
       - ASPNETCORE_URLS=http://+:8080
-      - Auth0__Domain=${AUTH0_ISSUER_BASE_URL}
+      - Auth0__Authority=${AUTH0_DOMAIN}
       - Auth0__Audience=${AUTH0_AUDIENCE}
     depends_on:
       - mssql
@@ -32,7 +32,7 @@ services:
       - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
       - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}
       - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
-      - AUTH0_SCOPE=openid profile email read:shows
+      - AUTH0_SCOPE=${AUTH0_SCOPE}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
       - NEXT_PUBLIC_AUTH0_CLIENT_ID=${NEXT_PUBLIC_AUTH0_CLIENT_ID}
       - NEXT_PUBLIC_AUTH0_DOMAIN=${NEXT_PUBLIC_AUTH0_DOMAIN}

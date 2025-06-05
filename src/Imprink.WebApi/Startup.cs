@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Imprink.Application;
 using Imprink.Application.Products.Handlers;
 using Imprink.Domain.Repositories;
@@ -7,7 +6,6 @@ using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Imprink.WebApi;
 
@@ -32,18 +30,17 @@ public static class Startup
             cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly);
         });
         
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}/";
-                options.Audience = builder.Configuration["Auth0:Audience"];
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = ClaimTypes.NameIdentifier
-                };
-            });
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = builder.Configuration["Auth0:Authority"];
+            options.Audience = builder.Configuration["Auth0:Audience"];
+        });
 
-        builder.Services.AddAuthorization();
+        services.AddAuthorization();
 
         services.AddControllers();
         services.AddSwaggerGen();
@@ -66,25 +63,20 @@ public static class Startup
             }
         }
         
-        // if (env.IsDevelopment())
-        // {
-        //     app.UseSwagger();
-        //     app.UseSwaggerUI();
-        //     app.UseDeveloperExceptionPage();
-        // }
-        // else
-        // {
-        //     app.UseExceptionHandler("/Error");
-        //     app.UseHsts();
-        //     app.UseHttpsRedirection();
-        // }
-        
-        app.UseSwagger();
-        app.UseSwaggerUI();
-        app.UseDeveloperExceptionPage();
+        if (env.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
+            app.UseHttpsRedirection();
+        }
 
         app.UseRouting();
-        
         app.UseAuthentication();
         app.UseAuthorization();
 

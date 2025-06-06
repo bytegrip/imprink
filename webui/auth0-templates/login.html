@@ -3,880 +3,939 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <link rel="icon" href="https://i.ibb.co/gbthcbnP/logo-sm.png" type="image/png" />
   <title>Sign In | Imprink</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+  * {
+    box-sizing: border-box;
+  }
 
-    body, html {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      background-image: url('https://i.ibb.co/BDSg5pD/vecteezy-abstract-arrows-ribbons-crowns-hearts-explosions-and-5891677.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      position: relative;
-      font-family: 'Roboto', sans-serif;
+  body, html {
+    height: 100dvh;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    background-image: url('https://i.ibb.co/BDSg5pD/vecteezy-abstract-arrows-ribbons-crowns-hearts-explosions-and-5891677.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(120deg,
+    rgba(8, 181, 240, 1),
+    rgba(255, 213, 33, 1),
+    rgba(231, 0, 130, 1)
+    );
+    z-index: 0;
+  }
+
+  .invisible {
+    display: none !important;
+  }
+
+  .login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+    min-height: 100dvh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: 0 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: clamp(20px, 5vw, 150px);
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+  }
+
+  .logo-section {
+    flex: 0 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideLeft 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    position: relative;
+    z-index: 0;
+  }
+
+  .logo-section img {
+    width: 100%;
+    max-width: 600px;
+    filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.2));
+  }
+
+  .login-section {
+    flex: 0 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideRight 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    position: relative;
+    z-index: 1;
+  }
+
+  .login-box {
+    padding: 32px;
+    background: #ffffff;
+    box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0 9px 46px 8px rgba(0, 0, 0, 0.12),
+    0 11px 15px -7px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    min-width: 360px;
+    animation: fadeIn 0.5s ease-out;
+    max-height: 90dvh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .login-header h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    color: #212121;
+    margin: 16px 0 8px;
+    font-weight: 400;
+    letter-spacing: 0.15px;
+  }
+
+  .login-header h5 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #757575;
+    font-weight: 400;
+    letter-spacing: 0.25px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .login-header img {
+    width: 70%;
+    animation: slideIn 0.8s ease-out forwards;
+    transform-origin: center;
+  }
+
+  .login-header .mobile-logo {
+    display: none;
+  }
+
+  #error-message {
+    font-family: 'Roboto', sans-serif;
+    display: none;
+    white-space: break-spaces;
+    background: #ffebee;
+    border: 1px solid #e57373;
+    color: #c62828;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  #success-message {
+    font-family: 'Roboto', sans-serif;
+    display: none;
+    white-space: break-spaces;
+    background: #e8f5e8;
+    border: 1px solid #81c784;
+    color: #2e7d32;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .divider {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: #757575;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .divider::before {
+    margin-right: 16px;
+  }
+
+  .divider::after {
+    margin-left: 16px;
+  }
+
+  .social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: #fafafa;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .social-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  .social-btn:hover {
+    box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2),
+    0 7px 12px 1px rgba(0, 0, 0, 0.14),
+    0 2px 16px 1px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .social-btn:active {
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0 1px 10px 0px rgba(0, 0, 0, 0.12);
+    transform: translateY(0);
+  }
+
+  #link-signup-login {
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.25px;
+  }
+
+  #link-signup-login:hover {
+    color: #1565c0;
+    text-decoration: none;
+  }
+
+  #btn-signup {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  #btn-signup:hover {
+    background-color: #43a047;
+    box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2),
+    0 7px 12px 1px rgba(0, 0, 0, 0.14),
+    0 2px 16px 1px rgba(0, 0, 0, 0.12);
+  }
+
+  .form-control {
+    font-family: 'Roboto', sans-serif;
+    max-width: 100%;
+    padding: 16px 12px;
+    height: 56px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    width: 100%;
+    font-size: 16px;
+    background-color: #fff;
+    color: #212121;
+    outline: none;
+  }
+
+  .form-control:focus {
+    border-color: #1976d2;
+    border-width: 2px;
+    box-shadow: none;
+  }
+
+  .form-control::placeholder {
+    font-family: 'Roboto', sans-serif;
+    color: #9e9e9e;
+    opacity: 1;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .form-group label {
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 8px;
+    font-weight: 400;
+    color: #757575;
+    font-size: 12px;
+    display: block;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  .btn {
+    font-family: 'Roboto', sans-serif;
+    padding: 0 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    font-size: 14px;
+    height: 36px;
+    letter-spacing: 0.25px;
+    text-transform: uppercase;
+    min-width: 64px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: #1976d2;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .btn-primary:hover {
+    background-color: #1565c0;
+    box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2),
+    0 7px 12px 1px rgba(0, 0, 0, 0.14),
+    0 2px 16px 1px rgba(0, 0, 0, 0.12);
+  }
+
+  .btn-primary:active {
+    background-color: #0d47a1;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .btn-block {
+    width: 100%;
+    height: 48px;
+  }
+
+  @keyframes slideLeft {
+    0% {
+      transform: translateX(50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideRight {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 992px) {
+    html, body {
       overflow: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(120deg, 
-        rgba(8, 181, 240, 1), 
-        rgba(255, 213, 33, 1),
-        rgba(231, 0, 130, 1)
-      );
-      z-index: 0;
-    }
-
-    .invisible {
-      display: none !important;
+      position: fixed;
+      width: 100%;
+      height: 100dvh;
+      min-height: 100dvh;
     }
 
     .login-container {
-      display: flex;
-      align-items: center;
+      flex-direction: column;
+      padding: 16px;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      padding: 0 5%;
-      max-width: 1400px;
-      margin: 0 auto;
-      gap: clamp(20px, 5vw, 150px);
+      inset: 0;
+      height: 100dvh;
+      min-height: 100dvh;
+      padding-top: max(8px, env(safe-area-inset-top));
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+      padding-left: max(8px, env(safe-area-inset-left));
+      padding-right: max(8px, env(safe-area-inset-right));
     }
 
     .logo-section {
-      flex: 0 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: slideLeft 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-      position: relative;
-      z-index: 0;
-    }
-
-    .logo-section img {
-      width: 100%;
-      max-width: 600px;
-      filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.2));
+      display: none !important;
     }
 
     .login-section {
-      flex: 0 1 auto;
+      width: 100%;
+      animation: none;
       display: flex;
-      align-items: center;
       justify-content: center;
-      animation: slideRight 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-      position: relative;
-      z-index: 1;
+      align-items: center;
+      flex: 1;
     }
 
     .login-box {
-      padding: 32px;
-      background: #ffffff;
-      box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-                  0 9px 46px 8px rgba(0, 0, 0, 0.12),
-                  0 11px 15px -7px rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
-      min-width: 360px;
-      animation: fadeIn 0.5s ease-out;
-      max-height: 90vh;
+      width: calc(100% - 32px);
+      max-width: 380px;
+      min-width: unset;
+      animation: none;
+      margin: 0;
+      padding: 24px;
+      max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);
       overflow-y: auto;
-      position: relative;
     }
 
     .login-header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .login-header h3 {
-      font-family: 'Roboto', sans-serif;
-      font-size: 24px;
-      color: #212121;
-      margin: 16px 0 8px;
-      font-weight: 400;
-      letter-spacing: 0.15px;
-    }
-
-    .login-header h5 {
-      font-family: 'Roboto', sans-serif;
-      font-size: 14px;
-      color: #757575;
-      font-weight: 400;
-      letter-spacing: 0.25px;
-      margin: 0;
-      text-transform: uppercase;
-    }
-
-    .login-header img {
-      width: 70%;
-      animation: slideIn 0.8s ease-out forwards;
-      transform-origin: center;
+      margin-bottom: 24px;
     }
 
     .login-header .mobile-logo {
-      display: none;
+      display: block;
+      width: 60%;
+      margin: 0 auto 16px auto;
     }
 
-    #error-message {
-      font-family: 'Roboto', sans-serif;
-      display: none;
-      white-space: break-spaces;
-      background: #ffebee;
-      border: 1px solid #e57373;
-      color: #c62828;
-      border-radius: 4px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
-    #success-message {
-      font-family: 'Roboto', sans-serif;
-      display: none;
-      white-space: break-spaces;
-      background: #e8f5e8;
-      border: 1px solid #81c784;
-      color: #2e7d32;
-      border-radius: 4px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
-    .social-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 24px 0;
-      flex-wrap: wrap;
-    }
-
-    .divider {
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 24px 0;
-      color: #757575;
-      font-size: 12px;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    .divider::before {
-      margin-right: 16px;
-    }
-
-    .divider::after {
-      margin-left: 16px;
-    }
-
-    .social-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: #fafafa;
-      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-      cursor: pointer;
-      padding: 0;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-                  0 4px 5px 0px rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0px rgba(0, 0, 0, 0.12);
-    }
-
-    .social-btn img {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-    }
-
-    .social-btn:hover {
-      box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2),
-                  0 7px 12px 1px rgba(0, 0, 0, 0.14),
-                  0 2px 16px 1px rgba(0, 0, 0, 0.12);
-      transform: translateY(-2px);
-    }
-
-    .social-btn:active {
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-                  0 4px 5px 0px rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0px rgba(0, 0, 0, 0.12);
-      transform: translateY(0);
-    }
-
-    #link-signup-login {
-      font-family: 'Roboto', sans-serif;
-      cursor: pointer;
-      color: #1976d2;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 0.25px;
-    }
-
-    #link-signup-login:hover {
-      color: #1565c0;
-      text-decoration: none;
-    }
-
-    #btn-signup {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-                  0 4px 5px 0px rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0px rgba(0, 0, 0, 0.12);
-    }
-
-    #btn-signup:hover {
-      background-color: #43a047;
-      box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2),
-                  0 7px 12px 1px rgba(0, 0, 0, 0.14),
-                  0 2px 16px 1px rgba(0, 0, 0, 0.12);
-    }
-
-    .form-control {
-      font-family: 'Roboto', sans-serif;
-      max-width: 100%;
-      padding: 16px 12px;
-      height: 56px;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-      width: 100%;
-      font-size: 16px;
-      background-color: #fff;
-      color: #212121;
-      outline: none;
-    }
-
-    .form-control:focus {
-      border-color: #1976d2;
-      border-width: 2px;
-      box-shadow: none;
-    }
-
-    .form-control::placeholder {
-      font-family: 'Roboto', sans-serif;
-      color: #9e9e9e;
-      opacity: 1;
+    .login-header h3 {
+      font-size: 20px;
+      margin: 12px 0 6px;
     }
 
     .form-group {
-      margin-bottom: 20px;
-      position: relative;
+      margin-bottom: 16px;
     }
 
-    .form-group label {
-      font-family: 'Roboto', sans-serif;
-      margin-bottom: 8px;
-      font-weight: 400;
-      color: #757575;
-      font-size: 12px;
-      display: block;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
+    .social-buttons {
+      gap: 6px;
+      margin: 20px 0;
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+    }
+
+    .social-btn img {
+      width: 18px;
+      height: 18px;
+    }
+
+    .divider {
+      margin: 20px 0;
+    }
+
+    hr {
+      margin: 20px 0;
+      border-color: #e0e0e0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login-container {
+      padding-top: max(6px, env(safe-area-inset-top));
+      padding-bottom: max(6px, env(safe-area-inset-bottom));
+      padding-left: max(4px, env(safe-area-inset-left));
+      padding-right: max(4px, env(safe-area-inset-right));
+    }
+
+    .login-box {
+      width: calc(100% - 16px);
+      padding: 20px;
+      max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+    }
+
+    .form-control {
+      padding: 14px 12px;
+      height: 52px;
     }
 
     .btn {
-      font-family: 'Roboto', sans-serif;
-      padding: 0 24px;
-      border-radius: 4px;
-      font-weight: 500;
-      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-      font-size: 14px;
-      height: 36px;
-      letter-spacing: 0.25px;
-      text-transform: uppercase;
-      min-width: 64px;
-      border: none;
-      cursor: pointer;
+      padding: 0 20px;
+    }
+  }
+
+  .forgot-password {
+    text-align: right;
+    margin-top: 8px;
+  }
+
+  .forgot-password a {
+    font-family: 'Roboto', sans-serif;
+    color: #1976d2;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+  }
+
+  .forgot-password a:hover {
+    color: #1565c0;
+    text-decoration: none;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 24px 0;
+  }
+
+  @supports not (height: 100dvh) {
+    html, body {
+      height: 100vh;
+      min-height: 100vh;
     }
 
-    .btn-primary {
-      background-color: #1976d2;
-      color: white;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-                  0 4px 5px 0px rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0px rgba(0, 0, 0, 0.12);
+    .login-container {
+      height: 100vh;
+      min-height: 100vh;
     }
 
-    .btn-primary:hover {
-      background-color: #1565c0;
-      box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2),
-                  0 7px 12px 1px rgba(0, 0, 0, 0.14),
-                  0 2px 16px 1px rgba(0, 0, 0, 0.12);
-    }
-
-    .btn-primary:active {
-      background-color: #0d47a1;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-                  0 4px 5px 0px rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0px rgba(0, 0, 0, 0.12);
-    }
-
-    .btn-block {
-      width: 100%;
-      height: 48px;
-    }
-
-    @keyframes slideLeft {
-      0% {
-        transform: translateX(50%);
-      }
-      100% {
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideRight {
-      0% {
-        transform: translateX(-50%);
-      }
-      100% {
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 1;
-      }
-      to {
-        opacity: 1;
-      }
+    .login-box {
+      max-height: 90vh;
     }
 
     @media (max-width: 992px) {
       html, body {
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
+        height: 100vh;
+        min-height: 100vh;
       }
-      
+
       .login-container {
-        flex-direction: column;
-        padding: 16px;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        inset: 0;
+        height: 100vh;
+        min-height: 100vh;
       }
-      
-      .logo-section {
-        display: none !important;
-      }
-      
-      .login-section {
-        width: 100%;
-        animation: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-      }
-      
+
       .login-box {
-        width: calc(100% - 32px);
-        max-width: 380px;
-        min-width: unset;
-        animation: none;
-        margin: 0;
-        padding: 24px;
-        max-height: calc(100vh - 32px);
-        overflow-y: auto;
-      }
-
-      .login-header {
-        margin-bottom: 24px;
-      }
-
-      .login-header .mobile-logo {
-        display: block;
-        width: 60%;
-        margin: 0 auto 16px auto;
-      }
-
-      .login-header h3 {
-        font-size: 20px;
-        margin: 12px 0 6px;
-      }
-
-      .form-group {
-        margin-bottom: 16px;
-      }
-
-      .social-buttons {
-        gap: 6px;
-        margin: 20px 0;
-      }
-
-      .social-btn {
-        width: 36px;
-        height: 36px;
-      }
-
-      .social-btn img {
-        width: 18px;
-        height: 18px;
-      }
-
-      .divider {
-        margin: 20px 0;
-      }
-
-      hr {
-        margin: 20px 0;
-        border-color: #e0e0e0;
+        max-height: calc(100vh - 64px);
       }
     }
 
     @media (max-width: 480px) {
       .login-box {
-        width: calc(100% - 16px);
-        padding: 20px;
-      }
-      
-      .form-control {
-        padding: 14px 12px;
-        height: 52px;
-      }
-      
-      .btn {
-        padding: 0 20px;
+        max-height: calc(100vh - 48px);
       }
     }
-
-    .forgot-password {
-      text-align: right;
-      margin-top: 8px;
-    }
-
-    .forgot-password a {
-      font-family: 'Roboto', sans-serif;
-      color: #1976d2;
-      font-size: 12px;
-      text-decoration: none;
-      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      font-weight: 500;
-    }
-
-    .forgot-password a:hover {
-      color: #1565c0;
-      text-decoration: none;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid #e0e0e0;
-      margin: 24px 0;
-    }
-  </style>
+  }
+</style>
 <body>
-  <div class="login-container">
-    <div class="logo-section">
-      <img src="https://i.ibb.co/0RK5CM5Q/logo-light.png" class="img-fluid"/>
-    </div>
-    <div class="login-section">
-      <div class="login-box">
-        <div class="login-header">
-          <img src="https://i.ibb.co/0RK5CM5Q/logo-light.png" class="img-fluid mobile-logo"/>
-          <h3>Welcome</h3>
-          <h5>Please log in</h5>
-        </div>
-        <div id="error-message" class="alert alert-danger"></div>
-        <div id="success-message" class="alert alert-success"></div>
-        <form onsubmit="return false;" method="post">
-          <div class="form-group">
-           <label for="name">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label for="name">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Enter your password">
-            <div class="forgot-password">
-              <a href="#" id="forgot-password-link">Forgot your password?</a>
-            </div>
-          </div>
-          <div class="captcha-container form-group"></div>
-          <button
-            type="submit"
-            id="btn-login"
-            class="btn btn-primary btn-block">
-              Log In
-          </button>
-           <button
-            type="button"
-            id="btn-signup"
-            class="btn btn-default btn-block invisible">
-              Sign Up
-          </button>
-          <div class="divider" id="divider">or continue with</div>
-          <div class="social-buttons" id="social-buttons">
-            <button
-              type="button"
-              id="btn-google"
-              class="social-btn btn-google"
-              title="Sign in with Google">
-                <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png" alt="Google">
-            </button>
-            <button
-              type="button"
-              id="btn-github"
-              class="social-btn btn-github"
-              title="Sign in with GitHub">
-                <img src="https://img.icons8.com/m_outlined/512/github.png" alt="GitHub">
-            </button>
-            <button
-              type="button"
-              id="btn-facebook"
-              class="social-btn btn-facebook"
-              title="Sign in with Facebook">
-                <img src="https://www.freeiconspng.com/uploads/facebook-png-icon-follow-us-facebook-1.png" alt="Facebook">
-            </button>
-            <button
-              type="button"
-              id="btn-linkedin"
-              class="social-btn btn-linkedin"
-              title="Sign in with LinkedIn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1024px-LinkedIn_icon.svg.png" alt="LinkedIn">
-            </button>
-            <button
-              type="button"
-              id="btn-windows"
-              class="social-btn btn-windows"
-              title="Sign in with Microsoft">
-                <img src="https://cdn-icons-png.freepik.com/256/11378/11378754.png?semt=ais_hybrid" alt="Microsoft">
-            </button>
-          </div>
-          <hr>
-          <div class="form-group">
-            <span id="login-signup-msg">Don't have an account?</span> <a id="link-signup-login"> Sign Up </a>
-          </div>
-        </form>
+<div class="login-container">
+  <div class="logo-section">
+    <img src="https://i.ibb.co/0RK5CM5Q/logo-light.png" class="img-fluid"/>
+  </div>
+  <div class="login-section">
+    <div class="login-box">
+      <div class="login-header">
+        <img src="https://i.ibb.co/0RK5CM5Q/logo-light.png" class="img-fluid mobile-logo"/>
+        <h3>Welcome</h3>
+        <h5>Please log in</h5>
       </div>
+      <div id="error-message" class="alert alert-danger"></div>
+      <div id="success-message" class="alert alert-success"></div>
+      <form onsubmit="return false;" method="post">
+        <div class="form-group">
+          <label for="name">Email</label>
+          <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="name">Password</label>
+          <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Enter your password">
+          <div class="forgot-password">
+            <a href="#" id="forgot-password-link">Forgot your password?</a>
+          </div>
+        </div>
+        <div class="captcha-container form-group"></div>
+        <button
+                type="submit"
+                id="btn-login"
+                class="btn btn-primary btn-block">
+          Log In
+        </button>
+        <button
+                type="button"
+                id="btn-signup"
+                class="btn btn-default btn-block invisible">
+          Sign Up
+        </button>
+        <div class="divider" id="divider">or continue with</div>
+        <div class="social-buttons" id="social-buttons">
+          <button
+                  type="button"
+                  id="btn-google"
+                  class="social-btn btn-google"
+                  title="Sign in with Google">
+            <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png" alt="Google">
+          </button>
+          <button
+                  type="button"
+                  id="btn-github"
+                  class="social-btn btn-github"
+                  title="Sign in with GitHub">
+            <img src="https://img.icons8.com/m_outlined/512/github.png" alt="GitHub">
+          </button>
+          <button
+                  type="button"
+                  id="btn-facebook"
+                  class="social-btn btn-facebook"
+                  title="Sign in with Facebook">
+            <img src="https://www.freeiconspng.com/uploads/facebook-png-icon-follow-us-facebook-1.png" alt="Facebook">
+          </button>
+          <button
+                  type="button"
+                  id="btn-linkedin"
+                  class="social-btn btn-linkedin"
+                  title="Sign in with LinkedIn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1024px-LinkedIn_icon.svg.png" alt="LinkedIn">
+          </button>
+          <button
+                  type="button"
+                  id="btn-windows"
+                  class="social-btn btn-windows"
+                  title="Sign in with Microsoft">
+            <img src="https://cdn-icons-png.freepik.com/256/11378/11378754.png?semt=ais_hybrid" alt="Microsoft">
+          </button>
+        </div>
+        <hr>
+        <div class="form-group">
+          <span id="login-signup-msg">Don't have an account?</span> <a id="link-signup-login"> Sign Up </a>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <!--[if IE 8]>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
-  <![endif]-->
+<!--[if IE 8]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+<![endif]-->
 
-  <!--[if lte IE 9]>
-  <script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
-  <script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
-  <![endif]-->
+<!--[if lte IE 9]>
+<script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
+<script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
+<![endif]-->
 
-  <script src="https://cdn.auth0.com/js/auth0/9.28/auth0.min.js"></script>
-  <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
-  <script>
-    function capitalizeFirstLetter(str) {
-      if (!str) return '';
-      return str.charAt(0).toUpperCase() + str.slice(1);
+<script src="https://cdn.auth0.com/js/auth0/9.28/auth0.min.js"></script>
+<script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
+<script>
+  function capitalizeFirstLetter(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  window.addEventListener('load', function() {
+
+    var config = JSON.parse(
+            decodeURIComponent(escape(window.atob('@@config@@')))
+    );
+
+    var leeway = config.internalOptions.leeway;
+    if (leeway) {
+      var convertedLeeway = parseInt(leeway);
+
+      if (!isNaN(convertedLeeway)) {
+        config.internalOptions.leeway = convertedLeeway;
+      }
     }
 
-    window.addEventListener('load', function() {
+    var params =  {
+      overrides: {
+        __tenant: config.auth0Tenant,
+        __token_issuer: config.authorizationServer.issuer
+      },
+      domain: config.auth0Domain,
+      clientID: config.clientID,
+      redirectUri: config.callbackURL,
+      responseType: 'code',
+      scope: config.internalOptions.scope,
+      _csrf: config.internalOptions._csrf,
+      state: config.internalOptions.state,
+      _intstate: config.internalOptions._intstate
+    };
 
-      var config = JSON.parse(
-        decodeURIComponent(escape(window.atob('@@config@@')))
-      );
-
-      var leeway = config.internalOptions.leeway;
-      if (leeway) {
-        var convertedLeeway = parseInt(leeway);
-
-        if (!isNaN(convertedLeeway)) {
-          config.internalOptions.leeway = convertedLeeway;
-        }
-      }
-
-      var params =  {
-        overrides: {
-          __tenant: config.auth0Tenant,
-          __token_issuer: config.authorizationServer.issuer
-        },
-        domain: config.auth0Domain,
-        clientID: config.clientID,
-        redirectUri: config.callbackURL,
-        responseType: 'code',
-        scope: config.internalOptions.scope,
-        _csrf: config.internalOptions._csrf,
-        state: config.internalOptions.state,
-        _intstate: config.internalOptions._intstate
-      };
-
-      var triggerCaptcha = null;
-      var signupCaptcha = null;
-      var webAuth = new auth0.WebAuth(params);
-      var databaseConnection = 'Username-Password-Authentication';
-      var captcha = webAuth.renderCaptcha(
-        document.querySelector('.captcha-container'),
-        null,
-        (error, payload) => {
-          if (payload) {
-            triggerCaptcha = payload.triggerCaptcha;
-          }
-        }
-      );
+    var triggerCaptcha = null;
+    var signupCaptcha = null;
+    var webAuth = new auth0.WebAuth(params);
+    var databaseConnection = 'Username-Password-Authentication';
+    var captcha = webAuth.renderCaptcha(
+            document.querySelector('.captcha-container'),
+            null,
+            (error, payload) => {
+              if (payload) {
+                triggerCaptcha = payload.triggerCaptcha;
+              }
+            }
+    );
 
     function login(e) {
-        e.preventDefault();
-        
-        var signupBtn = document.getElementById('btn-signup');
-        if (!signupBtn.classList.contains('invisible')) {
-            signup.call(signupBtn);
-            return;
-        }
-        
-        var button = document.getElementById('btn-login');
-        var username = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        button.disabled = true;
+      e.preventDefault();
 
-        var request = () => {
-            webAuth.login({
-            realm: databaseConnection,
-            username: username,
-            password: password,
-            captcha: captcha.getValue()
-            }, function(err) {
-            if (err) displayError(err);
-            button.disabled = false;
-            });
-        };
+      var signupBtn = document.getElementById('btn-signup');
+      if (!signupBtn.classList.contains('invisible')) {
+        signup.call(signupBtn);
+        return;
+      }
 
-        if (triggerCaptcha) {
-            triggerCaptcha(request);
-        } else {
-            request();
-        }
+      var button = document.getElementById('btn-login');
+      var username = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      button.disabled = true;
+
+      var request = () => {
+        webAuth.login({
+          realm: databaseConnection,
+          username: username,
+          password: password,
+          captcha: captcha.getValue()
+        }, function(err) {
+          if (err) displayError(err);
+          button.disabled = false;
+        });
+      };
+
+      if (triggerCaptcha) {
+        triggerCaptcha(request);
+      } else {
+        request();
+      }
     }
 
-      function toggleSignupLogin(e) {
-        e.preventDefault();
-        var loginSignupLink = e.target;
-        var loginBtn = document.getElementById('btn-login');
-        var signupBtn = document.getElementById('btn-signup');
-        var msg = document.getElementById('login-signup-msg');
-        var socialButtons = document.getElementById('social-buttons');
-        var divider = document.getElementById('divider');
-        
-        loginBtn.classList.toggle('invisible');
-        signupBtn.classList.toggle('invisible');
-        socialButtons.classList.toggle('invisible');
-        divider.classList.toggle('invisible');
+    function toggleSignupLogin(e) {
+      e.preventDefault();
+      var loginSignupLink = e.target;
+      var loginBtn = document.getElementById('btn-login');
+      var signupBtn = document.getElementById('btn-signup');
+      var msg = document.getElementById('login-signup-msg');
+      var socialButtons = document.getElementById('social-buttons');
+      var divider = document.getElementById('divider');
 
-        if (signupBtn.classList.contains('invisible')) {
-          loginSignupLink.innerHTML = "Sign Up";
-          msg.innerHTML = "Don't have an account?";
-        } else {
-          loginSignupLink.innerHTML = "Log In";
-          msg.innerHTML = "Already have an account?";
-        }
+      loginBtn.classList.toggle('invisible');
+      signupBtn.classList.toggle('invisible');
+      socialButtons.classList.toggle('invisible');
+      divider.classList.toggle('invisible');
 
-        if (signupBtn.classList.contains('invisible')) {
-          captcha = webAuth.renderCaptcha(
-            document.querySelector('.captcha-container'),
-            null,
-            (error, payload) => {
-              if (payload) {
-                triggerCaptcha = payload.triggerCaptcha;
-              }
-            }
-          );
-        } else {
-          signupCaptcha = webAuth.renderSignupCaptcha(
-            document.querySelector('.captcha-container'),
-            null,
-            (error, payload) => {
-              if (payload) {
-                triggerCaptcha = payload.triggerCaptcha;
-              }
-            }
-          );
-        }
+      if (signupBtn.classList.contains('invisible')) {
+        loginSignupLink.innerHTML = "Sign Up";
+        msg.innerHTML = "Don't have an account?";
+      } else {
+        loginSignupLink.innerHTML = "Log In";
+        msg.innerHTML = "Already have an account?";
       }
 
-      function signup() {
-        var button = this;
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        button.disabled = true;
-
-        var request = () => {
-          webAuth.redirect.signupAndLogin({
-            connection: databaseConnection,
-            email: email,
-            password: password,
-            captcha: signupCaptcha.getValue()
-          }, function(err) {
-            if (err) displayError(err);
-            button.disabled = false;
-          });
-        };
-
-        if (triggerCaptcha) {
-          triggerCaptcha(request);
-        } else {
-          request();
-        }
+      if (signupBtn.classList.contains('invisible')) {
+        captcha = webAuth.renderCaptcha(
+                document.querySelector('.captcha-container'),
+                null,
+                (error, payload) => {
+                  if (payload) {
+                    triggerCaptcha = payload.triggerCaptcha;
+                  }
+                }
+        );
+      } else {
+        signupCaptcha = webAuth.renderSignupCaptcha(
+                document.querySelector('.captcha-container'),
+                null,
+                (error, payload) => {
+                  if (payload) {
+                    triggerCaptcha = payload.triggerCaptcha;
+                  }
+                }
+        );
       }
+    }
 
-      function loginWithGoogle() {
-        webAuth.authorize({
-          connection: 'google-oauth2'
+    function signup() {
+      var button = this;
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      button.disabled = true;
+
+      var request = () => {
+        webAuth.redirect.signupAndLogin({
+          connection: databaseConnection,
+          email: email,
+          password: password,
+          captcha: signupCaptcha.getValue()
         }, function(err) {
           if (err) displayError(err);
+          button.disabled = false;
         });
-      }
+      };
 
-      function loginWithGithub() {
-        webAuth.authorize({
-          connection: 'github'
+      if (triggerCaptcha) {
+        triggerCaptcha(request);
+      } else {
+        request();
+      }
+    }
+
+    function loginWithGoogle() {
+      webAuth.authorize({
+        connection: 'google-oauth2'
+      }, function(err) {
+        if (err) displayError(err);
+      });
+    }
+
+    function loginWithGithub() {
+      webAuth.authorize({
+        connection: 'github'
+      }, function(err) {
+        if (err) displayError(err);
+      });
+    }
+
+    function loginWithFacebook() {
+      webAuth.authorize({
+        connection: 'facebook'
+      }, function(err) {
+        if (err) displayError(err);
+      });
+    }
+
+    function loginWithLinkedIn() {
+      webAuth.authorize({
+        connection: 'linkedin'
+      }, function(err) {
+        if (err) displayError(err);
+      });
+    }
+
+    function loginWithWindows() {
+      webAuth.authorize({
+        connection: 'windowslive'
+      }, function(err) {
+        if (err) displayError(err);
+      });
+    }
+
+    function displayError(err) {
+      captcha.reload();
+      var successMessage = document.getElementById('success-message');
+      successMessage.style.display = 'none';
+      var errorMessage = document.getElementById('error-message');
+      errorMessage.innerText = capitalizeFirstLetter(err.policy) || capitalizeFirstLetter(err.description);
+      errorMessage.style.display = 'block';
+    }
+
+    function displaySuccess(text) {
+      captcha.reload();
+      var errorMessage = document.getElementById('error-message');
+      errorMessage.style.display = 'none';
+      var successMessage = document.getElementById('success-message');
+      successMessage.innerText = text;
+      successMessage.style.display = 'block';
+    }
+
+    function forgotPassword(e) {
+      e.preventDefault();
+      try {
+        var config = JSON.parse(
+                decodeURIComponent(escape(window.atob('@@config@@')))
+        );
+
+        webAuth.changePassword({
+          connection: databaseConnection,
+          email: document.getElementById('email').value
         }, function(err) {
-          if (err) displayError(err);
+          if (err) {
+            console.error('Error:', err);
+            displayError(err);
+          } else {
+            displaySuccess('Password reset email sent! Please check your inbox.');
+            console.log('Password reset email sent');
+          }
         });
+
+      } catch (error) {
+        console.error('Error in forgot password:', error);
+        displayError({ description: 'Unable to process password reset request. Please try again.' });
       }
-
-      function loginWithFacebook() {
-        webAuth.authorize({
-          connection: 'facebook'
-        }, function(err) {
-          if (err) displayError(err);
-        });
-      }
-
-      function loginWithLinkedIn() {
-        webAuth.authorize({
-          connection: 'linkedin'
-        }, function(err) {
-          if (err) displayError(err);
-        });
-      }
-
-      function loginWithWindows() {
-        webAuth.authorize({
-          connection: 'windowslive'
-        }, function(err) {
-          if (err) displayError(err);
-        });
-      }
-
-      function displayError(err) {
-        captcha.reload();
-        var successMessage = document.getElementById('success-message');
-        successMessage.style.display = 'none';
-        var errorMessage = document.getElementById('error-message');
-        errorMessage.innerText = capitalizeFirstLetter(err.policy) || capitalizeFirstLetter(err.description);
-        errorMessage.style.display = 'block';
-      }
-
-      function displaySuccess(text) {
-        captcha.reload();
-        var errorMessage = document.getElementById('error-message');
-        errorMessage.style.display = 'none';
-        var successMessage = document.getElementById('success-message');
-        successMessage.innerText = text;
-        successMessage.style.display = 'block';
-      }
-
-      function forgotPassword(e) {
-        e.preventDefault();
-        try {
-          var config = JSON.parse(
-            decodeURIComponent(escape(window.atob('@@config@@')))
-          );
-
-          webAuth.changePassword({
-            connection: databaseConnection,
-            email: document.getElementById('email').value
-          }, function(err) {
-            if (err) {
-              console.error('Error:', err);
-              displayError(err);
-            } else {
-              displaySuccess('Password reset email sent! Please check your inbox.');
-              console.log('Password reset email sent');
-            }
-          });
-
-        } catch (error) {
-          console.error('Error in forgot password:', error);
-          displayError({ description: 'Unable to process password reset request. Please try again.' });
-        }
-      }
+    }
 
 
-      document.getElementById('btn-login').addEventListener('click', login);
-      document.getElementById('btn-google').addEventListener('click', loginWithGoogle);
-      document.getElementById('btn-github').addEventListener('click', loginWithGithub);
-      document.getElementById('btn-facebook').addEventListener('click', loginWithFacebook);
-      document.getElementById('btn-linkedin').addEventListener('click', loginWithLinkedIn);
-      document.getElementById('btn-windows').addEventListener('click', loginWithWindows);
-      document.getElementById('btn-signup').addEventListener('click', signup);
-      document.getElementById('link-signup-login').addEventListener('click', toggleSignupLogin);
-      document.getElementById('forgot-password-link').addEventListener('click', forgotPassword);
-      document.querySelector('form').addEventListener('submit', login);
-    });
-  </script>
+    document.getElementById('btn-login').addEventListener('click', login);
+    document.getElementById('btn-google').addEventListener('click', loginWithGoogle);
+    document.getElementById('btn-github').addEventListener('click', loginWithGithub);
+    document.getElementById('btn-facebook').addEventListener('click', loginWithFacebook);
+    document.getElementById('btn-linkedin').addEventListener('click', loginWithLinkedIn);
+    document.getElementById('btn-windows').addEventListener('click', loginWithWindows);
+    document.getElementById('btn-signup').addEventListener('click', signup);
+    document.getElementById('link-signup-login').addEventListener('click', toggleSignupLogin);
+    document.getElementById('forgot-password-link').addEventListener('click', forgotPassword);
+    document.querySelector('form').addEventListener('submit', login);
+  });
+</script>
 </body>
 </html>

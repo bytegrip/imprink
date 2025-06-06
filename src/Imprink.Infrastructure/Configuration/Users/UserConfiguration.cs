@@ -4,12 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Imprink.Infrastructure.Configuration.Users;
 
-public class UserConfiguration : EntityBaseConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public override void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        base.Configure(builder);
-        
         builder.Property(u => u.Id)
             .HasMaxLength(450)
             .ValueGeneratedNever();
@@ -49,12 +47,6 @@ public class UserConfiguration : EntityBaseConfiguration<User>
         builder.HasMany(u => u.Addresses)
             .WithOne()
             .HasForeignKey(a => a.UserId)
-            .HasPrincipalKey(u => u.Id)
-            .OnDelete(DeleteBehavior.Cascade);
-            
-        builder.HasMany(u => u.UserRoles)
-            .WithOne()
-            .HasForeignKey(ur => ur.UserId)
             .HasPrincipalKey(u => u.Id)
             .OnDelete(DeleteBehavior.Cascade);
 

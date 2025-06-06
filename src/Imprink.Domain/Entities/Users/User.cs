@@ -2,9 +2,9 @@ using Imprink.Domain.Entities.Orders;
 
 namespace Imprink.Domain.Entities.Users;
 
-public class User : EntityBase
+public class User
 {
-    public new string Id { get; set; } = null!;
+    public string Id { get; set; } = null!;
     public required string Email { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }

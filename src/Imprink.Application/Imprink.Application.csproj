@@ -21,7 +21,6 @@
       <Folder Include="Users\Create\" />
       <Folder Include="Users\Delete\" />
       <Folder Include="Users\Query\" />
-      <Folder Include="Users\Roles\" />
     </ItemGroup>
 
 </Project>

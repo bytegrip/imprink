@@ -737,7 +737,7 @@ namespace Imprink.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Role_RoleName");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -760,15 +760,6 @@ namespace Imprink.Infrastructure.Migrations
             modelBuilder.Entity("Imprink.Domain.Entities.Users.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
@@ -798,27 +789,11 @@ namespace Imprink.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_User_CreatedAt");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("IX_User_CreatedBy");
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -827,10 +802,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.HasIndex("IsActive")
                         .HasDatabaseName("IX_User_IsActive");
 
-                    b.HasIndex("ModifiedAt")
-                        .HasDatabaseName("IX_User_ModifiedAt");
-
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Imprink.Domain.Entities.Users.UserRole", b =>
@@ -850,7 +822,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("IX_UserRole_UserId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
@@ -965,13 +937,15 @@ namespace Imprink.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Imprink.Domain.Entities.Users.User", null)
+                    b.HasOne("Imprink.Domain.Entities.Users.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>

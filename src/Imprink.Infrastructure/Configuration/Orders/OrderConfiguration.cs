@@ -49,6 +49,12 @@ public class OrderConfiguration : EntityBaseConfiguration<Order>
                 .WithOne(oa => oa.Order)
                 .HasForeignKey<OrderAddress>(oa => oa.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .HasPrincipalKey(u => u.Id)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(o => o.UserId)
                 .HasDatabaseName("IX_Order_UserId");

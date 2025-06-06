@@ -1,3 +1,5 @@
+using Imprink.Domain.Entities.Users;
+
 namespace Imprink.Domain.Entities.Orders;
 
 public class Order : EntityBase
@@ -11,6 +13,7 @@ public class Order : EntityBase
     public string Notes { get; set; } = null!;
         
     public OrderStatus OrderStatus { get; set; } = null!;
+    public User User { get; set; } = null!;
     public ShippingStatus ShippingStatus { get; set; } = null!;
     public OrderAddress OrderAddress { get; set; } = null!;
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

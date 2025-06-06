@@ -1,9 +1,18 @@
-using Imprink.Application.Products.Commands;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Create;
+
+public class CreateCategoryCommand : IRequest<CategoryDto>
+{
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public string? ImageUrl { get; set; }
+    public int SortOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+    public Guid? ParentCategoryId { get; set; }
+}
 
 public class CreateCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateCategoryCommand, CategoryDto>
 {

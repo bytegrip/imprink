@@ -1,5 +1,5 @@
 using Imprink.Application;
-using Imprink.Application.Products.Handlers;
+using Imprink.Application.Products.Create;
 using Imprink.Domain.Repositories;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;

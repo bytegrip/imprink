@@ -1,7 +1,11 @@
-using Imprink.Application.Products.Commands;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Delete;
+
+public class DeleteProductCommand : IRequest<bool>
+{
+    public Guid Id { get; set; }
+}
 
 public class DeleteProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductCommand, bool>
 {

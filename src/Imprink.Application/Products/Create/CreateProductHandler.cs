@@ -1,9 +1,19 @@
-using Imprink.Application.Products.Commands;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Create;
+
+public class CreateProductCommand : IRequest<ProductDto>
+{
+    public string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public decimal BasePrice { get; set; }
+    public bool IsCustomizable { get; set; }
+    public bool IsActive { get; set; } = true;
+    public string? ImageUrl { get; set; }
+    public Guid? CategoryId { get; set; }
+}
 
 public class CreateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateProductCommand, ProductDto>
 {

@@ -1,9 +1,20 @@
-using Imprink.Application.Products.Commands;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Create;
+
+public class CreateProductVariantCommand : IRequest<ProductVariantDto>
+{
+    public Guid ProductId { get; set; }
+    public string Size { get; set; } = null!;
+    public string? Color { get; set; }
+    public decimal Price { get; set; }
+    public string? ImageUrl { get; set; }
+    public string Sku { get; set; } = null!;
+    public int StockQuantity { get; set; }
+    public bool IsActive { get; set; } = true;
+}
 
 public class CreateProductVariantHandler(IUnitOfWork unitOfWork)
     : IRequestHandler<CreateProductVariantCommand, ProductVariantDto>

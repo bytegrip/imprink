@@ -1,9 +1,15 @@
 using Imprink.Application.Products.Dtos;
-using Imprink.Application.Products.Queries;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Query;
+
+public class GetProductVariantsQuery : IRequest<IEnumerable<ProductVariantDto>>
+{
+    public Guid? ProductId { get; set; }
+    public bool? IsActive { get; set; }
+    public bool InStockOnly { get; set; } = false;
+}
 
 public class GetProductVariantsHandler(IUnitOfWork unitOfWork)
     : IRequestHandler<GetProductVariantsQuery, IEnumerable<ProductVariantDto>>

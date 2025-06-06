@@ -1,6 +1,7 @@
-using Imprink.Application.Products.Commands;
+using Imprink.Application.Products.Create;
+using Imprink.Application.Products.Delete;
 using Imprink.Application.Products.Dtos;
-using Imprink.Application.Products.Queries;
+using Imprink.Application.Products.Query;
 using Imprink.Domain.Common.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

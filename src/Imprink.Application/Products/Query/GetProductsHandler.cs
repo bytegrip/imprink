@@ -1,8 +1,13 @@
 using Imprink.Application.Products.Dtos;
-using Imprink.Application.Products.Queries;
+using Imprink.Domain.Common.Models;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Query;
+
+public class GetProductsQuery : IRequest<PagedResultDto<ProductDto>>
+{
+    public ProductFilterParameters FilterParameters { get; set; } = new();
+}
 
 public class GetProductsHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetProductsQuery, PagedResultDto<ProductDto>>
 {

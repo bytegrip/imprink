@@ -1,9 +1,14 @@
 using Imprink.Application.Products.Dtos;
-using Imprink.Application.Products.Queries;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Handlers;
+namespace Imprink.Application.Products.Query;
+
+public class GetCategoriesQuery : IRequest<IEnumerable<CategoryDto>>
+{
+    public bool? IsActive { get; set; }
+    public bool RootCategoriesOnly { get; set; } = false;
+}
 
 public class GetCategoriesHandler(IUnitOfWork unitOfWork)
     : IRequestHandler<GetCategoriesQuery, IEnumerable<CategoryDto>>

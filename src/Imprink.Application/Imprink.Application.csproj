@@ -17,4 +17,10 @@
       <ProjectReference Include="..\Imprink.Domain\Imprink.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Users\Create\" />
+      <Folder Include="Users\Delete\" />
+      <Folder Include="Users\Query\" />
+    </ItemGroup>
+
 </Project>

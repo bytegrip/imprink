@@ -29,4 +29,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\Orders\" />
+      <Folder Include="Controllers\Users\" />
+    </ItemGroup>
+
 </Project>

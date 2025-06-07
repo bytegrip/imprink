@@ -5,9 +5,31 @@ import {useEffect, useState} from "react";
 
 export default function Home() {
     const { user, error, isLoading } = useUser();
+    const [accessToken, setAccessToken] = useState(null);
+
+    useEffect(() => {
+        const fetchAccessToken = async () => {
+            if (user) {
+                try {
+                    const response = await fetch('/auth/access-token');
+                    const v = await fetch('/token');
+                    if (response.ok) {
+                        const tokenData = await response.text();
+                        setAccessToken(tokenData);
+                    } else {
+                        setAccessToken('Token not available');
+                    }
+                } catch (error) {
+                    setAccessToken('Error fetching token');
+                }
+            }
+        };
+
+        fetchAccessToken().then(r => console.log(r));
+    }, [user]);
 
     async function checkValidity() {
-        const check = await fetch('https://impr.ink/auth/sync', {method: 'POST'});
+        const check = await fetch('https://impr.ink/api/api/User', {method: 'POST'});
     }
 
     if (isLoading) {
@@ -39,6 +61,16 @@ export default function Home() {
                                 Sign In
                             </span>
                         </a>
+                        <a
+                            onClick={() => checkValidity()}
+                            className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                        >
+                            <div
+                                className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <span className="relative flex items-center gap-2">
+                                    Check
+                                </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -52,7 +84,8 @@ export default function Home() {
                 {user ? (
                     <div className="w-full max-w-5xl">
                         <div className="text-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mb-3 shadow-2xl">
+                            <div
+                                className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mb-3 shadow-2xl">
                                 {user.picture ? (
                                     <img
                                         src={user.picture}
@@ -114,6 +147,15 @@ export default function Home() {
                                                 </div>
                                             </div>
                                         )}
+                                        <div>
+                                            <label
+                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Access
+                                                Token</label>
+                                            <div
+                                                className="text-white/80 text-xs mt-1 p-2 bg-black/30 rounded-lg border border-white/10 font-mono break-all max-h-24 overflow-auto">
+                                                {accessToken}
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div>

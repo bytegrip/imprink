@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Imprink.Application;
 using Imprink.Application.Products.Create;
 using Imprink.Domain.Repositories;
@@ -41,6 +42,34 @@ public static class Startup
         {
             options.Authority = builder.Configuration["Auth0:Authority"];
             options.Audience = builder.Configuration["Auth0:Audience"];
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var token = context.Request.Cookies["access_token"];
+                    if (!string.IsNullOrEmpty(token)) context.Token = token;
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    var dbContext = context.HttpContext.RequestServices.GetService<ApplicationDbContext>();
+                    var userId = context.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                 ?? context.Principal?.FindFirst("sub")?.Value;
+
+                    if (string.IsNullOrEmpty(userId)) return Task.CompletedTask;
+                    var identity = context.Principal!.Identity as ClaimsIdentity;
+
+                    var roles = (from ur in dbContext?.UserRole
+                        join r in dbContext?.Roles on ur.RoleId equals r.Id
+                        where ur.UserId == userId
+                        select r.RoleName).ToList();
+
+                    foreach (var role in roles) identity!.AddClaim(new Claim(ClaimTypes.Role, role));
+
+                    return Task.CompletedTask;
+                }
+            };
         });
 
         services.AddAuthorization();

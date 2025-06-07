@@ -9,7 +9,7 @@ public class UserRoleRepository(ApplicationDbContext context) : IUserRoleReposit
 {
     public async Task<IEnumerable<Role>> GetUserRolesAsync(string userId, CancellationToken cancellationToken = default)
     {
-        return await context.UserRoles
+        return await context.UserRole
             .AsNoTracking()
             .Where(ur => ur.UserId == userId)
             .Select(ur => ur.Role)
@@ -18,7 +18,7 @@ public class UserRoleRepository(ApplicationDbContext context) : IUserRoleReposit
 
     public async Task<IEnumerable<User>> GetUsersInRoleAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
-        return await context.UserRoles
+        return await context.UserRole
             .AsNoTracking()
             .Where(ur => ur.RoleId == roleId)
             .Select(ur => ur.User)
@@ -27,32 +27,32 @@ public class UserRoleRepository(ApplicationDbContext context) : IUserRoleReposit
 
     public async Task<bool> IsUserInRoleAsync(string userId, Guid roleId, CancellationToken cancellationToken = default)
     {
-        return await context.UserRoles
+        return await context.UserRole
             .AnyAsync(ur => ur.UserId == userId && ur.RoleId == roleId, cancellationToken);
     }
 
     public async Task<UserRole?> GetUserRoleAsync(string userId, Guid roleId, CancellationToken cancellationToken = default)
     {
-        return await context.UserRoles
+        return await context.UserRole
             .AsNoTracking()
             .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId, cancellationToken);
     }
 
     public async Task AddUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
     {
-        context.UserRoles.Add(userRole);
+        context.UserRole.Add(userRole);
         await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task RemoveUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
     {
-        context.UserRoles.Remove(userRole);
+        context.UserRole.Remove(userRole);
         await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<UserRole>> GetUserRolesByUserIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        return await context.UserRoles
+        return await context.UserRole
             .AsNoTracking()
             .Where(ur => ur.UserId == userId)
             .ToListAsync(cancellationToken);

@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using Imprink.Domain.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,16 +13,11 @@ public class UserController : ControllerBase
     {
         var claims = User.Claims;
 
-        var enumerable = claims as Claim[] ?? claims.ToArray();
-        var user = new Auth0User
+        foreach (var claim in claims)
         {
-            Sub = enumerable.FirstOrDefault(c => c.Type == "sub")?.Value ?? "",
-            Name = enumerable.FirstOrDefault(c => c.Type == "name")?.Value ?? "",
-            Nickname = enumerable.FirstOrDefault(c => c.Type == "nickname")?.Value ?? "",
-            Email = enumerable.FirstOrDefault(c => c.Type == "email")?.Value ?? "",
-            EmailVerified = enumerable.FirstOrDefault(c => c.Type == "email_verified")?.Value == "true"
-        };
-        
-        return Ok(user);
+            Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+        }
+
+        return Ok("Claims logged to console.");
     }
 }

@@ -822,7 +822,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("IX_UserRole_UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>

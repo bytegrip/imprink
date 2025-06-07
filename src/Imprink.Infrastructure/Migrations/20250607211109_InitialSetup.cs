@@ -193,7 +193,7 @@ namespace Imprink.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
+                name: "UserRole",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
@@ -201,15 +201,15 @@ namespace Imprink.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_UserRole", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
+                        name: "FK_UserRole_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserRoles_Users_UserId",
+                        name: "FK_UserRole_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -630,12 +630,12 @@ namespace Imprink.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
-                table: "UserRoles",
+                table: "UserRole",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRole_UserId",
-                table: "UserRoles",
+                table: "UserRole",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -663,7 +663,7 @@ namespace Imprink.Infrastructure.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "UserRole");
 
             migrationBuilder.DropTable(
                 name: "Orders");

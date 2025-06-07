@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imprink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250606173957_InitialSetup")]
+    [Migration("20250607211109_InitialSetup")]
     partial class InitialSetup
     {
         /// <inheritdoc />
@@ -825,7 +825,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("IX_UserRole_UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>

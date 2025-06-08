@@ -1,6 +1,7 @@
 using Imprink.Application;
 using Imprink.Domain.Repositories;
 using Imprink.Infrastructure.Database;
+using Microsoft.Identity.Client;
 
 namespace Imprink.Infrastructure;
 
@@ -8,11 +9,13 @@ public class UnitOfWork(
     ApplicationDbContext context, 
     IProductRepository productRepository, 
     IProductVariantRepository productVariantRepository, 
-    ICategoryRepository categoryRepository) : IUnitOfWork
+    ICategoryRepository categoryRepository,
+    IUserRepository userRepository) : IUnitOfWork
 {
     public IProductRepository ProductRepository => productRepository;
     public IProductVariantRepository ProductVariantRepository => productVariantRepository;
     public ICategoryRepository CategoryRepository => categoryRepository;
+    public IUserRepository UserRepository => userRepository;
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {

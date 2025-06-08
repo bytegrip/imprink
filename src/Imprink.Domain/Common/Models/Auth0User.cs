@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Imprink.Domain.Common.Models;
 
 public class Auth0User

@@ -1,34 +1,30 @@
-import { cookies } from 'next/headers';
+import {cookies, headers} from 'next/headers';
 import { NextResponse } from 'next/server';
 import {auth0} from "@/lib/auth0";
+import api from "@/lib/api";
 
 export async function GET() {
     try {
-        const session = await auth0.getSession();
-        const accessToken = session.tokenSet.accessToken;
-        if (!accessToken) {
-            return NextResponse.json({ error: 'No access token found' }, { status: 401 });
-        }
+        const token = (await auth0.getSession()).tokenSet.accessToken;
 
-        const response = NextResponse.json({ message: 'Access token set in cookie' });
+        if (!token) { return NextResponse.json({ error: 'No access token found' }, { status: 401 }); }
 
-        const cookieDomain = process.env.COOKIE_DOMAIN || undefined;
-
-        const cookieStore = await cookies();
-        cookieStore.set({
-            name: 'access_token',
-            value: accessToken,
+        (await cookies()).set('access_token', token, {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
             path: '/',
-            domain: cookieDomain,
+            domain: process.env.COOKIE_DOMAIN,
             maxAge: 3600,
         });
 
-        return response;
+        await api.post('/users/sync', {}, {
+            headers: { Cookie: `access_token=${token}` }
+        });
+
+        NextResponse.json({ message: 'Access token set in cookie' });
     } catch (error) {
-        console.error('Error in /api/set-token:', error);
+        console.error('Error in /api/token:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

@@ -5,32 +5,26 @@ import {useEffect, useState} from "react";
 
 export default function Home() {
     const { user, error, isLoading } = useUser();
-    const [accessToken, setAccessToken] = useState(null);
 
     useEffect(() => {
         const fetchAccessToken = async () => {
             if (user) {
                 try {
-                    const response = await fetch('/auth/access-token');
                     const v = await fetch('/token');
-                    if (response.ok) {
-                        const tokenData = await response.text();
-                        setAccessToken(tokenData);
-                    } else {
-                        setAccessToken('Token not available');
-                    }
                 } catch (error) {
-                    setAccessToken('Error fetching token');
+                    console.error("Error fetching token");
+                }
+            } else {
+                try {
+                    const resp = await fetch('/untoken');
+                } catch (e) {
+                    console.error('Error in /api/untoken:', e);
                 }
             }
         };
 
         fetchAccessToken().then(r => console.log(r));
     }, [user]);
-
-    async function checkValidity() {
-        const check = await fetch('https://impr.ink/api/api/User', {method: 'POST'});
-    }
 
     if (isLoading) {
         return (
@@ -147,15 +141,6 @@ export default function Home() {
                                                 </div>
                                             </div>
                                         )}
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Access
-                                                Token</label>
-                                            <div
-                                                className="text-white/80 text-xs mt-1 p-2 bg-black/30 rounded-lg border border-white/10 font-mono break-all max-h-24 overflow-auto">
-                                                {accessToken}
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div>

@@ -1,3 +1,4 @@
+using Imprink.Domain.Common.Models;
 using Imprink.Domain.Entities.Users;
 using Imprink.Domain.Repositories;
 using Imprink.Infrastructure.Database;
@@ -7,6 +8,37 @@ namespace Imprink.Infrastructure.Repositories;
 
 public class UserRepository(ApplicationDbContext context) : IUserRepository
 {
+    public async Task<bool> UpdateOrCreateUserAsync(Auth0User user, CancellationToken cancellationToken = default)
+    {
+        var userToUpdate = await context.Users
+            .Where(u => u.Id.Equals(user.Sub))
+            .FirstOrDefaultAsync(cancellationToken);
+        
+        if (userToUpdate == null)
+        {
+            var newUser = new User
+            {
+                Id = user.Sub,
+                Email = user.Email,
+                EmailVerified = user.EmailVerified,
+                Name = user.Name,
+                Nickname = user.Nickname,
+                IsActive = true
+            };
+            
+            context.Users.Add(newUser);
+        }
+        else
+        {
+            userToUpdate.Email = user.Email;
+            userToUpdate.Name = user.Name;
+            userToUpdate.Nickname = user.Nickname;
+            userToUpdate.EmailVerified = user.EmailVerified;
+        }
+        
+        return true;
+    }
+
     public async Task<User?> GetUserByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
         return await context.Users
@@ -92,80 +124,12 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return true;
     }
 
-    public async Task UpdateLastLoginAsync(string userId, DateTime loginTime, CancellationToken cancellationToken = default)
-    {
-        var user = await context.Users.FindAsync(new object[] { userId }, cancellationToken);
-        if (user != null)
-        {
-            user.LastLoginAt = loginTime;
-            await context.SaveChangesAsync(cancellationToken);
-        }
-    }
-
-    public async Task<IEnumerable<User>> SearchUsersAsync(string searchTerm, CancellationToken cancellationToken = default)
-    {
-        return await context.Users
-            .AsNoTracking()
-            .Where(u => u.Email.Contains(searchTerm) || 
-                       u.FirstName.Contains(searchTerm) || 
-                       u.LastName.Contains(searchTerm))
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<IEnumerable<User>> GetUsersByRoleAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
         return await context.Users
             .AsNoTracking()
             .Where(u => u.UserRoles.Any(ur => ur.RoleId == roleId))
             .ToListAsync(cancellationToken);
-    }
-
-    public async Task<(IEnumerable<User> Users, int TotalCount)> GetUsersPagedAsync(
-        int pageNumber, 
-        int pageSize, 
-        string? searchTerm = null,
-        bool? isActive = null,
-        CancellationToken cancellationToken = default)
-    {
-        var query = context.Users.AsNoTracking();
-
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            query = query.Where(u => u.Email.Contains(searchTerm) || 
-                                   u.FirstName.Contains(searchTerm) || 
-                                   u.LastName.Contains(searchTerm));
-        }
-
-        if (isActive.HasValue)
-        {
-            query = query.Where(u => u.IsActive == isActive.Value);
-        }
-
-        var totalCount = await query.CountAsync(cancellationToken);
-        
-        var users = await query
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return (users, totalCount);
-    }
-
-    public async Task<User?> GetUserWithAddressesAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        return await context.Users
-            .AsNoTracking()
-            .Include(u => u.Addresses)
-            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
-    }
-
-    public async Task<User?> GetUserWithRolesAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        return await context.Users
-            .AsNoTracking()
-            .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 
     public async Task<User?> GetUserWithAllRelatedDataAsync(string userId, CancellationToken cancellationToken = default)

@@ -15,28 +15,29 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(256);
-            
-        builder.Property(u => u.FirstName)
+
+        builder.Property(u => u.Name)
             .IsRequired()
             .HasMaxLength(100);
-            
-        builder.Property(u => u.LastName)
+        
+        builder.Property(u => u.Nickname)
             .IsRequired()
+            .HasMaxLength(100);
+        
+        builder.Property(u => u.EmailVerified)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        builder.Property(u => u.FullName)
             .HasMaxLength(100);
             
         builder.Property(u => u.PhoneNumber)
             .HasMaxLength(20);
             
-        builder.Property(u => u.DateOfBirth)
-            .HasColumnType("date");
-            
         builder.Property(u => u.IsActive)
             .IsRequired()
             .HasDefaultValue(true);
             
-        builder.Property(u => u.LastLoginAt)
-            .HasColumnType("datetime2");
-
         builder.HasIndex(u => u.Email)
             .IsUnique()
             .HasDatabaseName("IX_User_Email");
@@ -50,7 +51,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasPrincipalKey(u => u.Id)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Ignore(u => u.FullName);
         builder.Ignore(u => u.DefaultAddress);
         builder.Ignore(u => u.Roles);
     }

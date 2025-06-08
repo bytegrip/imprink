@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imprink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250607211109_InitialSetup")]
+    [Migration("20250608204903_InitialSetup")]
     partial class InitialSetup
     {
         /// <inheritdoc />
@@ -766,16 +766,16 @@ namespace Imprink.Infrastructure.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
+                    b.Property<bool>("EmailVerified")
+                        .HasMaxLength(100)
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -784,10 +784,12 @@ namespace Imprink.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Nickname")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");

@@ -24,6 +24,8 @@ public static class Startup
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        services.AddScoped<Seeder>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
@@ -61,13 +63,14 @@ public static class Startup
                     if (string.IsNullOrEmpty(userId)) return Task.CompletedTask;
                     var identity = context.Principal!.Identity as ClaimsIdentity;
 
-                    var roles = (from ur in dbContext?.UserRole
+                    var roles = (
+                        from ur in dbContext?.UserRole
                         join r in dbContext?.Roles on ur.RoleId equals r.Id
                         where ur.UserId == userId
                         select r.RoleName).ToList();
 
                     foreach (var role in roles) identity!.AddClaim(new Claim(ClaimTypes.Role, role));
-
+                    identity!.AddClaim(new Claim(ClaimTypes.Role, "User"));
                     return Task.CompletedTask;
                 }
             };

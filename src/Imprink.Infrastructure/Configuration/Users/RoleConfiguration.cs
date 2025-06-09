@@ -23,7 +23,6 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             .HasDatabaseName("IX_Role_RoleName");
 
         builder.HasData(
-            new Role { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), RoleName = "User" },
             new Role { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), RoleName = "Merchant" },
             new Role { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), RoleName = "Admin" }
         );

@@ -2,7 +2,7 @@ using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Common.Models;
 using MediatR;
 
-namespace Imprink.Application.Products.Query;
+namespace Imprink.Application.Products;
 
 public class GetProductsQuery : IRequest<PagedResultDto<ProductDto>>
 {

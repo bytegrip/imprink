@@ -68,62 +68,12 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<User> CreateUserAsync(User user, CancellationToken cancellationToken = default)
-    {
-        context.Users.Add(user);
-        await context.SaveChangesAsync(cancellationToken);
-        return user;
-    }
-
-    public async Task<User> UpdateUserAsync(User user, CancellationToken cancellationToken = default)
-    {
-        context.Users.Update(user);
-        await context.SaveChangesAsync(cancellationToken);
-        return user;
-    }
-
-    public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        var user = await context.Users.FindAsync(new object[] { userId }, cancellationToken);
-        if (user != null)
-        {
-            context.Users.Remove(user);
-            await context.SaveChangesAsync(cancellationToken);
-        }
-    }
-
     public async Task<bool> UserExistsAsync(string userId, CancellationToken cancellationToken = default)
     {
         return await context.Users
             .AnyAsync(u => u.Id == userId, cancellationToken);
     }
-
-    public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
-    {
-        return await context.Users
-            .AnyAsync(u => u.Email == email, cancellationToken);
-    }
-
-    public async Task<bool> ActivateUserAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        var user = await context.Users.FindAsync(new object[] { userId }, cancellationToken);
-        if (user == null) return false;
-
-        user.IsActive = true;
-        await context.SaveChangesAsync(cancellationToken);
-        return true;
-    }
-
-    public async Task<bool> DeactivateUserAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        var user = await context.Users.FindAsync(new object[] { userId }, cancellationToken);
-        if (user == null) return false;
-
-        user.IsActive = false;
-        await context.SaveChangesAsync(cancellationToken);
-        return true;
-    }
-
+    
     public async Task<IEnumerable<User>> GetUsersByRoleAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
         return await context.Users

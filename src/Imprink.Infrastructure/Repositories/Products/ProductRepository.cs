@@ -8,35 +8,9 @@ namespace Imprink.Infrastructure.Repositories;
 
 public class ProductRepository(ApplicationDbContext context) : IProductRepository
 {
-    public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context.Products
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<Product?> GetByIdWithVariantsAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context.Products
-            .Include(p => p.ProductVariants.Where(pv => pv.IsActive))
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<Product?> GetByIdWithCategoryAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context.Products
-            .Include(p => p.Category)
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<Product?> GetByIdFullAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context.Products
-            .Include(p => p.Category)
-            .Include(p => p.ProductVariants.Where(pv => pv.IsActive))
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<PagedResult<Product>> GetPagedAsync(ProductFilterParameters filterParameters, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<Product>> GetPagedAsync(
+        ProductFilterParameters filterParameters, 
+        CancellationToken cancellationToken = default)
     {
         var query = context.Products
             .Include(p => p.Category)
@@ -49,8 +23,9 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
 
         if (!string.IsNullOrEmpty(filterParameters.SearchTerm))
         {
-            query = query.Where(p => p.Name.Contains(filterParameters.SearchTerm) ||
-                                   (p.Description != null && p.Description.Contains(filterParameters.SearchTerm)));
+            query = query.Where(
+                p => p.Name.Contains(filterParameters.SearchTerm) 
+                     || (p.Description != null && p.Description.Contains(filterParameters.SearchTerm)));
         }
 
         if (filterParameters.CategoryId.HasValue)
@@ -100,6 +75,34 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
             PageNumber = filterParameters.PageNumber,
             PageSize = filterParameters.PageSize
         };
+    }
+    
+    public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.Products
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
+    public async Task<Product?> GetByIdWithVariantsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.Products
+            .Include(p => p.ProductVariants.Where(pv => pv.IsActive))
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
+    public async Task<Product?> GetByIdWithCategoryAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
+    public async Task<Product?> GetByIdFullAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.Products
+            .Include(p => p.Category)
+            .Include(p => p.ProductVariants.Where(pv => pv.IsActive))
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<Product>> GetByCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default)

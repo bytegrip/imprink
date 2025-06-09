@@ -30,8 +30,8 @@ public class RequestTimingMiddleware(RequestDelegate next, ILogger<RequestTiming
 
 public static class RequestTimingMiddlewareExtensions
 {
-    public static IApplicationBuilder UseRequestTiming(this IApplicationBuilder builder)
+    public static void UseRequestTiming(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<RequestTimingMiddleware>();
+        builder.UseMiddleware<RequestTimingMiddleware>();
     }
 }

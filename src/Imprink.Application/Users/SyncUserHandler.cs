@@ -1,4 +1,4 @@
-using Imprink.Domain.Common.Models;
+using Imprink.Domain.Models;
 using MediatR;
 
 namespace Imprink.Application.Users;

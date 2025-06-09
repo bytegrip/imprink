@@ -1,10 +1,13 @@
 using System.Security.Claims;
+using FluentValidation;
 using Imprink.Application;
 using Imprink.Application.Products.Create;
+using Imprink.Application.Validation.Models;
 using Imprink.Domain.Repositories;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories;
+using Imprink.WebApi.Filters;
 using Imprink.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -37,11 +40,14 @@ public static class Startup
             cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly);
         });
         
+        services.AddValidatorsFromAssembly(typeof(Auth0UserValidator).Assembly);
+        
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
+        })
+            .AddJwtBearer(options =>
         {
             options.Authority = builder.Configuration["Auth0:Authority"];
             options.Audience = builder.Configuration["Auth0:Audience"];
@@ -78,7 +84,11 @@ public static class Startup
 
         services.AddAuthorization();
 
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<ValidationActionFilter>();
+        });
+        
         services.AddSwaggerGen();
     }
 

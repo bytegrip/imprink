@@ -1,6 +1,6 @@
 using Imprink.Application.Products;
 using Imprink.Application.Products.Dtos;
-using Imprink.Domain.Common.Models;
+using Imprink.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

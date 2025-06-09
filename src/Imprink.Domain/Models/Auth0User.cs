@@ -1,4 +1,4 @@
-namespace Imprink.Domain.Common.Models;
+namespace Imprink.Domain.Models;
 
 public class Auth0User
 {

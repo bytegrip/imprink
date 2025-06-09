@@ -1,5 +1,5 @@
-using Imprink.Domain.Common.Models;
 using Imprink.Domain.Entities.Users;
+using Imprink.Domain.Models;
 
 namespace Imprink.Domain.Repositories;
 

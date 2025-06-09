@@ -1,13 +1,11 @@
 using Imprink.WebApi;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Seq("http://seq:5341",
-        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
+    .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
 builder.Host.UseSerilog();

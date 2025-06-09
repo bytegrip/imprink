@@ -8,12 +8,19 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ConnectionStrings__DefaultConnection=Server=${SQL_SERVER};Database=${SQL_DATABASE};User Id=${SQL_USER_ID};Password=${SQL_PASSWORD};Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;
-      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - HTTP_PORTS=${ASPNETCORE_HTTP_PORTS}
       - Auth0__Authority=${AUTH0_AUTHORITY}
       - Auth0__Audience=${AUTH0_AUDIENCE}
-      - Logging__LogLevel__Default=${ASPNETCORE_LOGGING_LEVEL_DEFAULT}
-      - Logging__LogLevel__Microsoft.AspNetCore=${ASPNETCORE_LOGGING_LEVEL}
-      - Logging__LogLevel__Microsoft.EntityFrameworkCore=${ASPNETCORE_LOGGING_LEVEL_EFCORE}
+      - Serilog__SeqUrl=${ASPNETCORE_SEQ_URL}
+      - Serilog__MinimumLevel__Default=${ASPNETCORE_LOGGING_LEVEL_DEFAULT}
+      - Serilog__MinimumLevel__Override__Microsoft=${ASPNETCORE_LOGGING_LEVEL}
+      - Serilog__MinimumLevel__Override__Microsoft.AspNetCore=${ASPNETCORE_LOGGING_LEVEL}
+      - Serilog__MinimumLevel__Override__Microsoft.EntityFrameworkCore=${ASPNETCORE_LOGGING_LEVEL_EFCORE}
+      - Serilog__MinimumLevel__Override__Imprink=${ASPNETCORE_LOGGING_LEVEL_IMPRINK}
+      - Serilog__WriteTo__0__Name=Console
+      - Serilog__WriteTo__1__Name=Seq
+      - Serilog__WriteTo__1__Args__serverUrl=${ASPNETCORE_SEQ_URL}
+      - Serilog__Enrich__0=FromLogContext
       - DatabaseOptions__ApplyMigrationsAtStartup=${ASPNETCORE_APPLY_MIGRATIONS_AT_STARTUP}
     depends_on:
       - mssql
@@ -25,12 +32,10 @@ services:
     expose:
       - "80"
       - "5341"
-    ports:
-      - "5341:5341"
     environment:
       - ACCEPT_EULA=Y
       - SEQ_CACHE_SYSTEMRAMTARGET=0.9
-      - BASE_URI=https://impr.ink/seq
+      - BASE_URI=${SEQ_BASE_URI}
     networks:
       - app-network
 
@@ -43,7 +48,7 @@ services:
     ports:
       - "3000"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV}
       - AUTH0_SECRET=${AUTH0_SECRET}
       - APP_BASE_URL=${APP_BASE_URL}
       - AUTH0_DOMAIN=${AUTH0_ISSUER_BASE_URL}
@@ -62,16 +67,19 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
+    tty: false
+    stdin_open: false
     ports:
       - "1433:1433"
     environment:
       - SA_PASSWORD=${SQL_PASSWORD}
       - ACCEPT_EULA=Y
       - MSSQL_AGENT_ENABLED=false
-      - MSSQL_LOG_LEVEL=WARN
     restart: unless-stopped
     networks:
       - app-network
+    logging:
+      driver: "none"
 
   nginx:
     image: nginx:latest

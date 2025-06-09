@@ -22,7 +22,7 @@ export async function GET() {
             headers: { Cookie: `access_token=${token}` }
         });
 
-        NextResponse.json({ message: 'Access token set in cookie' });
+        return NextResponse.json({ message: 'Access token set in cookie' });
     } catch (error) {
         console.error('Error in /api/token:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

@@ -5,6 +5,7 @@ using Imprink.Domain.Repositories;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories;
+using Imprink.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -94,6 +95,8 @@ public static class Startup
                 Console.WriteLine($"An error occurred while applying migrations: {ex.Message}");
             }
         }
+
+        app.UseRequestTiming();
         
         if (env.IsDevelopment())
         {

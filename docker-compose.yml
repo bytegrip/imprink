@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: ./src/Imprink.WebApi/Dockerfile
     expose:
-      - "80"
+      - "8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ConnectionStrings__DefaultConnection=Server=${SQL_SERVER};Database=${SQL_DATABASE};User Id=${SQL_USER_ID};Password=${SQL_PASSWORD};Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;
@@ -17,6 +17,20 @@ services:
       - DatabaseOptions__ApplyMigrationsAtStartup=${ASPNETCORE_APPLY_MIGRATIONS_AT_STARTUP}
     depends_on:
       - mssql
+    networks:
+      - app-network
+
+  seq:
+    image: datalust/seq
+    expose:
+      - "80"
+      - "5341"
+    ports:
+      - "5341:5341"
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_CACHE_SYSTEMRAMTARGET=0.9
+      - BASE_URI=https://impr.ink/seq
     networks:
       - app-network
 
@@ -45,15 +59,16 @@ services:
     networks:
       - app-network
 
-
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "${SQL_PASSWORD}"
-      ACCEPT_EULA: "Y"
+      - SA_PASSWORD=${SQL_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_AGENT_ENABLED=false
+      - MSSQL_LOG_LEVEL=WARN
     restart: unless-stopped
     networks:
       - app-network
@@ -70,6 +85,7 @@ services:
     depends_on:
       - webapi
       - webui
+      - seq
     networks:
       - app-network
 

@@ -1,26 +1,31 @@
+using Imprink.Application.Exceptions;
+using Imprink.Application.Service;
 using Imprink.Application.Users.Dtos;
-using Imprink.Domain.Models;
 using MediatR;
 
 namespace Imprink.Application.Users;
 
-public record SyncUserCommand(Auth0User User) : IRequest<UserDto?>;
+public record SetUserFullNameCommand(string FirstName, string LastName) : IRequest<UserDto?>;
 
-public class SyncUserHandler(IUnitOfWork uw): IRequestHandler<SyncUserCommand, UserDto?>
+public class SetUserFullNameHandler(IUnitOfWork uw, ICurrentUserService userService) : IRequestHandler<SetUserFullNameCommand, UserDto?>
 {
-    public async Task<UserDto?> Handle(SyncUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserDto?> Handle(SetUserFullNameCommand request, CancellationToken cancellationToken)
     {
         await uw.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var user = await uw.UserRepository.UpdateOrCreateUserAsync(request.User, cancellationToken);
-            
-            if (user == null) throw new Exception("User exists but could not be updated");
-            
+            var currentUser = userService.GetCurrentUserId();
+            if (currentUser == null)
+                throw new NotFoundException("User token could not be accessed.");
+
+            var user = await uw.UserRepository.SetUserFullNameAsync(currentUser, request.FirstName, request.LastName, cancellationToken);
+            if (user == null)
+                throw new DataUpdateException("User name could not be updated.");
+
             await uw.SaveAsync(cancellationToken);
             await uw.CommitTransactionAsync(cancellationToken);
-            
+
             return new UserDto
             {
                 Id = user.Id,
@@ -39,5 +44,5 @@ public class SyncUserHandler(IUnitOfWork uw): IRequestHandler<SyncUserCommand, U
             await uw.RollbackTransactionAsync(cancellationToken);
             throw;
         }
-    }
+    } 
 }

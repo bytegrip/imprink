@@ -62,23 +62,21 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Category> AddAsync(Category category, CancellationToken cancellationToken = default)
+    public Task<Category> AddAsync(Category category, CancellationToken cancellationToken = default)
     {
         category.Id = Guid.NewGuid();
         category.CreatedAt = DateTime.UtcNow;
         category.ModifiedAt = DateTime.UtcNow;
 
         context.Categories.Add(category);
-        await context.SaveChangesAsync(cancellationToken);
-        return category;
+        return Task.FromResult(category);
     }
 
-    public async Task<Category> UpdateAsync(Category category, CancellationToken cancellationToken = default)
+    public Task<Category> UpdateAsync(Category category, CancellationToken cancellationToken = default)
     {
         category.ModifiedAt = DateTime.UtcNow;
         context.Categories.Update(category);
-        await context.SaveChangesAsync(cancellationToken);
-        return category;
+        return Task.FromResult(category);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -87,7 +85,6 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         if (category != null)
         {
             context.Categories.Remove(category);
-            await context.SaveChangesAsync(cancellationToken);
         }
     }
 

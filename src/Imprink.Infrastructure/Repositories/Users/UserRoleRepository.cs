@@ -1,5 +1,4 @@
 using Imprink.Domain.Entities.Users;
-using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -33,17 +32,15 @@ public class UserRoleRepository(ApplicationDbContext context) : IUserRoleReposit
             .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId, cancellationToken);
     }
 
-    public async Task<UserRole> AddUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
+    public Task<UserRole> AddUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
     {
         var ur = context.UserRole.Add(userRole);
-        await context.SaveChangesAsync(cancellationToken);
-        return ur.Entity;
+        return Task.FromResult(ur.Entity);
     }
 
-    public async Task<UserRole> RemoveUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
+    public Task<UserRole> RemoveUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
     {
         var ur = context.UserRole.Remove(userRole);
-        await context.SaveChangesAsync(cancellationToken);
-        return ur.Entity;
+        return Task.FromResult(ur.Entity);
     }
 }

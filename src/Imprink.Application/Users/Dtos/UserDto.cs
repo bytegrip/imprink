@@ -1,17 +1,17 @@
 using Imprink.Domain.Entities.Orders;
+using Imprink.Domain.Entities.Users;
 
-namespace Imprink.Domain.Entities.Users;
+namespace Imprink.Application.Users.Dtos;
 
-public class User
+public class UserDto
 {
     public string Id { get; set; } = null!;
     public required string Name { get; set; }
     public required string Nickname { get; set; }
     public required string Email { get; set; }
     public bool EmailVerified { get; set; }
-    
-    public string? FirstName { get; set; } = null!;
-    public string? LastName { get; set; } = null!;
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
     public string? PhoneNumber { get; set; }
     public required bool IsActive { get; set; }
 

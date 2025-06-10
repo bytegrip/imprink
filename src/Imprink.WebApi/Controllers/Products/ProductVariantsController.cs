@@ -13,7 +13,6 @@ public class ProductVariantsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<IEnumerable<ProductVariantDto>>> GetProductVariants(
         [FromQuery] GetProductVariantsQuery query)
     {
-        var result = await mediator.Send(query);
-        return Ok(result);
+        return Ok(await mediator.Send(query));
     }
 }

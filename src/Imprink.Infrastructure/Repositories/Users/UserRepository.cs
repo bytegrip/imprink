@@ -1,6 +1,7 @@
 using Imprink.Domain.Entities.Users;
 using Imprink.Domain.Models;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ namespace Imprink.Infrastructure.Repositories.Users;
 
 public class UserRepository(ApplicationDbContext context) : IUserRepository
 {
-    public async Task<bool> UpdateOrCreateUserAsync(Auth0User user, CancellationToken cancellationToken = default)
+    public async Task<User?> UpdateOrCreateUserAsync(Auth0User user, CancellationToken cancellationToken = default)
     {
         var userToUpdate = await context.Users
             .Where(u => u.Id.Equals(user.Sub))
@@ -27,16 +28,15 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             };
             
             context.Users.Add(newUser);
+            return newUser;
         }
-        else
-        {
-            userToUpdate.Email = user.Email;
-            userToUpdate.Name = user.Name;
-            userToUpdate.Nickname = user.Nickname;
-            userToUpdate.EmailVerified = user.EmailVerified;
-        }
-        
-        return true;
+
+        userToUpdate.Email = user.Email;
+        userToUpdate.Name = user.Name;
+        userToUpdate.Nickname = user.Nickname;
+        userToUpdate.EmailVerified = user.EmailVerified;
+
+        return userToUpdate;
     }
 
     public async Task<User?> GetUserByIdAsync(string userId, CancellationToken cancellationToken = default)
@@ -91,5 +91,28 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
                 .ThenInclude(ur => ur.Role)
             .Include(u => u.Orders)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+    }
+
+    public async Task<User?> SetUserPhoneAsync(string userId, string phoneNumber, CancellationToken cancellationToken = default)
+    {
+        var user = await context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+    
+        if (user == null) return null;
+    
+        user.PhoneNumber = phoneNumber;
+        return user;
+    }
+
+    public async Task<User?> SetUserFullNameAsync(string userId, string firstName, string lastName, CancellationToken cancellationToken = default)
+    {
+        var user = await context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+    
+        if (user == null) return null;
+
+        user.FirstName = firstName;
+        user.LastName = lastName;
+        return user;
     }
 }

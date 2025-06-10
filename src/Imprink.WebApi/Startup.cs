@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FluentValidation;
 using Imprink.Application;
 using Imprink.Application.Products.Create;
+using Imprink.Application.Service;
 using Imprink.Application.Validation.Models;
 using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Products;
@@ -10,6 +11,7 @@ using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories.Products;
 using Imprink.Infrastructure.Repositories.Users;
+using Imprink.Infrastructure.Services;
 using Imprink.WebApi.Filters;
 using Imprink.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,8 +33,11 @@ public static class Startup
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         
         services.AddScoped<Seeder>();
+        
+        services.AddHttpContextAccessor();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
@@ -140,13 +145,13 @@ public static class Startup
             }
         }
 
+        app.UseGlobalExceptionHandling();
         app.UseRequestTiming();
         
         if (env.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.UseDeveloperExceptionPage();
         }
         else
         {

@@ -18,13 +18,12 @@ public class DeleteUserRoleHandler(IUnitOfWork uw) : IRequestHandler<DeleteUserR
             if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken))
                 throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
 
-            var userRole = new UserRole
-            {
-                UserId = request.Sub,
-                RoleId = request.RoleId
-            };
+            var existingUserRole = await uw.UserRoleRepository.GetUserRoleAsync(request.Sub, request.RoleId, cancellationToken);
+            
+            if (existingUserRole == null)
+                throw new NotFoundException($"User role not found for user {request.Sub} and role {request.RoleId}");
 
-            var removedRole = await uw.UserRoleRepository.RemoveUserRoleAsync(userRole, cancellationToken);
+            var removedRole = await uw.UserRoleRepository.RemoveUserRoleAsync(existingUserRole, cancellationToken);
 
             await uw.SaveAsync(cancellationToken);
             await uw.CommitTransactionAsync(cancellationToken);

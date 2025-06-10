@@ -9,7 +9,9 @@ public class User
     public required string Nickname { get; set; }
     public required string Email { get; set; }
     public bool EmailVerified { get; set; }
-    public string? FullName { get; set; }
+    
+    public string? FirstName { get; set; } = null!;
+    public string? LastName { get; set; } = null!;
     public string? PhoneNumber { get; set; }
     public required bool IsActive { get; set; }
 

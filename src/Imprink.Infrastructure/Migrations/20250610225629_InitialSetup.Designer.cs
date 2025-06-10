@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imprink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250609202250_InitialSetup")]
+    [Migration("20250610225629_InitialSetup")]
     partial class InitialSetup
     {
         /// <inheritdoc />
@@ -745,11 +745,6 @@ namespace Imprink.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            RoleName = "User"
-                        },
-                        new
-                        {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             RoleName = "Merchant"
                         },
@@ -775,7 +770,7 @@ namespace Imprink.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -783,6 +778,10 @@ namespace Imprink.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()

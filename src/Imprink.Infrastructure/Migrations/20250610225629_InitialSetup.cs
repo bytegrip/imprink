@@ -85,7 +85,8 @@ namespace Imprink.Infrastructure.Migrations
                     Nickname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     EmailVerified = table.Column<bool>(type: "bit", maxLength: 100, nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
@@ -339,7 +340,6 @@ namespace Imprink.Infrastructure.Migrations
                 columns: new[] { "Id", "RoleName" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), "User" },
                     { new Guid("22222222-2222-2222-2222-222222222222"), "Merchant" },
                     { new Guid("33333333-3333-3333-3333-333333333333"), "Admin" }
                 });

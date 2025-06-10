@@ -1,8 +1,9 @@
 using Imprink.Domain.Entities.Orders;
+using Imprink.Domain.Entities.Users;
 
-namespace Imprink.Domain.Entities.Users;
+namespace Imprink.Application.Users.Dtos;
 
-public class User
+public class UserDto
 {
     public string Id { get; set; } = null!;
     public required string Name { get; set; }

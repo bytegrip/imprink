@@ -27,7 +27,6 @@ public class UserController(IMediator mediator) : ControllerBase
         };
         
         await mediator.Send(new SyncUserCommand(auth0User));
-
         return Ok("User Synced.");
     }
 }

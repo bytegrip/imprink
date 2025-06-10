@@ -14,35 +14,21 @@ public class UserRoleController(IMediator mediator) : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> GetMyRoles()
     {
-        var claims = User.Claims as Claim[] ?? User.Claims.ToArray();
-        var sub = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-        
-        var myRoles = await mediator.Send(new GetUserRolesCommand(sub));
-        
-        return Ok(myRoles);
+        var sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        return Ok(await mediator.Send(new GetUserRolesCommand(sub)));
     }
     
     [Authorize(Roles = "Admin")]
     [HttpPost("set")]
     public async Task<IActionResult> SetUserRole(SetUserRoleCommand command)
     {
-        var userRole = await mediator.Send(command);
-        
-        if (userRole == null)
-            return BadRequest();
-        
-        return Ok(userRole);
+        return Ok(await mediator.Send(command));
     }
     
     [Authorize(Roles = "Admin")]
     [HttpPost("unset")]
     public async Task<IActionResult> UnsetUserRole(DeleteUserRoleCommand command)
     {
-        var userRole = await mediator.Send(command);
-        
-        if (userRole == null)
-            return BadRequest();
-        
-        return Ok(userRole);
+        return Ok(await mediator.Send(command));
     }
 }

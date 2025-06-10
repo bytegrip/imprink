@@ -12,7 +12,6 @@ public class CategoriesController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories([FromQuery] GetCategoriesQuery query)
     {
-        var result = await mediator.Send(query);
-        return Ok(result);
+        return Ok(await mediator.Send(query));
     }
 }

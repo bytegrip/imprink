@@ -11,21 +11,35 @@ public class DeleteUserRoleHandler(IUnitOfWork uw) : IRequestHandler<DeleteUserR
 {
     public async Task<UserRoleDto?> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
     {
-        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) 
-            throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
+        await uw.BeginTransactionAsync(cancellationToken);
 
-        var userRole = new UserRole
+        try
         {
-            UserId = request.Sub,
-            RoleId = request.RoleId
-        };
+            if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken))
+                throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
+
+            var userRole = new UserRole
+            {
+                UserId = request.Sub,
+                RoleId = request.RoleId
+            };
+
+            var removedRole = await uw.UserRoleRepository.RemoveUserRoleAsync(userRole, cancellationToken);
+
+            await uw.SaveAsync(cancellationToken);
+            await uw.CommitTransactionAsync(cancellationToken);
+            
+            return new UserRoleDto
+            {
+                UserId = removedRole.UserId,
+                RoleId = removedRole.RoleId
+            };
+        }
+        catch
+        {
+            await uw.RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
         
-        var removedRole = await uw.UserRoleRepository.RemoveUserRoleAsync(userRole, cancellationToken);
-
-        return new UserRoleDto
-        {
-            UserId = removedRole.UserId,
-            RoleId = removedRole.RoleId
-        };
     }
 }

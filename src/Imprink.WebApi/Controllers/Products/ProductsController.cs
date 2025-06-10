@@ -17,7 +17,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<PagedResultDto<ProductDto>>> GetProducts(
         [FromQuery] ProductFilterParameters filterParameters)
     {
-        var result = await mediator.Send(new GetProductsQuery { FilterParameters = filterParameters });
+        var result = await mediator.Send(new GetProductsQuery { FilterParameters = filterParameters});
         return Ok(result);
     }
 }

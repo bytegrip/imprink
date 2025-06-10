@@ -1,6 +1,5 @@
 using Imprink.Domain.Entities.Product;
 using Imprink.Domain.Models;
-using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Products;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -143,12 +142,11 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         return product;
     }
 
-    public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)
+    public Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)
     {
         product.ModifiedAt = DateTime.UtcNow;
         context.Products.Update(product);
-        await context.SaveChangesAsync(cancellationToken);
-        return product;
+        return Task.FromResult(product);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -157,7 +155,6 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         if (product != null)
         {
             context.Products.Remove(product);
-            await context.SaveChangesAsync(cancellationToken);
         }
     }
 

@@ -11,21 +11,34 @@ public class SetUserRoleHandler(IUnitOfWork uw) : IRequestHandler<SetUserRoleCom
 {
     public async Task<UserRoleDto?> Handle(SetUserRoleCommand request, CancellationToken cancellationToken)
     {
-        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken))
-            throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
+        await uw.BeginTransactionAsync(cancellationToken);
 
-        var userRole = new UserRole
+        try
         {
-            UserId = request.Sub,
-            RoleId = request.RoleId
-        };
-        
-        var addedRole = await uw.UserRoleRepository.AddUserRoleAsync(userRole, cancellationToken);
+            if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken))
+                throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
 
-        return new UserRoleDto
+            var userRole = new UserRole
+            {
+                UserId = request.Sub,
+                RoleId = request.RoleId
+            };
+
+            var addedRole = await uw.UserRoleRepository.AddUserRoleAsync(userRole, cancellationToken);
+
+            await uw.SaveAsync(cancellationToken);
+            await uw.CommitTransactionAsync(cancellationToken);
+
+            return new UserRoleDto
+            {
+                UserId = addedRole.UserId,
+                RoleId = addedRole.RoleId
+            };
+        }
+        catch
         {
-            UserId = addedRole.UserId,
-            RoleId = addedRole.RoleId
-        };
+            await uw.RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
     }
 }

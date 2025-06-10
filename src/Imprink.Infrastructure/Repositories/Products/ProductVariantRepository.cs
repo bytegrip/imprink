@@ -58,23 +58,21 @@ public class ProductVariantRepository(ApplicationDbContext context) : IProductVa
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<ProductVariant> AddAsync(ProductVariant productVariant, CancellationToken cancellationToken = default)
+    public Task<ProductVariant> AddAsync(ProductVariant productVariant, CancellationToken cancellationToken = default)
     {
         productVariant.Id = Guid.NewGuid();
         productVariant.CreatedAt = DateTime.UtcNow;
         productVariant.ModifiedAt = DateTime.UtcNow;
 
         context.ProductVariants.Add(productVariant);
-        await context.SaveChangesAsync(cancellationToken);
-        return productVariant;
+        return Task.FromResult(productVariant);
     }
 
-    public async Task<ProductVariant> UpdateAsync(ProductVariant productVariant, CancellationToken cancellationToken = default)
+    public Task<ProductVariant> UpdateAsync(ProductVariant productVariant, CancellationToken cancellationToken = default)
     {
         productVariant.ModifiedAt = DateTime.UtcNow;
         context.ProductVariants.Update(productVariant);
-        await context.SaveChangesAsync(cancellationToken);
-        return productVariant;
+        return Task.FromResult(productVariant);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -83,7 +81,6 @@ public class ProductVariantRepository(ApplicationDbContext context) : IProductVa
         if (productVariant != null)
         {
             context.ProductVariants.Remove(productVariant);
-            await context.SaveChangesAsync(cancellationToken);
         }
     }
 
@@ -112,7 +109,6 @@ public class ProductVariantRepository(ApplicationDbContext context) : IProductVa
         {
             productVariant.StockQuantity = quantity;
             productVariant.ModifiedAt = DateTime.UtcNow;
-            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

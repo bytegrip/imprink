@@ -1,6 +1,7 @@
 using Imprink.Application;
 using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Products;
+using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
 
 namespace Imprink.Infrastructure;

@@ -5,6 +5,7 @@ using Imprink.Application.Products.Create;
 using Imprink.Application.Validation.Models;
 using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Products;
+using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
 using Imprink.Infrastructure.Repositories.Products;
@@ -74,6 +75,7 @@ public static class Startup
 
                     foreach (var role in roles) identity!.AddClaim(new Claim(ClaimTypes.Role, role));
                     identity!.AddClaim(new Claim(ClaimTypes.Role, "User"));
+                    
                     return Task.CompletedTask;
                 }
             };
@@ -99,8 +101,9 @@ public static class Startup
                 Description = "JWT Authorization header using the Bearer scheme.",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT"
             });
             
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -112,12 +115,9 @@ public static class Startup
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
-                        },
-                        Scheme = "Bearer",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header
+                        }
                     },
-                    new List<string>()
+                    []
                 }
             });
         });

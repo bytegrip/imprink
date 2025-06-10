@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Imprink.Application.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Imprink.WebApi.Controllers.Users;
@@ -9,7 +10,7 @@ namespace Imprink.WebApi.Controllers.Users;
 [Route("/api/users/roles")]
 public class UserRoleController(IMediator mediator) : ControllerBase
 {
-    //[Authorize]
+    [Authorize]
     [HttpGet("me")]
     public async Task<IActionResult> GetMyRoles()
     {
@@ -19,5 +20,17 @@ public class UserRoleController(IMediator mediator) : ControllerBase
         var myRoles = await mediator.Send(new GetUserRolesCommand(sub));
         
         return Ok(myRoles);
+    }
+    
+    [Authorize(Roles = "Admin")]
+    [HttpPost("set")]
+    public async Task<IActionResult> SetUserRole(SetUserRoleCommand command)
+    {
+        var userRole = await mediator.Send(command);
+        
+        if (userRole == null)
+            return BadRequest();
+        
+        return Ok(userRole);
     }
 }

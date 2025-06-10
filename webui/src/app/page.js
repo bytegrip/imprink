@@ -10,13 +10,13 @@ export default function Home() {
         const fetchAccessToken = async () => {
             if (user) {
                 try {
-                    const v = await fetch('/token');
+                    await fetch('/token');
                 } catch (error) {
                     console.error("Error fetching token");
                 }
             } else {
                 try {
-                    const resp = await fetch('/untoken');
+                    await fetch('/untoken');
                 } catch (e) {
                     console.error('Error in /api/untoken:', e);
                 }

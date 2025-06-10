@@ -1,15 +1,22 @@
-using Imprink.Domain.Entities.Users;
+using Imprink.Application.Users.Dtos;
 using MediatR;
 
 namespace Imprink.Application.Users;
 
-public record GetUserRolesCommand(string Sub) : IRequest<IEnumerable<Role>>;
+public record GetUserRolesCommand(string Sub) : IRequest<IEnumerable<RoleDto>>;
 
-public class GetUserRolesHandler(IUnitOfWork uw): IRequestHandler<GetUserRolesCommand, IEnumerable<Role>>
+public class GetUserRolesHandler(IUnitOfWork uw): IRequestHandler<GetUserRolesCommand, IEnumerable<RoleDto>>
 {
-    public async Task<IEnumerable<Role>> Handle(GetUserRolesCommand request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RoleDto>> Handle(GetUserRolesCommand request, CancellationToken cancellationToken)
     {
-        if (await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) return [];
-        return await uw.UserRoleRepository.GetUserRolesAsync(request.Sub, cancellationToken);;
+        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) return [];
+        
+        var roles = await uw.UserRoleRepository.GetUserRolesAsync(request.Sub, cancellationToken);
+
+        return roles.Select(role => new RoleDto
+        {
+            RoleId = role.Id,
+            RoleName = role.RoleName
+        }).ToList();
     }
 }

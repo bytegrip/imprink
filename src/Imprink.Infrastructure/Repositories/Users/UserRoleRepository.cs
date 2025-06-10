@@ -1,5 +1,6 @@
 using Imprink.Domain.Entities.Users;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,12 +26,6 @@ public class UserRoleRepository(ApplicationDbContext context) : IUserRoleReposit
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> IsUserInRoleAsync(string userId, Guid roleId, CancellationToken cancellationToken = default)
-    {
-        return await context.UserRole
-            .AnyAsync(ur => ur.UserId == userId && ur.RoleId == roleId, cancellationToken);
-    }
-
     public async Task<UserRole?> GetUserRoleAsync(string userId, Guid roleId, CancellationToken cancellationToken = default)
     {
         return await context.UserRole
@@ -38,23 +33,17 @@ public class UserRoleRepository(ApplicationDbContext context) : IUserRoleReposit
             .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId, cancellationToken);
     }
 
-    public async Task AddUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
+    public async Task<UserRole> AddUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
     {
-        context.UserRole.Add(userRole);
+        var ur = context.UserRole.Add(userRole);
         await context.SaveChangesAsync(cancellationToken);
+        return ur.Entity;
     }
 
-    public async Task RemoveUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
+    public async Task<UserRole> RemoveUserRoleAsync(UserRole userRole, CancellationToken cancellationToken = default)
     {
-        context.UserRole.Remove(userRole);
+        var ur = context.UserRole.Remove(userRole);
         await context.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<UserRole>> GetUserRolesByUserIdAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        return await context.UserRole
-            .AsNoTracking()
-            .Where(ur => ur.UserId == userId)
-            .ToListAsync(cancellationToken);
+        return ur.Entity;
     }
 }

@@ -1,3 +1,4 @@
+using Imprink.Application.Exceptions;
 using Imprink.Application.Users.Dtos;
 using MediatR;
 
@@ -9,7 +10,8 @@ public class GetUserRolesHandler(IUnitOfWork uw): IRequestHandler<GetUserRolesCo
 {
     public async Task<IEnumerable<RoleDto>> Handle(GetUserRolesCommand request, CancellationToken cancellationToken)
     {
-        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) return [];
+        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) 
+            throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
         
         var roles = await uw.UserRoleRepository.GetUserRolesAsync(request.Sub, cancellationToken);
 

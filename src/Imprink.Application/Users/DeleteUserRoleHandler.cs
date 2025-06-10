@@ -1,3 +1,4 @@
+using Imprink.Application.Exceptions;
 using Imprink.Application.Users.Dtos;
 using Imprink.Domain.Entities.Users;
 using MediatR;
@@ -10,7 +11,8 @@ public class DeleteUserRoleHandler(IUnitOfWork uw) : IRequestHandler<DeleteUserR
 {
     public async Task<UserRoleDto?> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
     {
-        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) return null;
+        if (!await uw.UserRepository.UserExistsAsync(request.Sub, cancellationToken)) 
+            throw new NotFoundException("User with ID: " + request.Sub + " does not exist.");
 
         var userRole = new UserRole
         {

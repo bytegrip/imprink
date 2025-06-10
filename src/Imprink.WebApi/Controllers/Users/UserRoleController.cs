@@ -11,7 +11,7 @@ namespace Imprink.WebApi.Controllers.Users;
 public class UserRoleController(IMediator mediator) : ControllerBase
 {
     [Authorize]
-    [HttpGet("/me")]
+    [HttpGet("me")]
     public async Task<IActionResult> GetMyRoles()
     {
         var claims = User.Claims as Claim[] ?? User.Claims.ToArray();
@@ -23,7 +23,7 @@ public class UserRoleController(IMediator mediator) : ControllerBase
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpPost("/set")]
+    [HttpPost("set")]
     public async Task<IActionResult> SetUserRole(SetUserRoleCommand command)
     {
         var userRole = await mediator.Send(command);
@@ -35,7 +35,7 @@ public class UserRoleController(IMediator mediator) : ControllerBase
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpPost("/unset")]
+    [HttpPost("unset")]
     public async Task<IActionResult> UnsetUserRole(DeleteUserRoleCommand command)
     {
         var userRole = await mediator.Send(command);

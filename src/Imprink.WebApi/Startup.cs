@@ -140,13 +140,13 @@ public static class Startup
             }
         }
 
+        app.UseGlobalExceptionHandling();
         app.UseRequestTiming();
         
         if (env.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.UseDeveloperExceptionPage();
         }
         else
         {

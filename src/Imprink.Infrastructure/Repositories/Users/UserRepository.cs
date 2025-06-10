@@ -4,7 +4,7 @@ using Imprink.Domain.Repositories;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imprink.Infrastructure.Repositories;
+namespace Imprink.Infrastructure.Repositories.Users;
 
 public class UserRepository(ApplicationDbContext context) : IUserRepository
 {

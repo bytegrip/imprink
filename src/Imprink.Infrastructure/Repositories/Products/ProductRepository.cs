@@ -1,10 +1,11 @@
 using Imprink.Domain.Entities.Product;
 using Imprink.Domain.Models;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Products;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Imprink.Infrastructure.Repositories;
+namespace Imprink.Infrastructure.Repositories.Products;
 
 public class ProductRepository(ApplicationDbContext context) : IProductRepository
 {

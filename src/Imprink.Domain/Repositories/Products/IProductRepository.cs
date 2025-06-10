@@ -1,7 +1,7 @@
 using Imprink.Domain.Entities.Product;
 using Imprink.Domain.Models;
 
-namespace Imprink.Domain.Repositories;
+namespace Imprink.Domain.Repositories.Products;
 
 public interface IProductRepository
 {

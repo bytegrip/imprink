@@ -1,7 +1,7 @@
 using Imprink.Application;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Products;
 using Imprink.Infrastructure.Database;
-using Microsoft.Identity.Client;
 
 namespace Imprink.Infrastructure;
 
@@ -10,12 +10,16 @@ public class UnitOfWork(
     IProductRepository productRepository, 
     IProductVariantRepository productVariantRepository, 
     ICategoryRepository categoryRepository,
-    IUserRepository userRepository) : IUnitOfWork
+    IUserRepository userRepository,
+    IUserRoleRepository userRoleRepository,
+    IRoleRepository roleRepository) : IUnitOfWork
 {
     public IProductRepository ProductRepository => productRepository;
     public IProductVariantRepository ProductVariantRepository => productVariantRepository;
     public ICategoryRepository CategoryRepository => categoryRepository;
     public IUserRepository UserRepository => userRepository;
+    public IUserRoleRepository UserRoleRepository => userRoleRepository;
+    public IRoleRepository RoleRepository => roleRepository;
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {

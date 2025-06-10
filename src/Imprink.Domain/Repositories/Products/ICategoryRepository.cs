@@ -1,6 +1,6 @@
 using Imprink.Domain.Entities.Product;
 
-namespace Imprink.Domain.Repositories;
+namespace Imprink.Domain.Repositories.Products;
 
 public interface ICategoryRepository
 {

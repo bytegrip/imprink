@@ -7,7 +7,6 @@ using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Products;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
-using Imprink.Infrastructure.Repositories;
 using Imprink.Infrastructure.Repositories.Products;
 using Imprink.Infrastructure.Repositories.Users;
 using Imprink.WebApi.Filters;
@@ -57,12 +56,6 @@ public static class Startup
 
             options.Events = new JwtBearerEvents
             {
-                OnMessageReceived = context =>
-                {
-                    var token = context.Request.Cookies["access_token"];
-                    if (!string.IsNullOrEmpty(token)) context.Token = token;
-                    return Task.CompletedTask;
-                },
                 OnTokenValidated = context =>
                 {
                     var dbContext = context.HttpContext.RequestServices.GetService<ApplicationDbContext>();
@@ -88,9 +81,9 @@ public static class Startup
         services.AddAuthorization();
 
         services.AddControllers(options =>
-        {
-            options.Filters.Add<ValidationActionFilter>();
-        });
+            {
+                options.Filters.Add<ValidationActionFilter>();
+            });
         
         services.AddSwaggerGen();
     }

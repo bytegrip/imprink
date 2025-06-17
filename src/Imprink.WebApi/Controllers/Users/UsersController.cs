@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Imprink.Application.Users;
+using Imprink.Application.Domains.Users;
 using Imprink.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

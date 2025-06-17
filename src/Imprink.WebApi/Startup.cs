@@ -1,8 +1,9 @@
 using System.Security.Claims;
 using FluentValidation;
 using Imprink.Application;
-using Imprink.Application.Products.Create;
-using Imprink.Application.Service;
+using Imprink.Application.Domains.Products;
+using Imprink.Application.Products;
+using Imprink.Application.Services;
 using Imprink.Application.Validation.Models;
 using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Products;

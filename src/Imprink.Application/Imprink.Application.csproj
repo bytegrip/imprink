@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Validation\Users\" />
+      <Folder Include="Domains\Orders\" />
     </ItemGroup>
 
 </Project>

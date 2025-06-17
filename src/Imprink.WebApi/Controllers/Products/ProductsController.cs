@@ -1,3 +1,4 @@
+using Imprink.Application.Domains.Products;
 using Imprink.Application.Products;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Models;
@@ -19,5 +20,34 @@ public class ProductsController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(new GetProductsQuery { FilterParameters = filterParameters});
         return Ok(result);
+    }
+    
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<PagedResultDto<ProductDto>>> CreateProduct(
+        [FromBody] CreateProductCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+    
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ProductDto>> UpdateProduct(
+        Guid id,
+        [FromBody] UpdateProductCommand command)
+    {
+        if (id != command.Id) return BadRequest("ID mismatch");
+            
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+    
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteProduct(Guid id)
+    {
+        await mediator.Send(new DeleteProductCommand { Id = id });
+        return NoContent();
     }
 }

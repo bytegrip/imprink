@@ -62,7 +62,7 @@ export default function Home() {
                             <div
                                 className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             <span className="relative flex items-center gap-2">
-                                    Check
+                                    Checkaaaaa
                                 </span>
                         </a>
                     </div>
@@ -168,7 +168,7 @@ export default function Home() {
                                 <div
                                     className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 <span className="relative flex items-center gap-2">
-                                    Check
+                                    Checkaaaaa
                                 </span>
                             </a>
                             <a

@@ -6,10 +6,12 @@ using Imprink.Application.Products;
 using Imprink.Application.Services;
 using Imprink.Application.Validation.Models;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Orders;
 using Imprink.Domain.Repositories.Products;
 using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure;
 using Imprink.Infrastructure.Database;
+using Imprink.Infrastructure.Repositories.Orders;
 using Imprink.Infrastructure.Repositories.Products;
 using Imprink.Infrastructure.Repositories.Users;
 using Imprink.Infrastructure.Services;
@@ -33,6 +35,8 @@ public static class Startup
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderItemRepository, OrderItemRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         

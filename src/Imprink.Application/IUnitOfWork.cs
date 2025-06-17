@@ -1,4 +1,5 @@
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Orders;
 using Imprink.Domain.Repositories.Products;
 using Imprink.Domain.Repositories.Users;
 
@@ -12,6 +13,8 @@ public interface IUnitOfWork
     public IUserRepository UserRepository { get; }
     public IUserRoleRepository UserRoleRepository { get; }
     public IRoleRepository RoleRepository { get; }
+    public IOrderRepository OrderRepository { get; }
+    public IOrderItemRepository OrderItemRepository { get; }
 
     Task SaveAsync(CancellationToken cancellationToken = default);
     Task BeginTransactionAsync(CancellationToken cancellationToken = default);

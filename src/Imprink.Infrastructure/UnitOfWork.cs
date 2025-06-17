@@ -1,5 +1,6 @@
 using Imprink.Application;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Orders;
 using Imprink.Domain.Repositories.Products;
 using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
@@ -13,7 +14,9 @@ public class UnitOfWork(
     ICategoryRepository categoryRepository,
     IUserRepository userRepository,
     IUserRoleRepository userRoleRepository,
-    IRoleRepository roleRepository) : IUnitOfWork
+    IRoleRepository roleRepository,
+    IOrderRepository orderRepository,
+    IOrderItemRepository orderItemRepository) : IUnitOfWork
 {
     public IProductRepository ProductRepository => productRepository;
     public IProductVariantRepository ProductVariantRepository => productVariantRepository;
@@ -21,6 +24,8 @@ public class UnitOfWork(
     public IUserRepository UserRepository => userRepository;
     public IUserRoleRepository UserRoleRepository => userRoleRepository;
     public IRoleRepository RoleRepository => roleRepository;
+    public IOrderRepository OrderRepository => orderRepository;
+    public IOrderItemRepository OrderItemRepository => orderItemRepository;
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {

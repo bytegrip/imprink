@@ -1,4 +1,4 @@
-namespace Imprink.Application.Service;
+namespace Imprink.Application.Services;
 
 public interface ICurrentUserService
 {

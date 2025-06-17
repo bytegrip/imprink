@@ -2,7 +2,7 @@ using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Create;
+namespace Imprink.Application.Domains.Products;
 
 public class CreateProductCommand : IRequest<ProductDto>
 {

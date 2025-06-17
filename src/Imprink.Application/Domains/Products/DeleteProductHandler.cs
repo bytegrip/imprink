@@ -1,28 +1,28 @@
 using MediatR;
 
-namespace Imprink.Application.Products.Delete;
+namespace Imprink.Application.Domains.Products;
 
-public class DeleteCategoryCommand : IRequest<bool>
+public class DeleteProductCommand : IRequest<bool>
 {
     public Guid Id { get; set; }
 }
 
-public class DeleteCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteCategoryCommand, bool>
+public class DeleteProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductCommand, bool>
 {
-    public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         
         try
         {
-            var exists = await unitOfWork.CategoryRepository.ExistsAsync(request.Id, cancellationToken);
+            var exists = await unitOfWork.ProductRepository.ExistsAsync(request.Id, cancellationToken);
             if (!exists)
             {
                 await unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return false;
             }
 
-            await unitOfWork.CategoryRepository.DeleteAsync(request.Id, cancellationToken);
+            await unitOfWork.ProductRepository.DeleteAsync(request.Id, cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
             return true;
         }

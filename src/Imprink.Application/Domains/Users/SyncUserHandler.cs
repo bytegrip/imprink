@@ -2,7 +2,7 @@ using Imprink.Application.Users.Dtos;
 using Imprink.Domain.Models;
 using MediatR;
 
-namespace Imprink.Application.Users;
+namespace Imprink.Application.Domains.Users;
 
 public record SyncUserCommand(Auth0User User) : IRequest<UserDto?>;
 

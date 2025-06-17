@@ -1,9 +1,9 @@
 using Imprink.Application.Exceptions;
-using Imprink.Application.Service;
+using Imprink.Application.Services;
 using Imprink.Application.Users.Dtos;
 using MediatR;
 
-namespace Imprink.Application.Users;
+namespace Imprink.Application.Domains.Users;
 
 public record SetUserPhoneCommand(string PhoneNumber) : IRequest<UserDto?>;
 

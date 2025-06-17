@@ -2,7 +2,7 @@ using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
 
-namespace Imprink.Application.Products.Query;
+namespace Imprink.Application.Domains.ProductVariants;
 
 public class GetProductVariantsQuery : IRequest<IEnumerable<ProductVariantDto>>
 {

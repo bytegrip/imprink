@@ -2,7 +2,7 @@ using Imprink.Application.Exceptions;
 using Imprink.Application.Users.Dtos;
 using MediatR;
 
-namespace Imprink.Application.Users;
+namespace Imprink.Application.Domains.Users;
 
 public record GetUserRolesCommand(string Sub) : IRequest<IEnumerable<RoleDto>>;
 

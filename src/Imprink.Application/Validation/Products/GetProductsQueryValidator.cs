@@ -1,6 +1,5 @@
 using FluentValidation;
 using Imprink.Application.Domains.Products;
-using Imprink.Application.Products;
 using Imprink.Application.Validation.Models;
 
 namespace Imprink.Application.Validation.Products;

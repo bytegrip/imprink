@@ -1,26 +1,22 @@
 ### `.env Example`
 
 ```env
-# SQL Server Configuration
-SQL_SERVER=localhost
-SQL_DATABASE=ExampleDatabase
+SQL_SERVER=sqlserver
+SQL_DATABASE=ExampleDB
 SQL_USER_ID=admin
-SQL_PASSWORD=ExamplePassword123!
+SQL_PASSWORD=SuperSecure(!)Pass123
 
-# Auth0 Configuration
-AUTH0_SECRET=0000000000000000000000000000000000000000000000000000000000000000
-AUTH0_ISSUER_BASE_URL=https://auth.example.com
-AUTH0_CLIENT_ID=EXAMPLE_CLIENT_ID_12345
-AUTH0_CLIENT_SECRET=EXAMPLE_CLIENT_SECRET_ABCDE12345
-AUTH0_AUDIENCE=https://api.example.com
+AUTH0_SECRET=1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcd
+AUTH0_ISSUER_BASE_URL=auth.example.com
+AUTH0_CLIENT_ID=abcDEF123456xyz7890
+AUTH0_CLIENT_SECRET=SecretClientKeyHereThatLooksRealButIsFake1234567890
+AUTH0_AUDIENCE=https://example.com
 AUTH0_SCOPE=openid profile email
-AUTH0_DOMAIN=https://example.auth0.com/
+AUTH0_DOMAIN=https://dev-12345678.us.auth0.com/
 AUTH0_AUTHORITY=https://auth.example.com/
 
-# App Configuration
 APP_BASE_URL=https://example.com
 
-# ASP.NET Core Configuration
 ASPNETCORE_ENVIRONMENT=Development
 ASPNETCORE_HTTP_PORTS=8080
 ASPNETCORE_APPLY_MIGRATIONS_AT_STARTUP=true
@@ -30,12 +26,15 @@ ASPNETCORE_LOGGING_LEVEL=Information
 ASPNETCORE_LOGGING_LEVEL_EFCORE=Information
 ASPNETCORE_LOGGING_LEVEL_APP=Information
 
-# Seq UI URL
 SEQ_BASE_URI=https://example.com/seq
 
-# Node.js / Next.js Configuration
+ZIPLINE_SECRET=somefakesecretkey123
+ZIPLINE_URL=https://example.com/res
+ZIPLINE_ROUTE=/res
+
 NODE_ENV=development
 COOKIE_DOMAIN=.example.com
 NEXT_PUBLIC_API_URL=https://example.com/api
 NEXT_PUBLIC_AUTH0_DOMAIN=auth.example.com
-NEXT_PUBLIC_AUTH0_CLIENT_ID=EXAMPLE_PUBLIC_CLIENT_ID
+NEXT_PUBLIC_AUTH0_CLIENT_ID=abcDEF123456xyz7890
+```

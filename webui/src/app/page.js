@@ -1,192 +1,423 @@
-'use client';
+'use client'
 
-import { useUser } from "@auth0/nextjs-auth0";
-import {useEffect, useState} from "react";
+import {useEffect, useState} from 'react';
+import axios from 'axios';
+import {
+    Alert,
+    AppBar,
+    Badge,
+    Box,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Chip,
+    Container,
+    Fab,
+    Grid,
+    IconButton,
+    Skeleton,
+    Toolbar,
+    Typography
+} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import {Menu, Palette, Search, ShoppingCart} from 'lucide-react';
 
-export default function Home() {
-    const { user, error, isLoading } = useUser();
+const theme = createTheme({
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: '#D0BCFF',
+            light: '#EADDFF',
+            dark: '#9A82DB',
+            contrastText: '#21005D'
+        },
+        secondary: {
+            main: '#CCC2DC',
+            light: '#E8DEF8',
+            dark: '#A8A2BA',
+            contrastText: '#332D41'
+        },
+        background: {
+            default: '#101418',
+            paper: '#1D1B20'
+        },
+        surface: {
+            main: '#1D1B20',
+            variant: '#49454F'
+        },
+        error: {
+            main: '#F2B8B5',
+            light: '#FFDAD6',
+            dark: '#BA1A1A',
+            contrastText: '#410002'
+        },
+        success: {
+            main: '#A6D4A3',
+            light: '#C4F0B8',
+            dark: '#52B788'
+        },
+        text: {
+            primary: '#E6E0E9',
+            secondary: '#CAC4D0'
+        }
+    },
+    shape: {
+        borderRadius: 16
+    },
+    typography: {
+        fontFamily: '"Google Sans", "Roboto", "Helvetica", "Arial", sans-serif',
+        h4: {
+            fontWeight: 400,
+            fontSize: '2rem'
+        },
+        h6: {
+            fontWeight: 500,
+            fontSize: '1.25rem'
+        },
+        body1: {
+            fontSize: '1rem',
+            lineHeight: 1.5
+        },
+        body2: {
+            fontSize: '0.875rem',
+            lineHeight: 1.43
+        }
+    },
+    components: {
+        MuiCard: {
+            styleOverrides: {
+                root: {
+                    backgroundImage: 'none',
+                    backgroundColor: '#1D1B20',
+                    border: '1px solid #49454F',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                        transform: 'translateY(-4px)',
+                        borderColor: '#D0BCFF',
+                        boxShadow: '0 8px 32px rgba(208, 188, 255, 0.1)'
+                    }
+                }
+            }
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    borderRadius: 20,
+                    paddingLeft: 24,
+                    paddingRight: 24,
+                    height: 40
+                }
+            }
+        },
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: 12,
+                        backgroundColor: '#1D1B20',
+                        '& fieldset': {
+                            borderColor: '#49454F'
+                        },
+                        '&:hover fieldset': {
+                            borderColor: '#CAC4D0'
+                        }
+                    }
+                }
+            }
+        },
+        MuiChip: {
+            styleOverrides: {
+                root: {
+                    borderRadius: 8
+                }
+            }
+        }
+    }
+});
+
+const ProductCard = ({ product }) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    return (
+        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+                {!imageLoaded && (
+                    <Skeleton variant="rectangular" height={200} />
+                )}
+                <CardMedia
+                    component="img"
+                    height="200"
+                    image={product.imageUrl}
+                    alt={product.name}
+                    onLoad={() => setImageLoaded(true)}
+                    sx={{
+                        display: imageLoaded ? 'block' : 'none',
+                        objectFit: 'cover',
+                        transition: 'transform 0.3s ease',
+                        '&:hover': {
+                            transform: 'scale(1.05)'
+                        }
+                    }}
+                />
+                <Box sx={{
+                    position: 'absolute',
+                    top: 12,
+                    right: 12,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1
+                }}>
+                    {product.isCustomizable && (
+                        <Chip
+                            icon={<Palette size={16} />}
+                            label="Customizable"
+                            size="small"
+                            color="primary"
+                            sx={{ fontSize: '0.75rem' }}
+                        />
+                    )}
+                    <Chip
+                        label={product.category.name}
+                        size="small"
+                        variant="outlined"
+                        sx={{ fontSize: '0.75rem' }}
+                    />
+                </Box>
+            </Box>
+
+            <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+                <Typography variant="h6" component="h3" gutterBottom>
+                    {product.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    {product.description}
+                </Typography>
+                <Typography variant="h5" color="primary.main" fontWeight="bold">
+                    ${product.basePrice.toFixed(2)}
+                </Typography>
+            </CardContent>
+
+            <CardActions sx={{ p: 2, pt: 0 }}>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<ShoppingCart size={18} />}
+                    sx={{
+                        background: 'linear-gradient(45deg, #D0BCFF 30%, #EADDFF 90%)',
+                        color: '#21005D'
+                    }}
+                >
+                    Add to Cart
+                </Button>
+            </CardActions>
+        </Card>
+    );
+};
+
+const LoadingSkeleton = () => (
+    <Grid container spacing={3}>
+        {[...Array(8)].map((_, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <Card>
+                    <Skeleton variant="rectangular" height={200} />
+                    <CardContent>
+                        <Skeleton variant="text" height={32} />
+                        <Skeleton variant="text" height={20} />
+                        <Skeleton variant="text" height={20} width="60%" />
+                        <Skeleton variant="text" height={28} width="40%" />
+                    </CardContent>
+                </Card>
+            </Grid>
+        ))}
+    </Grid>
+);
+
+const ImprintLanding = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
-        const fetchAccessToken = async () => {
-            if (user) {
-                try {
-                    await fetch('/token');
-                } catch (error) {
-                    console.error("Error fetching token");
-                }
-            } else {
-                try {
-                    await fetch('/untoken');
-                } catch (e) {
-                    console.error('Error in /api/untoken:', e);
-                }
+        const fetchProducts = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get('https://impr.ink/api/products', {
+                    params: {
+                        PageNumber: 1,
+                        PageSize: 20
+                    }
+                });
+                setProducts(response.data.items);
+            } catch (err) {
+                setError('Failed to load products. Please try again later.');
+                console.error('Error fetching products:', err);
+            } finally {
+                setLoading(false);
             }
         };
 
-        fetchAccessToken().then(r => console.log(r));
-    }, [user]);
+        fetchProducts().then(r => console.log(r));
+    }, []);
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-                <div className="relative">
-                    <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div className="w-10 h-10 border-4 border-transparent border-t-purple-400 rounded-full animate-spin"></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-red-900 via-pink-900 to-purple-900 flex items-center justify-center p-4">
-                <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-2xl">
-                    <div className="text-white/80 mb-4">{error.message}</div>
-                    <div className="text-center">
-                        <a
-                            href="/auth/login"
-                            className="group relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-                        >
-                            <div
-                                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <span className="relative flex items-center gap-2">
-                                Sign In
-                            </span>
-                        </a>
-                        <a
-                            onClick={() => checkValidity()}
-                            className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-                        >
-                            <div
-                                className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <span className="relative flex items-center gap-2">
-                                    Checkaaaaa
-                                </span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
+    const featuredProducts = products.slice(0, 4);
     return (
-        <div
-            className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-            <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
-                {user ? (
-                    <div className="w-full max-w-5xl">
-                        <div className="text-center mb-6">
-                            <div
-                                className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mb-3 shadow-2xl">
-                                {user.picture ? (
-                                    <img
-                                        src={user.picture}
-                                        alt="Profile"
-                                        className="w-full h-full rounded-full object-cover border-3 border-white/20"
-                                    />
-                                ) : (
-                                    <div className="text-white text-xl font-bold">
-                                        {user.name?.charAt(0) || user.email?.charAt(0) || '👤'}
-                                    </div>
-                                )}
-                            </div>
-                            <h1 className="text-2xl pb-1 font-bold bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
-                                Just testing :P
-                            </h1>
-                        </div>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Box sx={{ flexGrow: 1 }}>
+                {/* App Bar */}
+                <AppBar position="sticky" sx={{ backgroundColor: 'background.paper', borderBottom: '1px solid #49454F' }}>
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
+                            <Menu />
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'primary.main', fontWeight: 'bold' }}>
+                            impr.ink
+                        </Typography>
+                        <IconButton color="inherit" sx={{ mr: 1 }}>
+                            <Search />
+                        </IconButton>
+                        <IconButton color="inherit">
+                            <Badge badgeContent={cartCount} color="primary">
+                                <ShoppingCart />
+                            </Badge>
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
 
-                        <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden mb-4">
-                            <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 p-4 border-b border-white/10">
-                                <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                    Auth Details
-                                </h2>
-                            </div>
-                            <div className="p-5">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Name</label>
-                                            <div
-                                                className="text-white text-base mt-1 p-2 bg-white/5 rounded-lg border border-white/10">
-                                                {user.name || 'Not provided'}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Email</label>
-                                            <div
-                                                className="text-white text-base mt-1 p-2 bg-white/5 rounded-lg border border-white/10">
-                                                {user.email || 'Not provided'}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">User
-                                                ID</label>
-                                            <div
-                                                className="text-white/80 text-xs mt-1 p-2 bg-white/5 rounded-lg border border-white/10 font-mono break-all">
-                                                {user.sub || 'Not available'}
-                                            </div>
-                                        </div>
-                                        {user.nickname && (
-                                            <div>
-                                                <label
-                                                    className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Nickname</label>
-                                                <div
-                                                    className="text-white text-base mt-1 p-2 bg-white/5 rounded-lg border border-white/10">
-                                                    {user.nickname}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            className="text-purple-300 text-xs font-semibold uppercase tracking-wider mb-2 block">
-                                            Raw User Data
-                                        </label>
-                                        <div
-                                            className="bg-black/30 rounded-lg p-3 border border-white/10 h-64 overflow-auto">
-                                            <pre
-                                                className="text-green-300 text-xs font-mono leading-tight whitespace-pre-wrap">
-                                                {JSON.stringify(user, null, 2)}
-                                            </pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center">
-                            <a
-                                onClick={() => checkValidity()}
-                                className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                {/* Hero Section */}
+                <Box sx={{
+                    background: 'linear-gradient(135deg, #1D1B20 0%, #2D1B69 50%, #1D1B20 100%)',
+                    py: 8,
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}>
+                    <Container maxWidth="lg">
+                        <Box sx={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                            <Typography variant="h2" component="h1" gutterBottom sx={{
+                                fontWeight: 300,
+                                background: 'linear-gradient(45deg, #D0BCFF, #EADDFF)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                mb: 2
+                            }}>
+                                Custom Printing Made Beautiful
+                            </Typography>
+                            <Typography variant="h5" color="text.secondary" sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}>
+                                High-quality custom printing solutions for caps, flyers, coasters, and more.
+                                Premium materials with excellent print adhesion and longevity.
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                size="large"
+                                sx={{
+                                    background: 'linear-gradient(45deg, #D0BCFF 30%, #EADDFF 90%)',
+                                    color: '#21005D',
+                                    px: 4,
+                                    py: 1.5,
+                                    fontSize: '1.1rem'
+                                }}
                             >
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <span className="relative flex items-center gap-2">
-                                    Checkaaaaa
-                                </span>
-                            </a>
-                            <a
-                                href="/auth/logout"
-                                className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                                Explore Products
+                            </Button>
+                        </Box>
+                    </Container>
+                </Box>
+
+                <Container maxWidth="lg" sx={{ py: 6 }}>
+                    {error && (
+                        <Alert severity="error" sx={{ mb: 4 }}>
+                            {error}
+                        </Alert>
+                    )}
+
+                    {/* Featured Products */}
+                    <Box sx={{ mb: 6 }}>
+                        <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
+                            Featured Products
+                        </Typography>
+                        {loading ? (
+                            <Grid container spacing={3}>
+                                {[...Array(4)].map((_, index) => (
+                                    <Grid item xs={12} sm={6} md={3} key={index}>
+                                        <Card>
+                                            <Skeleton variant="rectangular" height={200} />
+                                            <CardContent>
+                                                <Skeleton variant="text" height={32} />
+                                                <Skeleton variant="text" height={20} />
+                                                <Skeleton variant="text" height={28} width="40%" />
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        ) : (
+                            <Grid container spacing={3}>
+                                {featuredProducts.map((product) => (
+                                    <Grid item xs={12} sm={6} md={3} key={product.id}>
+                                        <ProductCard product={product} />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </Box>
+
+                    {/* All Products */}
+                    <Box>
+                        <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
+                            All Products
+                        </Typography>
+                        {loading ? (
+                            <LoadingSkeleton />
+                        ) : (
+                            <Grid container spacing={3}>
+                                {products.map((product) => (
+                                    <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                                        <ProductCard product={product} />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </Box>
+
+                    {/* Load More Button */}
+                    {!loading && products.length > 0 && (
+                        <Box sx={{ textAlign: 'center', mt: 6 }}>
+                            <Button
+                                variant="outlined"
+                                size="large"
+                                sx={{ px: 4 }}
                             >
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <span className="relative flex items-center gap-2">
-                                    Sign Out
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                ) : (
-                    <div></div>
-                )}
-            </div>
-        </div>
+                                Load More Products
+                            </Button>
+                        </Box>
+                    )}
+                </Container>
+
+                {/* Floating Action Button */}
+                <Fab
+                    color="primary"
+                    sx={{
+                        position: 'fixed',
+                        bottom: 16,
+                        right: 16,
+                        background: 'linear-gradient(45deg, #D0BCFF 30%, #EADDFF 90%)',
+                        color: '#21005D'
+                    }}
+                >
+                    <Badge badgeContent={cartCount} color="error">
+                        <ShoppingCart />
+                    </Badge>
+                </Fab>
+            </Box>
+        </ThemeProvider>
     );
-}
+};
+
+export default ImprintLanding;

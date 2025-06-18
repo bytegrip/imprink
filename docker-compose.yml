@@ -94,38 +94,20 @@ services:
       - webapi
       - webui
       - seq
+      - upload-server
     networks:
       - app-network
 
-  zipline:
-    image: ghcr.io/diced/zipline:latest
-    expose:
-      - "3000"
+  upload-server:
+    build: .
+    ports:
+      - "3000:3000"
     environment:
-      - CORE_RETURN_HTTPS=true
-      - CORE_SECRET=${ZIPLINE_SECRET}
-      - CORE_HOST=0.0.0.0
-      - CORE_PORT=3000
-      - CORE_DATABASE_URL=file:./zipline.db
-      - CORE_LOGGER=true
-      - URLS_ROUTE=${ZIPLINE_ROUTE}
-      - URLS_LENGTH=6
-      - UPLOADER_DEFAULT_FORMAT=RANDOM
-      - UPLOADER_DISABLED_EXTENSIONS=
-      - UPLOADER_FORMAT_DATE=%Y-%m-%d_%H-%M-%S
-      - FEATURES_INVITES=false
-      - FEATURES_REGISTRATION=false
-      - FEATURES_HEADLESS=true
-      - FEATURES_USER_REGISTRATION=false
-      - FEATURES_OAUTH_REGISTRATION=false
-      - FEATURES_ANONYMOUS_UPLOAD=true
-      - WEBSITE_TITLE=File Upload
-      - WEBSITE_EXTERNAL_LINKS=${ZIPLINE_URL}
+      - BASE_URL=https://impr.ink
+      - HASH_FILENAME=true
+      - UPLOAD_DIR=/app/uploads
     volumes:
-      - zipline_data:/zipline/uploads
-      - zipline_public:/zipline/public
-      - zipline_db:/zipline
-    restart: unless-stopped
+      - ./uploads:/app/uploads
     networks:
       - app-network
 
@@ -134,6 +116,4 @@ networks:
     driver: bridge
 
 volumes:
-  zipline_data:
-  zipline_public:
-  zipline_db:
+  upload_data:

@@ -1,9 +1,11 @@
 using Imprink.Domain.Entities.Orders;
 using Imprink.Domain.Entities.Products;
 using Imprink.Domain.Entities.Users;
-using Imprink.Infrastructure.Configuration.Orders;
-using Imprink.Infrastructure.Configuration.Products;
-using Imprink.Infrastructure.Configuration.Users;
+using Imprink.Infrastructure.Categories.Configuration;
+using Imprink.Infrastructure.Orders.Configuration;
+using Imprink.Infrastructure.Products.Configuration;
+using Imprink.Infrastructure.ProductVariants.Configuration;
+using Imprink.Infrastructure.Users.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

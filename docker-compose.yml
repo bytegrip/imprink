@@ -103,9 +103,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - BASE_URL=https://impr.ink
-      - HASH_FILENAME=true
-      - UPLOAD_DIR=/app/uploads
+      - BASE_URL=${UPLOAD_BASE_URL}
+      - HASH_FILENAME=${UPLOAD_HASH_FILENAME}
+      - UPLOAD_DIR=${UPLOAD_DIRECTORY}
     volumes:
       - ./uploads:/app/uploads
     networks:

@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FluentValidation;
 using Imprink.Application;
 using Imprink.Application.Domains.Products;
+using Imprink.Application.Mappings;
 using Imprink.Application.Products;
 using Imprink.Application.Services;
 using Imprink.Application.Validation.Models;
@@ -39,8 +40,9 @@ public static class Startup
         services.AddScoped<IOrderItemRepository, OrderItemRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        
         services.AddScoped<Seeder>();
+
+        services.AddAutoMapper(typeof(MappingProfile).Assembly);
         
         services.AddHttpContextAccessor();
 

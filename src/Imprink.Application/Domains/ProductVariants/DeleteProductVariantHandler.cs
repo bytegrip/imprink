@@ -16,6 +16,7 @@ public class DeleteProductVariantHandler(IUnitOfWork unitOfWork) : IRequestHandl
         try
         {
             var exists = await unitOfWork.ProductVariantRepository.ExistsAsync(request.Id, cancellationToken);
+            
             if (!exists)
             {
                 await unitOfWork.RollbackTransactionAsync(cancellationToken);
@@ -23,7 +24,10 @@ public class DeleteProductVariantHandler(IUnitOfWork unitOfWork) : IRequestHandl
             }
 
             await unitOfWork.ProductVariantRepository.DeleteAsync(request.Id, cancellationToken);
+            
+            await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
+            
             return true;
         }
         catch

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Imprink.Application.Exceptions;
 using Imprink.Application.Products.Dtos;
 using MediatR;
@@ -17,7 +18,7 @@ public class UpdateProductVariantCommand : IRequest<ProductVariantDto>
     public bool IsActive { get; set; }
 }
 
-public class UpdateProductVariantHandler(IUnitOfWork unitOfWork)
+public class UpdateProductVariantHandler(IUnitOfWork unitOfWork, IMapper mapper)
     : IRequestHandler<UpdateProductVariantCommand, ProductVariantDto>
 {
     public async Task<ProductVariantDto> Handle(UpdateProductVariantCommand request, CancellationToken cancellationToken)
@@ -29,36 +30,16 @@ public class UpdateProductVariantHandler(IUnitOfWork unitOfWork)
             var existingVariant = await unitOfWork.ProductVariantRepository.GetByIdAsync(request.Id, cancellationToken);
             
             if (existingVariant == null)
-            {
                 throw new NotFoundException($"Product variant with ID {request.Id} not found.");
-            }
-
-            existingVariant.ProductId = request.ProductId;
-            existingVariant.Size = request.Size;
-            existingVariant.Color = request.Color;
-            existingVariant.Price = request.Price;
-            existingVariant.ImageUrl = request.ImageUrl;
-            existingVariant.Sku = request.Sku;
-            existingVariant.StockQuantity = request.StockQuantity;
-            existingVariant.IsActive = request.IsActive;
+            
+            mapper.Map(request, existingVariant);
 
             var updatedVariant = await unitOfWork.ProductVariantRepository.UpdateAsync(existingVariant, cancellationToken);
+            
+            await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
 
-            return new ProductVariantDto
-            {
-                Id = updatedVariant.Id,
-                ProductId = updatedVariant.ProductId,
-                Size = updatedVariant.Size,
-                Color = updatedVariant.Color,
-                Price = updatedVariant.Price,
-                ImageUrl = updatedVariant.ImageUrl,
-                Sku = updatedVariant.Sku,
-                StockQuantity = updatedVariant.StockQuantity,
-                IsActive = updatedVariant.IsActive,
-                CreatedAt = updatedVariant.CreatedAt,
-                ModifiedAt = updatedVariant.ModifiedAt
-            };
+            return mapper.Map<ProductVariantDto>(updatedVariant);
         }
         catch
         {

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Imprink.Application.Exceptions;
 using Imprink.Application.Users.Dtos;
 using MediatR;
@@ -6,7 +7,7 @@ namespace Imprink.Application.Domains.Users;
 
 public record DeleteUserRoleCommand(string Sub, Guid RoleId) : IRequest<UserRoleDto?>;
 
-public class DeleteUserRoleHandler(IUnitOfWork uw) : IRequestHandler<DeleteUserRoleCommand, UserRoleDto?>
+public class DeleteUserRoleHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<DeleteUserRoleCommand, UserRoleDto?>
 {
     public async Task<UserRoleDto?> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
     {
@@ -27,11 +28,7 @@ public class DeleteUserRoleHandler(IUnitOfWork uw) : IRequestHandler<DeleteUserR
             await uw.SaveAsync(cancellationToken);
             await uw.CommitTransactionAsync(cancellationToken);
             
-            return new UserRoleDto
-            {
-                UserId = removedRole.UserId,
-                RoleId = removedRole.RoleId
-            };
+            return mapper.Map<UserRoleDto>(removedRole);
         }
         catch
         {

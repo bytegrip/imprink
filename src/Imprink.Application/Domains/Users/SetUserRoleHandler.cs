@@ -1,3 +1,4 @@
+using AutoMapper;
 using Imprink.Application.Exceptions;
 using Imprink.Application.Users.Dtos;
 using Imprink.Domain.Entities.Users;
@@ -7,7 +8,7 @@ namespace Imprink.Application.Domains.Users;
 
 public record SetUserRoleCommand(string Sub, Guid RoleId) : IRequest<UserRoleDto?>;
 
-public class SetUserRoleHandler(IUnitOfWork uw) : IRequestHandler<SetUserRoleCommand, UserRoleDto?>
+public class SetUserRoleHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<SetUserRoleCommand, UserRoleDto?>
 {
     public async Task<UserRoleDto?> Handle(SetUserRoleCommand request, CancellationToken cancellationToken)
     {
@@ -29,11 +30,7 @@ public class SetUserRoleHandler(IUnitOfWork uw) : IRequestHandler<SetUserRoleCom
             await uw.SaveAsync(cancellationToken);
             await uw.CommitTransactionAsync(cancellationToken);
 
-            return new UserRoleDto
-            {
-                UserId = addedRole.UserId,
-                RoleId = addedRole.RoleId
-            };
+            return mapper.Map<UserRoleDto>(addedRole);
         }
         catch
         {

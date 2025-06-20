@@ -1,3 +1,4 @@
+using AutoMapper;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
@@ -15,7 +16,7 @@ public class CreateProductCommand : IRequest<ProductDto>
     public Guid? CategoryId { get; set; }
 }
 
-public class CreateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateProductCommand, ProductDto>
+public class CreateProductHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateProductCommand, ProductDto>
 {
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
@@ -23,49 +24,18 @@ public class CreateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<Crea
         
         try
         {
-            var product = new Product
-            {
-                Name = request.Name,
-                Description = request.Description,
-                BasePrice = request.BasePrice,
-                IsCustomizable = request.IsCustomizable,
-                IsActive = request.IsActive,
-                ImageUrl = request.ImageUrl,
-                CategoryId = request.CategoryId,
-                Category = null!
-            };
+            var product = mapper.Map<Product>(request);
 
             var createdProduct = await unitOfWork.ProductRepository.AddAsync(product, cancellationToken);
-
-            var categoryDto = new CategoryDto
+            
+            if (createdProduct.CategoryId.HasValue)
             {
-                Id = createdProduct.Category.Id,
-                Name = createdProduct.Category.Name,
-                Description = createdProduct.Category.Description,
-                ImageUrl = createdProduct.Category.ImageUrl,
-                SortOrder = createdProduct.Category.SortOrder,
-                IsActive = createdProduct.Category.IsActive,
-                ParentCategoryId = createdProduct.Category.ParentCategoryId,
-                CreatedAt = createdProduct.Category.CreatedAt,
-                ModifiedAt = createdProduct.Category.ModifiedAt
-            };
+                createdProduct.Category = (await unitOfWork.CategoryRepository.GetByIdAsync(createdProduct.CategoryId.Value, cancellationToken))!;
+            }
             
             await unitOfWork.CommitTransactionAsync(cancellationToken);
 
-            return new ProductDto
-            {
-                Id = createdProduct.Id,
-                Name = createdProduct.Name,
-                Description = createdProduct.Description,
-                BasePrice = createdProduct.BasePrice,
-                IsCustomizable = createdProduct.IsCustomizable,
-                IsActive = createdProduct.IsActive,
-                ImageUrl = createdProduct.ImageUrl,
-                CategoryId = createdProduct.CategoryId,
-                Category = categoryDto,
-                CreatedAt = createdProduct.CreatedAt,
-                ModifiedAt = createdProduct.ModifiedAt
-            };
+            return mapper.Map<ProductDto>(createdProduct);
         }
         catch
         {

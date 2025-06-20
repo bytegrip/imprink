@@ -1,3 +1,4 @@
+using AutoMapper;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Entities.Product;
 using MediatR;
@@ -16,7 +17,7 @@ public class CreateProductVariantCommand : IRequest<ProductVariantDto>
     public bool IsActive { get; set; } = true;
 }
 
-public class CreateProductVariantHandler(IUnitOfWork unitOfWork)
+public class CreateProductVariantHandler(IUnitOfWork unitOfWork, IMapper mapper)
     : IRequestHandler<CreateProductVariantCommand, ProductVariantDto>
 {
     public async Task<ProductVariantDto> Handle(CreateProductVariantCommand request, CancellationToken cancellationToken)
@@ -25,36 +26,16 @@ public class CreateProductVariantHandler(IUnitOfWork unitOfWork)
         
         try
         {
-            var productVariant = new ProductVariant
-            {
-                ProductId = request.ProductId,
-                Size = request.Size,
-                Color = request.Color,
-                Price = request.Price,
-                ImageUrl = request.ImageUrl,
-                Sku = request.Sku,
-                StockQuantity = request.StockQuantity,
-                IsActive = request.IsActive,
-                Product = null!
-            };
+            var productVariant = mapper.Map<ProductVariant>(request);
+            
+            productVariant.Product = null!;
 
             var createdVariant = await unitOfWork.ProductVariantRepository.AddAsync(productVariant, cancellationToken);
+            
+            await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
-
-            return new ProductVariantDto
-            {
-                Id = createdVariant.Id,
-                ProductId = createdVariant.ProductId,
-                Size = createdVariant.Size,
-                Color = createdVariant.Color,
-                Price = createdVariant.Price,
-                ImageUrl = createdVariant.ImageUrl,
-                Sku = createdVariant.Sku,
-                StockQuantity = createdVariant.StockQuantity,
-                IsActive = createdVariant.IsActive,
-                CreatedAt = createdVariant.CreatedAt,
-                ModifiedAt = createdVariant.ModifiedAt
-            };
+            
+            return mapper.Map<ProductVariantDto>(createdVariant);
         }
         catch
         {

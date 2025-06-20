@@ -1,7 +1,7 @@
 using FluentValidation;
-using Imprink.Application.Domains.Users;
+using Imprink.Application.Users.Commands;
 
-namespace Imprink.Application.Validation.Users;
+namespace Imprink.Application.Users.Validation;
 
 public class SetUserPhoneCommandValidator : AbstractValidator<SetUserPhoneCommand>
 {

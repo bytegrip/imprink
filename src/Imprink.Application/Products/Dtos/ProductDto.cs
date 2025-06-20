@@ -1,3 +1,5 @@
+using Imprink.Application.Categories.Dtos;
+
 namespace Imprink.Application.Products.Dtos;
 
 public class ProductDto

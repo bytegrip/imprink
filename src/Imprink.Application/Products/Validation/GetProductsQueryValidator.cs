@@ -1,8 +1,7 @@
 using FluentValidation;
-using Imprink.Application.Domains.Products;
-using Imprink.Application.Validation.Models;
+using Imprink.Application.Products.Commands;
 
-namespace Imprink.Application.Validation.Products;
+namespace Imprink.Application.Products.Validation;
 
 public class GetProductsQueryValidator : AbstractValidator<GetProductsQuery>
 {

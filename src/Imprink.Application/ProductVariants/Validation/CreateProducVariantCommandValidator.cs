@@ -1,7 +1,7 @@
 using FluentValidation;
-using Imprink.Application.Domains.ProductVariants;
+using Imprink.Application.ProductVariants.Commands;
 
-namespace Imprink.Application.Validation.ProductVariants;
+namespace Imprink.Application.ProductVariants.Validation;
 
 public class CreateProductVariantCommandValidator : AbstractValidator<CreateProductVariantCommand>
 {

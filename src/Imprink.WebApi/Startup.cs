@@ -1,11 +1,10 @@
 using System.Security.Claims;
 using FluentValidation;
 using Imprink.Application;
-using Imprink.Application.Domains.Products;
-using Imprink.Application.Mappings;
 using Imprink.Application.Products;
-using Imprink.Application.Services;
-using Imprink.Application.Validation.Models;
+using Imprink.Application.Products.Commands;
+using Imprink.Application.Users.Services;
+using Imprink.Application.Users.Validation;
 using Imprink.Domain.Repositories;
 using Imprink.Domain.Repositories.Orders;
 using Imprink.Domain.Repositories.Products;

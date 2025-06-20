@@ -1,8 +1,9 @@
+using Imprink.Application.Categories.Dtos;
 using Imprink.Application.Exceptions;
 using Imprink.Application.Products.Dtos;
 using MediatR;
 
-namespace Imprink.Application.Domains.Categories;
+namespace Imprink.Application.Categories.Commands;
 
 public class UpdateCategoryCommand : IRequest<CategoryDto>
 {

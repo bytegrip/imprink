@@ -1,9 +1,9 @@
 using AutoMapper;
 using Imprink.Application.Products.Dtos;
-using Imprink.Domain.Entities.Product;
+using Imprink.Domain.Entities.Products;
 using MediatR;
 
-namespace Imprink.Application.Domains.Products;
+namespace Imprink.Application.Products.Commands;
 
 public class CreateProductCommand : IRequest<ProductDto>
 {

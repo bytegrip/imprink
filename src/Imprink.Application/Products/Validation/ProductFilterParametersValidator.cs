@@ -1,7 +1,7 @@
 using FluentValidation;
 using Imprink.Domain.Models;
 
-namespace Imprink.Application.Validation.Models;
+namespace Imprink.Application.Products.Validation;
 
 public class ProductFilterParametersValidator : AbstractValidator<ProductFilterParameters>
 {

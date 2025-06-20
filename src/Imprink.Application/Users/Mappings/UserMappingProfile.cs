@@ -4,7 +4,7 @@ using Imprink.Application.Users.Dtos;
 using Imprink.Domain.Entities.Users;
 using Imprink.Domain.Models;
 
-namespace Imprink.Application.Mappings;
+namespace Imprink.Application.Users.Mappings;
 
 public class UserMappingProfile: Profile
 {

@@ -3,7 +3,7 @@ using Imprink.Application.Exceptions;
 using Imprink.Application.Users.Dtos;
 using MediatR;
 
-namespace Imprink.Application.Domains.Users;
+namespace Imprink.Application.Users.Commands;
 
 public record DeleteUserRoleCommand(string Sub, Guid RoleId) : IRequest<UserRoleDto?>;
 

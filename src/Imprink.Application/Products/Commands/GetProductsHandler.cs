@@ -1,8 +1,9 @@
+using Imprink.Application.Categories.Dtos;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Models;
 using MediatR;
 
-namespace Imprink.Application.Domains.Products;
+namespace Imprink.Application.Products.Commands;
 
 public class GetProductsQuery : IRequest<PagedResultDto<ProductDto>>
 {

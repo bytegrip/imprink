@@ -1,10 +1,10 @@
 using AutoMapper;
 using Imprink.Application.Exceptions;
-using Imprink.Application.Services;
 using Imprink.Application.Users.Dtos;
+using Imprink.Application.Users.Services;
 using MediatR;
 
-namespace Imprink.Application.Domains.Users;
+namespace Imprink.Application.Users.Commands;
 
 public record SetUserFullNameCommand(string FirstName, string LastName) : IRequest<UserDto?>;
 

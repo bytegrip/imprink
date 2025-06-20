@@ -2,7 +2,7 @@ using AutoMapper;
 using Imprink.Application.Users.Dtos;
 using MediatR;
 
-namespace Imprink.Application.Domains.Users;
+namespace Imprink.Application.Users.Commands;
 
 public record GetAllRolesCommand : IRequest<IEnumerable<RoleDto>>;
 

@@ -1,4 +1,6 @@
-namespace Imprink.Application.Products.Dtos;
+using Imprink.Application.Products.Dtos;
+
+namespace Imprink.Application.ProductVariants.Dtos;
 
 public class ProductVariantDto
 {

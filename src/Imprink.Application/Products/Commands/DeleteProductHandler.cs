@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Imprink.Application.Domains.Products;
+namespace Imprink.Application.Products.Commands;
 
 public class DeleteProductCommand : IRequest<bool>
 {

@@ -1,6 +1,6 @@
 using Imprink.Domain.Entities.Users;
 
-namespace Imprink.Domain.Repositories;
+namespace Imprink.Domain.Repositories.Users;
 
 public interface IRoleRepository
 {

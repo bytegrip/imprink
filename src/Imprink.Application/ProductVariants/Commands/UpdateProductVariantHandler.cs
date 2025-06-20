@@ -1,9 +1,9 @@
 using AutoMapper;
 using Imprink.Application.Exceptions;
-using Imprink.Application.Products.Dtos;
+using Imprink.Application.ProductVariants.Dtos;
 using MediatR;
 
-namespace Imprink.Application.Domains.ProductVariants;
+namespace Imprink.Application.ProductVariants.Commands;
 
 public class UpdateProductVariantCommand : IRequest<ProductVariantDto>
 {

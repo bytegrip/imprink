@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Imprink.Application.Domains.Categories;
+namespace Imprink.Application.Categories.Commands;
 
 public class DeleteCategoryCommand : IRequest<bool>
 {

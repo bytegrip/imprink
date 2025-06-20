@@ -4,7 +4,7 @@ using Imprink.Application.Users.Dtos;
 using Imprink.Domain.Entities.Users;
 using MediatR;
 
-namespace Imprink.Application.Domains.Users;
+namespace Imprink.Application.Users.Commands;
 
 public record SetUserRoleCommand(string Sub, Guid RoleId) : IRequest<UserRoleDto?>;
 

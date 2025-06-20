@@ -1,8 +1,9 @@
+using Imprink.Application.Categories.Dtos;
 using Imprink.Application.Products.Dtos;
-using Imprink.Domain.Entities.Product;
+using Imprink.Domain.Entities.Products;
 using MediatR;
 
-namespace Imprink.Application.Domains.Categories;
+namespace Imprink.Application.Categories.Commands;
 
 public class GetCategoriesQuery : IRequest<IEnumerable<CategoryDto>>
 {

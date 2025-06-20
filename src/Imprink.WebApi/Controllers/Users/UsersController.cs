@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using AutoMapper;
-using Imprink.Application.Domains.Users;
+using Imprink.Application.Users.Commands;
 using Imprink.Application.Users.Dtos;
 using Imprink.Domain.Models;
 using MediatR;

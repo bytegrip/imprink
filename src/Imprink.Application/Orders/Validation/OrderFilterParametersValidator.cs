@@ -1,7 +1,7 @@
 using FluentValidation;
 using Imprink.Domain.Models;
 
-namespace Imprink.Application.Validation.Models;
+namespace Imprink.Application.Orders.Validation;
 
 public class OrderFilterParametersValidator : AbstractValidator<OrderFilterParameters>
 {

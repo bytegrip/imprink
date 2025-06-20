@@ -1,7 +1,7 @@
 using FluentValidation;
 using Imprink.Domain.Models;
 
-namespace Imprink.Application.Validation.Models;
+namespace Imprink.Application.Users.Validation;
 
 public class Auth0UserValidator : AbstractValidator<Auth0User>
 {

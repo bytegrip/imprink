@@ -1,4 +1,4 @@
-using Imprink.Domain.Entities.Product;
+using Imprink.Domain.Entities.Products;
 
 namespace Imprink.Domain.Repositories.Products;
 

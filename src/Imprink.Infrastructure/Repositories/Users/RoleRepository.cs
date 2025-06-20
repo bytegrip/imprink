@@ -1,5 +1,6 @@
 using Imprink.Domain.Entities.Users;
 using Imprink.Domain.Repositories;
+using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 

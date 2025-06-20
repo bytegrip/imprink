@@ -1,10 +1,10 @@
 using AutoMapper;
-using Imprink.Application.Products.Dtos;
-using Imprink.Domain.Entities.Product;
+using Imprink.Application.ProductVariants.Dtos;
+using Imprink.Domain.Entities.Products;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Imprink.Application.Domains.ProductVariants;
+namespace Imprink.Application.ProductVariants.Commands;
 
 public class GetProductVariantsQuery : IRequest<IEnumerable<ProductVariantDto>>
 {

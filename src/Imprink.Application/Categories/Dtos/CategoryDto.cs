@@ -1,4 +1,4 @@
-namespace Imprink.Application.Products.Dtos;
+namespace Imprink.Application.Categories.Dtos;
 
 public class CategoryDto
 {

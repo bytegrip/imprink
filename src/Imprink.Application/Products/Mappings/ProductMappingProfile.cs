@@ -1,10 +1,12 @@
 using AutoMapper;
-using Imprink.Application.Domains.Products;
-using Imprink.Application.Domains.ProductVariants;
+using Imprink.Application.Categories.Dtos;
+using Imprink.Application.Products.Commands;
 using Imprink.Application.Products.Dtos;
-using Imprink.Domain.Entities.Product;
+using Imprink.Application.ProductVariants.Commands;
+using Imprink.Application.ProductVariants.Dtos;
+using Imprink.Domain.Entities.Products;
 
-namespace Imprink.Application.Mappings;
+namespace Imprink.Application.Products.Mappings;
 
 public class ProductMappingProfile: Profile
 {

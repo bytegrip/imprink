@@ -1,4 +1,4 @@
-using Imprink.Domain.Entities.Product;
+using Imprink.Domain.Entities.Products;
 using Imprink.Domain.Models;
 using Imprink.Domain.Repositories.Products;
 using Imprink.Infrastructure.Database;

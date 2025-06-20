@@ -1,6 +1,6 @@
 using Imprink.Domain.Entities.Orders;
 
-namespace Imprink.Domain.Entities.Product;
+namespace Imprink.Domain.Entities.Products;
 
 public class ProductVariant : EntityBase
 {
@@ -13,6 +13,6 @@ public class ProductVariant : EntityBase
     public int StockQuantity { get; set; }
     public bool IsActive { get; set; }
         
-    public virtual required Imprink.Domain.Entities.Product.Product Product { get; set; }
+    public virtual required Product Product { get; set; }
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

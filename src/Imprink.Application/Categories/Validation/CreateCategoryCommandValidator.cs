@@ -1,7 +1,7 @@
 using FluentValidation;
-using Imprink.Application.Domains.Categories;
+using Imprink.Application.Categories.Commands;
 
-namespace Imprink.Application.Validation.Categories;
+namespace Imprink.Application.Categories.Validation;
 
 public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
 {

@@ -1,0 +1,14 @@
+using FluentValidation;
+using Imprink.Application.Categories.Commands;
+
+namespace Imprink.Application.Categories.Validation;
+
+public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
+{
+    public DeleteCategoryCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Id is required.")
+            .NotEqual(Guid.Empty).WithMessage("Id must be a valid GUID.");
+    }
+}

@@ -1,4 +1,4 @@
-namespace Imprink.Domain.Entities.Product;
+namespace Imprink.Domain.Entities.Products;
 
 public class Category : EntityBase
 {

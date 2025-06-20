@@ -1,4 +1,5 @@
-using Imprink.Application.Domains.Categories;
+using Imprink.Application.Categories.Commands;
+using Imprink.Application.Categories.Dtos;
 using Imprink.Application.Products.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

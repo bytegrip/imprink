@@ -1,5 +1,5 @@
 using Imprink.Domain.Entities.Orders;
-using Imprink.Domain.Entities.Product;
+using Imprink.Domain.Entities.Products;
 using Imprink.Domain.Entities.Users;
 using Imprink.Infrastructure.Configuration.Orders;
 using Imprink.Infrastructure.Configuration.Products;

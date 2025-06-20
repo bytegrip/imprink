@@ -19,8 +19,4 @@
       <ProjectReference Include="..\Imprink.Domain\Imprink.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Domains\Orders\" />
-    </ItemGroup>
-
 </Project>

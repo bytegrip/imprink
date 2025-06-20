@@ -1,6 +1,6 @@
 using Imprink.Domain.Entities.Orders;
 
-namespace Imprink.Domain.Entities.Product;
+namespace Imprink.Domain.Entities.Products;
 
 public class Product : EntityBase
 {

@@ -1,5 +1,5 @@
-using Imprink.Application.Domains.Products;
 using Imprink.Application.Products;
+using Imprink.Application.Products.Commands;
 using Imprink.Application.Products.Dtos;
 using Imprink.Domain.Models;
 using MediatR;

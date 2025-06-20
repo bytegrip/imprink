@@ -61,6 +61,7 @@ public class ExceptionHandlingMiddleware(
         return exception switch
         {
             NotFoundException => (HttpStatusCode.NotFound, exception.Message, false),
+            DataUpdateException => (HttpStatusCode.Conflict, exception.Message, false),
             _ => (HttpStatusCode.InternalServerError, "An internal server error occurred", true)
         };
     }

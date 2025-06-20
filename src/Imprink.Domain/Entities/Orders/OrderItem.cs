@@ -1,4 +1,4 @@
-using Imprink.Domain.Entities.Product;
+using Imprink.Domain.Entities.Products;
 
 namespace Imprink.Domain.Entities.Orders;
 
@@ -14,6 +14,6 @@ public class OrderItem : EntityBase
     public string CustomizationDescription { get; set; } = null!;
         
     public Order Order { get; set; } = null!;
-    public Product.Product Product { get; set; } = null!;
+    public Product Product { get; set; } = null!;
     public ProductVariant ProductVariant { get; set; } = null!;
 }

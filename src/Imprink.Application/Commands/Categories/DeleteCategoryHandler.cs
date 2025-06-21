@@ -4,7 +4,7 @@ namespace Imprink.Application.Commands.Categories;
 
 public class DeleteCategoryCommand : IRequest<bool>
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 }
 
 public class DeleteCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteCategoryCommand, bool>

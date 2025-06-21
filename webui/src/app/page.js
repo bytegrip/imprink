@@ -6,7 +6,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import PaymentForm from './components/PaymentForm';
 import './globals.css';
 
-const stripePromise = loadStripe('pk_test_51RaxJBRrcXIyofFGYIfUxzWTLPBfr1A0f2VBjo0lOjHfTBtyVpJKBjVUJ972p5AytGl4LBrgQccwHkp6EYu4liln00vEAf2D4e');
+const stripePromise = loadStripe('');
 
 const products = [
     { id: '1', name: 'Premium Widget', price: 2999, description: 'High-quality widget for professionals' },

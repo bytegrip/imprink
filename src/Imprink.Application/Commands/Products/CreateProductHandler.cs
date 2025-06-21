@@ -16,32 +16,22 @@ public class CreateProductCommand : IRequest<ProductDto>
     public Guid? CategoryId { get; set; }
 }
 
-public class CreateProductHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateProductCommand, ProductDto>
+public class CreateProductHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<CreateProductCommand, ProductDto>
 {
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        await unitOfWork.BeginTransactionAsync(cancellationToken);
-        
-        try
+        return await uw.TransactAsync(async () =>
         {
             var product = mapper.Map<Product>(request);
+            var createdProduct = await uw.ProductRepository.AddAsync(product, cancellationToken);
 
-            var createdProduct = await unitOfWork.ProductRepository.AddAsync(product, cancellationToken);
-            
             if (createdProduct.CategoryId.HasValue)
             {
-                createdProduct.Category = (await unitOfWork.CategoryRepository.GetByIdAsync(createdProduct.CategoryId.Value, cancellationToken))!;
+                createdProduct.Category = 
+                    (await uw.CategoryRepository.GetByIdAsync(createdProduct.CategoryId.Value, cancellationToken))!;
             }
-            
-            await unitOfWork.SaveAsync(cancellationToken);
-            await unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return mapper.Map<ProductDto>(createdProduct);
-        }
-        catch
-        {
-            await unitOfWork.RollbackTransactionAsync(cancellationToken);
-            throw;
-        }
+        }, cancellationToken);
     }
 }

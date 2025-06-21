@@ -43,4 +43,37 @@ public class UnitOfWork(
     {
         await context.Database.RollbackTransactionAsync(cancellationToken);
     }
+    
+    public async Task<T> TransactAsync<T>(Func<Task<T>> operation, CancellationToken cancellationToken = default)
+    {
+        await BeginTransactionAsync(cancellationToken);
+        try
+        {
+            var result = await operation();
+            await SaveAsync(cancellationToken);
+            await CommitTransactionAsync(cancellationToken);
+            return result;
+        }
+        catch
+        {
+            await RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
+    }
+    
+    public async Task TransactAsync(Func<Task> operation, CancellationToken cancellationToken = default)
+    {
+        await BeginTransactionAsync(cancellationToken);
+        try
+        {
+            await operation();
+            await SaveAsync(cancellationToken);
+            await CommitTransactionAsync(cancellationToken);
+        }
+        catch
+        {
+            await RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
+    }
 }

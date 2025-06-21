@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Imprink.Application.Users.Services;
+using Imprink.Application.Services;
 using Microsoft.AspNetCore.Http;
 
 namespace Imprink.Infrastructure.Services;

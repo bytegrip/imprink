@@ -1,7 +1,4 @@
 using Imprink.Domain.Repositories;
-using Imprink.Domain.Repositories.Orders;
-using Imprink.Domain.Repositories.Products;
-using Imprink.Domain.Repositories.Users;
 
 namespace Imprink.Application;
 

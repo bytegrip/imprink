@@ -1,8 +1,5 @@
 using Imprink.Application;
 using Imprink.Domain.Repositories;
-using Imprink.Domain.Repositories.Orders;
-using Imprink.Domain.Repositories.Products;
-using Imprink.Domain.Repositories.Users;
 using Imprink.Infrastructure.Database;
 
 namespace Imprink.Infrastructure;
@@ -45,5 +42,38 @@ public class UnitOfWork(
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
         await context.Database.RollbackTransactionAsync(cancellationToken);
+    }
+    
+    public async Task<T> TransactAsync<T>(Func<Task<T>> operation, CancellationToken cancellationToken = default)
+    {
+        await BeginTransactionAsync(cancellationToken);
+        try
+        {
+            var result = await operation();
+            await SaveAsync(cancellationToken);
+            await CommitTransactionAsync(cancellationToken);
+            return result;
+        }
+        catch
+        {
+            await RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
+    }
+    
+    public async Task TransactAsync(Func<Task> operation, CancellationToken cancellationToken = default)
+    {
+        await BeginTransactionAsync(cancellationToken);
+        try
+        {
+            await operation();
+            await SaveAsync(cancellationToken);
+            await CommitTransactionAsync(cancellationToken);
+        }
+        catch
+        {
+            await RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
     }
 }

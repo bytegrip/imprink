@@ -1,4 +1,4 @@
-using Imprink.Domain.Entities.Products;
+using Imprink.Domain.Entities;
 using Imprink.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 

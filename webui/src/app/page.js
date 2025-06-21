@@ -1,192 +1,143 @@
 'use client';
 
-import { useUser } from "@auth0/nextjs-auth0";
-import {useEffect, useState} from "react";
+import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentForm from './components/PaymentForm';
+import './globals.css';
+
+const stripePromise = loadStripe('');
+
+const products = [
+    { id: '1', name: 'Premium Widget', price: 2999, description: 'High-quality widget for professionals' },
+    { id: '2', name: 'Standard Widget', price: 1999, description: 'Reliable widget for everyday use' },
+    { id: '3', name: 'Basic Widget', price: 999, description: 'Entry-level widget for beginners' }
+];
 
 export default function Home() {
-    const { user, error, isLoading } = useUser();
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [clientSecret, setClientSecret] = useState('');
+    const [orderId, setOrderId] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchAccessToken = async () => {
-            if (user) {
-                try {
-                    await fetch('/token');
-                } catch (error) {
-                    console.error("Error fetching token");
-                }
+    const handleProductSelect = async (product) => {
+        setLoading(true);
+        setSelectedProduct(product);
+
+        const newOrderId = Math.floor(Math.random() * 10000).toString();
+        setOrderId(newOrderId);
+
+        try {
+            const response = await fetch('https://impr.ink/api/stripe/create-payment-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: product.price,
+                    orderId: newOrderId
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.clientSecret) {
+                setClientSecret(data.clientSecret);
             } else {
-                try {
-                    await fetch('/untoken');
-                } catch (e) {
-                    console.error('Error in /api/untoken:', e);
-                }
+                console.error('Error creating payment intent:', data.error);
             }
-        };
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchAccessToken().then(r => console.log(r));
-    }, [user]);
+    const handlePaymentSuccess = () => {
+        setSelectedProduct(null);
+        setClientSecret('');
+        setOrderId('');
+    };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-                <div className="relative">
-                    <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div className="w-10 h-10 border-4 border-transparent border-t-purple-400 rounded-full animate-spin"></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    const handleBackToProducts = () => {
+        setSelectedProduct(null);
+        setClientSecret('');
+        setOrderId('');
+    };
 
-    if (error) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-red-900 via-pink-900 to-purple-900 flex items-center justify-center p-4">
-                <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-2xl">
-                    <div className="text-white/80 mb-4">{error.message}</div>
-                    <div className="text-center">
-                        <a
-                            href="/auth/login"
-                            className="group relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-                        >
-                            <div
-                                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <span className="relative flex items-center gap-2">
-                                Sign In
-                            </span>
-                        </a>
-                        <a
-                            onClick={() => checkValidity()}
-                            className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-                        >
-                            <div
-                                className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <span className="relative flex items-center gap-2">
-                                    Check
-                                </span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    const appearance = {
+        theme: 'stripe',
+        variables: {
+            colorPrimary: '#0570de',
+            colorBackground: '#ffffff',
+            colorText: '#30313d',
+            colorDanger: '#df1b41',
+            fontFamily: 'Ideal Sans, system-ui, sans-serif',
+            spacingUnit: '2px',
+            borderRadius: '4px',
+        },
+    };
+
+    const options = {
+        clientSecret,
+        appearance,
+    };
 
     return (
-        <div
-            className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-            <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
-                {user ? (
-                    <div className="w-full max-w-5xl">
-                        <div className="text-center mb-6">
-                            <div
-                                className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mb-3 shadow-2xl">
-                                {user.picture ? (
-                                    <img
-                                        src={user.picture}
-                                        alt="Profile"
-                                        className="w-full h-full rounded-full object-cover border-3 border-white/20"
-                                    />
-                                ) : (
-                                    <div className="text-white text-xl font-bold">
-                                        {user.name?.charAt(0) || user.email?.charAt(0) || '👤'}
-                                    </div>
-                                )}
-                            </div>
-                            <h1 className="text-2xl pb-1 font-bold bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
-                                Just testing :P
-                            </h1>
-                        </div>
+        <div className="container">
+            <header>
+                <h1>🛍️ Stripe Payment Demo</h1>
+                <p>Select a product to purchase</p>
+            </header>
 
-                        <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden mb-4">
-                            <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 p-4 border-b border-white/10">
-                                <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                    Auth Details
-                                </h2>
+            {!selectedProduct ? (
+                <div className="products">
+                    <h2>Products</h2>
+                    <div className="product-grid">
+                        {products.map((product) => (
+                            <div key={product.id} className="product-card">
+                                <h3>{product.name}</h3>
+                                <p className="description">{product.description}</p>
+                                <p className="price">${(product.price / 100).toFixed(2)}</p>
+                                <button
+                                    onClick={() => handleProductSelect(product)}
+                                    disabled={loading}
+                                    className="select-btn"
+                                >
+                                    {loading ? 'Loading...' : 'Select'}
+                                </button>
                             </div>
-                            <div className="p-5">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Name</label>
-                                            <div
-                                                className="text-white text-base mt-1 p-2 bg-white/5 rounded-lg border border-white/10">
-                                                {user.name || 'Not provided'}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Email</label>
-                                            <div
-                                                className="text-white text-base mt-1 p-2 bg-white/5 rounded-lg border border-white/10">
-                                                {user.email || 'Not provided'}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label
-                                                className="text-purple-300 text-xs font-semibold uppercase tracking-wider">User
-                                                ID</label>
-                                            <div
-                                                className="text-white/80 text-xs mt-1 p-2 bg-white/5 rounded-lg border border-white/10 font-mono break-all">
-                                                {user.sub || 'Not available'}
-                                            </div>
-                                        </div>
-                                        {user.nickname && (
-                                            <div>
-                                                <label
-                                                    className="text-purple-300 text-xs font-semibold uppercase tracking-wider">Nickname</label>
-                                                <div
-                                                    className="text-white text-base mt-1 p-2 bg-white/5 rounded-lg border border-white/10">
-                                                    {user.nickname}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            className="text-purple-300 text-xs font-semibold uppercase tracking-wider mb-2 block">
-                                            Raw User Data
-                                        </label>
-                                        <div
-                                            className="bg-black/30 rounded-lg p-3 border border-white/10 h-64 overflow-auto">
-                                            <pre
-                                                className="text-green-300 text-xs font-mono leading-tight whitespace-pre-wrap">
-                                                {JSON.stringify(user, null, 2)}
-                                            </pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center">
-                            <a
-                                onClick={() => checkValidity()}
-                                className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-                            >
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <span className="relative flex items-center gap-2">
-                                    Check
-                                </span>
-                            </a>
-                            <a
-                                href="/auth/logout"
-                                className="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl font-bold text-white shadow-2xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-                            >
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <span className="relative flex items-center gap-2">
-                                    Sign Out
-                                </span>
-                            </a>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                <div className="checkout">
+                    <div className="order-summary">
+                        <h2>Order Summary</h2>
+                        <div className="order-details">
+                            <p><strong>Product:</strong> {selectedProduct.name}</p>
+                            <p><strong>Order ID:</strong> {orderId}</p>
+                            <p><strong>Amount:</strong> ${(selectedProduct.price / 100).toFixed(2)}</p>
                         </div>
                     </div>
-                ) : (
-                    <div></div>
-                )}
-            </div>
+
+                    {clientSecret && (
+                        <Elements options={options} stripe={stripePromise}>
+                            <PaymentForm
+                                onSuccess={handlePaymentSuccess}
+                                orderId={orderId}
+                            />
+                        </Elements>
+                    )}
+
+                    <button
+                        onClick={handleBackToProducts}
+                        className="back-btn"
+                    >
+                        ← Back to Products
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

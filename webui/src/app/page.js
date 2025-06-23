@@ -9,25 +9,12 @@ import {
     CardContent,
     TextField,
     Chip,
-    AppBar,
-    Toolbar,
     Grid,
 } from '@mui/material';
-import ThemeToggleButton from './components/ThemeToggleButton';
 
 export default function HomePage() {
-    return (
-        <>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Modern App
-                    </Typography>
-                    <ThemeToggleButton />
-                    <Button color="inherit" sx={{ ml: 2 }}>Login</Button>
-                </Toolbar>
-            </AppBar>
 
+    return (
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <Box sx={{ mb: 6, textAlign: 'center' }}>
                     <Typography variant="h1" gutterBottom>
@@ -100,6 +87,5 @@ export default function HomePage() {
                     </Grid>
                 </Grid>
             </Container>
-        </>
     );
 }

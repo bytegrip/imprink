@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google';
 import MuiThemeProvider from './components/theme/MuiThemeProvider';
 import { ThemeContextProvider } from './components/theme/ThemeContext';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import ImprinkAppBar from "@/app/components/ImprinkAppBar";
+import ClientLayoutEffect from "@/app/components/ClientLayoutEffect";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,6 +19,8 @@ export default function RootLayout({children}) {
                 <AppRouterCacheProvider>
                     <ThemeContextProvider>
                         <MuiThemeProvider>
+                            <ClientLayoutEffect/>
+                            <ImprinkAppBar />
                             {children}
                         </MuiThemeProvider>
                     </ThemeContextProvider>

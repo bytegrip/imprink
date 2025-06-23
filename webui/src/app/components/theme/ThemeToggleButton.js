@@ -1,7 +1,7 @@
 'use client';
 
 import { IconButton } from '@mui/material';
-import { useTheme } from './theme/ThemeContext';
+import { useTheme } from './ThemeContext';
 
 export default function ThemeToggleButton() {
     const { isDarkMode, toggleTheme } = useTheme();

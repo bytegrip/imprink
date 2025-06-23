@@ -246,10 +246,10 @@ export const lightTheme = createTheme({
         MuiChip: {
             styleOverrides: {
                 root: {
-                    background: 'rgba(99, 102, 241, 0.1)',
+                    background: 'rgba(99, 102, 241, 0.7)',
                     border: '1px solid rgba(99, 102, 241, 0.2)',
                     '&:hover': {
-                        background: 'rgba(99, 102, 241, 0.2)',
+                        background: 'rgba(99, 102, 241, 0.9)',
                     },
                 },
             },

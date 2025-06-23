@@ -8,7 +8,6 @@ namespace Imprink.WebApi.Controllers;
 public class SeedingController(Seeder seeder) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<bool>> Seed()
     {
         await seeder.SeedAsync();

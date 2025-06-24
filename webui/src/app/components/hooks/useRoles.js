@@ -47,7 +47,6 @@ export const useRoles = () => {
         return roleNames.every(roleName => hasRole(roleName));
     };
 
-    // Common role checks based on your existing logic
     const isMerchant = hasAnyRole(['merchant', 'admin']);
     const isAdmin = hasRole('admin');
     const isCustomer = hasRole('customer');

@@ -36,6 +36,7 @@ services:
       - ACCEPT_EULA=Y
       - SEQ_CACHE_SYSTEMRAMTARGET=0.9
       - BASE_URI=${SEQ_BASE_URI}
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=true
     networks:
       - app-network
 

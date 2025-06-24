@@ -15,7 +15,7 @@ import {
     useTheme,
     Paper
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import {
     Menu as MenuIcon,
@@ -29,42 +29,15 @@ import {
     BugReport
 } from "@mui/icons-material";
 import ThemeToggleButton from "@/app/components/theme/ThemeToggleButton";
-import clientApi from "@/lib/clientApi";
+import useRoles from "@/app/components/hooks/useRoles";
 
 export default function ImprinkAppBar() {
     const { user, error, isLoading } = useUser();
+    const { isMerchant, isAdmin } = useRoles();
     const [anchorEl, setAnchorEl] = useState(null);
-    const [userRoles, setUserRoles] = useState([]);
-    const [rolesLoading, setRolesLoading] = useState(false);
     const theme = useTheme();
     const { isDarkMode, toggleTheme } = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
-    useEffect(() => {
-        const fetchUserRoles = async () => {
-            if (!user) {
-                setUserRoles([]);
-                return;
-            }
-
-            setRolesLoading(true);
-            try {
-                const response = await clientApi.get('/users/me/roles');
-                const roles = response.data.map(role => role.roleName.toLowerCase());
-                setUserRoles(roles);
-            } catch (error) {
-                console.error('Failed to fetch user roles:', error);
-                setUserRoles([]);
-            } finally {
-                setRolesLoading(false);
-            }
-        };
-
-        fetchUserRoles();
-    }, [user]);
-
-    const isMerchant = userRoles.includes('merchant') || userRoles.includes('admin');
-    const isAdmin = userRoles.includes('admin');
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -74,7 +47,6 @@ export default function ImprinkAppBar() {
         setAnchorEl(null);
     };
 
-    // Regular navigation links (excluding admin-specific ones)
     const navigationLinks = [
         { label: 'Home', href: '/', icon: <Home />, show: true },
         { label: 'Gallery', href: '/gallery', icon: <PhotoLibrary />, show: true },
@@ -82,7 +54,6 @@ export default function ImprinkAppBar() {
         { label: 'Merchant', href: '/merchant', icon: <Store />, show: isMerchant },
     ];
 
-    // Admin-specific links for the separate bar
     const adminLinks = [
         { label: 'Dashboard', href: '/dashboard', icon: <Dashboard />, show: isMerchant },
         { label: 'Admin', href: '/admin', icon: <AdminPanelSettings />, show: isAdmin },
@@ -206,7 +177,6 @@ export default function ImprinkAppBar() {
             >
                 <Divider />
 
-                {/* All navigation links - regular and admin mixed together */}
                 {[...visibleLinks, ...visibleAdminLinks].map((link) => (
                     <MenuItem
                         key={link.label}
@@ -376,7 +346,6 @@ export default function ImprinkAppBar() {
                 </Toolbar>
             </AppBar>
 
-            {/* Admin Bar - appears below main app bar */}
             {renderAdminBar()}
         </>
     )

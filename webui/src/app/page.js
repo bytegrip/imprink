@@ -157,6 +157,7 @@ export default function HomePage() {
                             <Button
                                 variant="contained"
                                 size="large"
+                                href="/gallery"
                                 sx={{ px: 5, py: 2, fontSize: '1.2rem' }}
                             >
                                 View Gallery

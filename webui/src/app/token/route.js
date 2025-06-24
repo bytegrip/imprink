@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import {auth0} from "@/lib/auth0";
-import api from "@/lib/api";
+import serverApi from "@/lib/serverApi";
 
 export async function GET() {
     try {
@@ -8,13 +8,13 @@ export async function GET() {
 
         if (!token) { return NextResponse.json({ error: 'No access token found' }, { status: 401 }); }
 
-        await api.post('/users/sync', {}, {
-            headers: { Cookie: `access_token=${token}` }
+        await serverApi.post('/users/me/sync', null, {
+            headers: { Authorization: `Bearer ${token}`}
         });
 
-        return NextResponse.json({ access_token: token });
+        return NextResponse.json("Ok");
     } catch (error) {
-        console.error('Error in /api/token:', error);
+        console.error('Error in /serverApi/token:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

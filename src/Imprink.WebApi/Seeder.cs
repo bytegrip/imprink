@@ -19,7 +19,6 @@ public class Seeder(ApplicationDbContext context)
     private readonly string[] _textileImages =
     [
         "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500",
-        "https://images.unsplash.com/photo-1583743814966-8936f37f4ad2?w=500",
         "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=500",
         "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500",
         "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500"
@@ -29,14 +28,11 @@ public class Seeder(ApplicationDbContext context)
     [
         "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500",
         "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
-        "https://images.unsplash.com/photo-1544966503-7cc5ac882d2e?w=500",
         "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"
     ];
     
     private readonly string[] _paperImages =
     [
-        "https://images.unsplash.com/photo-1586281010691-79ab3d0f2102?w=500",
-        "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=500",
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500",
         "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=500"
     ];

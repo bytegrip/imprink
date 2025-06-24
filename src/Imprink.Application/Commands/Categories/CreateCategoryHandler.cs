@@ -33,6 +33,7 @@ public class CreateCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Cre
             };
 
             var createdCategory = await unitOfWork.CategoryRepository.AddAsync(category, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return new CategoryDto

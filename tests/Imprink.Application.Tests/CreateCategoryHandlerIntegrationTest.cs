@@ -35,7 +35,7 @@ public class CreateCategoryHandlerIntegrationTest : IDisposable
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+        services.AddScoped<IAddressRepository, AddressRepository>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<CreateCategoryHandler>();

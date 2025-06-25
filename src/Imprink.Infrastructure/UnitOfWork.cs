@@ -13,7 +13,7 @@ public class UnitOfWork(
     IUserRoleRepository userRoleRepository,
     IRoleRepository roleRepository,
     IOrderRepository orderRepository,
-    IOrderItemRepository orderItemRepository) : IUnitOfWork
+    IAddressRepository addressRepository) : IUnitOfWork
 {
     public IProductRepository ProductRepository => productRepository;
     public IProductVariantRepository ProductVariantRepository => productVariantRepository;
@@ -22,7 +22,7 @@ public class UnitOfWork(
     public IUserRoleRepository UserRoleRepository => userRoleRepository;
     public IRoleRepository RoleRepository => roleRepository;
     public IOrderRepository OrderRepository => orderRepository;
-    public IOrderItemRepository OrderItemRepository => orderItemRepository;
+    public IAddressRepository AddressRepository => addressRepository;
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {

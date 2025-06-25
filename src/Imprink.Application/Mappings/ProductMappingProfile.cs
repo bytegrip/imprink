@@ -16,17 +16,15 @@ public class ProductMappingProfile: Profile
             .ForMember(dest => dest.ModifiedAt, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
             .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
-            .ForMember(dest => dest.Product, opt => opt.Ignore())
-            .ForMember(dest => dest.OrderItems, opt => opt.Ignore());
+            .ForMember(dest => dest.Product, opt => opt.Ignore());
         
         CreateMap<ProductVariant, ProductVariantDto>();
         CreateMap<ProductVariantDto, ProductVariant>()
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
-            .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
-            .ForMember(dest => dest.OrderItems, opt => opt.Ignore());
+            .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore());
         
         CreateMap<Product, ProductDto>();
-        
+
         CreateMap<CreateProductCommand, Product>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
@@ -34,8 +32,7 @@ public class ProductMappingProfile: Profile
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
             .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
             .ForMember(dest => dest.Category, opt => opt.Ignore())
-            .ForMember(dest => dest.ProductVariants, opt => opt.Ignore())
-            .ForMember(dest => dest.OrderItems, opt => opt.Ignore());
+            .ForMember(dest => dest.ProductVariants, opt => opt.Ignore());
         
         CreateMap<Category, CategoryDto>();
     }

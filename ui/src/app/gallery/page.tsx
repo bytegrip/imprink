@@ -31,9 +31,10 @@ import {
     Paper,
     Slider,
     Switch,
-    FormControlLabel
+    FormControlLabel,
+    SelectChangeEvent
 } from '@mui/material';
-import { useState, useEffect, useCallback } from 'react';
+import {useState, useEffect, useCallback, KeyboardEvent, ChangeEvent, JSX} from 'react';
 import {
     Search,
     ExpandLess,
@@ -44,7 +45,60 @@ import {
 import clientApi from "@/lib/clientApi";
 import useRoles from "@/app/components/hooks/useRoles";
 
-const SORT_OPTIONS = [
+interface SortOption {
+    value: string;
+    label: string;
+}
+
+interface Category {
+    id: string;
+    name: string;
+    parentCategoryId?: string;
+}
+
+interface Product {
+    id: string;
+    name: string;
+    description: string;
+    basePrice: number;
+    imageUrl?: string;
+    isCustomizable: boolean;
+    category?: Category;
+}
+
+interface ProductsResponse {
+    items: Product[];
+    totalPages: number;
+    totalCount: number;
+}
+
+interface Filters {
+    pageNumber: number;
+    pageSize: number;
+    searchTerm: string;
+    categoryId: string;
+    minPrice: number;
+    maxPrice: number;
+    isActive: boolean;
+    isCustomizable: boolean | null;
+    sortBy: string;
+    sortDirection: string;
+}
+
+interface ApiParams {
+    PageNumber: number;
+    PageSize: number;
+    IsActive: boolean;
+    SortBy: string;
+    SortDirection: string;
+    SearchTerm?: string;
+    CategoryId?: string;
+    MinPrice?: number;
+    MaxPrice?: number;
+    IsCustomizable?: boolean;
+}
+
+const SORT_OPTIONS: SortOption[] = [
     { value: 'Name-ASC', label: 'Name (A-Z)' },
     { value: 'Name-DESC', label: 'Name (Z-A)' },
     { value: 'Price-ASC', label: 'Price (Low to High)' },
@@ -53,26 +107,26 @@ const SORT_OPTIONS = [
     { value: 'CreatedDate-ASC', label: 'Oldest First' }
 ];
 
-const PAGE_SIZE_OPTIONS = [12, 24, 48, 96];
+const PAGE_SIZE_OPTIONS: number[] = [12, 24, 48, 96];
 
-export default function GalleryPage() {
+export default function GalleryPage(): JSX.Element {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const { isAdmin } = useRoles();
 
     const heightOffset = isAdmin ? 192 : 128;
 
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [totalPages, setTotalPages] = useState(0);
-    const [totalCount, setTotalCount] = useState(0);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const [totalCount, setTotalCount] = useState<number>(0);
 
-    const [categories, setCategories] = useState([]);
-    const [categoriesLoading, setCategoriesLoading] = useState(true);
-    const [expandedCategories, setExpandedCategories] = useState(new Set());
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
+    const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<Filters>({
         pageNumber: 1,
         pageSize: 24,
         searchTerm: '',
@@ -85,14 +139,14 @@ export default function GalleryPage() {
         sortDirection: 'ASC'
     });
 
-    const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-    const [priceRange, setPriceRange] = useState([0, 1000]);
-    const [searchInput, setSearchInput] = useState('');
+    const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
+    const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+    const [searchInput, setSearchInput] = useState<string>('');
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchCategories = async (): Promise<void> => {
             try {
-                const response = await clientApi.get('/products/categories');
+                const response = await clientApi.get<Category[]>('/products/categories');
                 setCategories(response.data);
             } catch (err) {
                 console.error('Error fetching categories:', err);
@@ -101,13 +155,13 @@ export default function GalleryPage() {
             }
         };
 
-        fetchCategories();
+        fetchCategories().then(r => console.log(r));
     }, []);
 
-    const fetchProducts = useCallback(async () => {
+    const fetchProducts = useCallback(async (): Promise<void> => {
         setLoading(true);
         try {
-            const params = {
+            const params: ApiParams = {
                 PageNumber: filters.pageNumber,
                 PageSize: filters.pageSize,
                 IsActive: filters.isActive,
@@ -121,7 +175,7 @@ export default function GalleryPage() {
             if (filters.maxPrice < 1000) params.MaxPrice = filters.maxPrice;
             if (filters.isCustomizable !== null) params.IsCustomizable = filters.isCustomizable;
 
-            const response = await clientApi.get('/products/', { params });
+            const response = await clientApi.get<ProductsResponse>('/products/', { params });
 
             setProducts(response.data.items);
             setTotalPages(response.data.totalPages);
@@ -138,34 +192,35 @@ export default function GalleryPage() {
         fetchProducts();
     }, [fetchProducts]);
 
-    const handleFilterChange = (key, value) => {
+    const handleFilterChange = <K extends keyof Filters>(key: K, value: Filters[K]): void => {
         setFilters(prev => ({
             ...prev,
             [key]: value,
-            pageNumber: key !== 'pageNumber' ? 1 : value
+            pageNumber: key !== 'pageNumber' ? 1 : (value as number)
         }));
     };
 
-    const handleSearch = () => {
+    const handleSearch = (): void => {
         handleFilterChange('searchTerm', searchInput);
     };
 
-    const handlePriceRangeChange = (event, newValue) => {
-        setPriceRange(newValue);
+    const handlePriceRangeChange = (event: Event, newValue: number | number[]): void => {
+        setPriceRange(newValue as number[]);
     };
 
-    const handlePriceRangeCommitted = (event, newValue) => {
-        handleFilterChange('minPrice', newValue[0]);
-        handleFilterChange('maxPrice', newValue[1]);
+    const handlePriceRangeCommitted = (event: Event | React.SyntheticEvent, newValue: number | number[]): void => {
+        const range = newValue as number[];
+        handleFilterChange('minPrice', range[0]);
+        handleFilterChange('maxPrice', range[1]);
     };
 
-    const handleSortChange = (value) => {
+    const handleSortChange = (value: string): void => {
         const [sortBy, sortDirection] = value.split('-');
         handleFilterChange('sortBy', sortBy);
         handleFilterChange('sortDirection', sortDirection);
     };
 
-    const toggleCategoryExpansion = (categoryId) => {
+    const toggleCategoryExpansion = (categoryId: string): void => {
         const newExpanded = new Set(expandedCategories);
         if (newExpanded.has(categoryId)) {
             newExpanded.delete(categoryId);
@@ -175,15 +230,15 @@ export default function GalleryPage() {
         setExpandedCategories(newExpanded);
     };
 
-    const getChildCategories = (parentId) => {
+    const getChildCategories = (parentId: string): Category[] => {
         return categories.filter(cat => cat.parentCategoryId === parentId);
     };
 
-    const getParentCategories = () => {
+    const getParentCategories = (): Category[] => {
         return categories.filter(cat => !cat.parentCategoryId);
     };
 
-    const CategorySidebar = () => (
+    const CategorySidebar = (): JSX.Element => (
         <Box sx={{
             width: 300,
             height: '100%',
@@ -304,7 +359,9 @@ export default function GalleryPage() {
                     control={
                         <Switch
                             checked={filters.isCustomizable === true}
-                            onChange={(e) => handleFilterChange('isCustomizable', e.target.checked ? true : null)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                handleFilterChange('isCustomizable', e.target.checked ? true : null)
+                            }
                         />
                     }
                     label="Customizable Only"
@@ -376,7 +433,7 @@ export default function GalleryPage() {
                         }}>
                             <Grid container spacing={{ xs: 1, sm: 2 }} alignItems="center">
                                 {isMobile && (
-                                    <Grid item>
+                                    <Grid>
                                         <IconButton
                                             onClick={() => setMobileDrawerOpen(true)}
                                             sx={{ mr: 1 }}
@@ -387,13 +444,13 @@ export default function GalleryPage() {
                                     </Grid>
                                 )}
 
-                                <Grid item xs={12} sm={6} md={4}>
+                                <Grid size={{ xs:12, sm:6, md:4 }}>
                                     <TextField
                                         fullWidth
                                         placeholder="Search products..."
                                         value={searchInput}
-                                        onChange={(e) => setSearchInput(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
+                                        onKeyPress={(e: KeyboardEvent) => e.key === 'Enter' && handleSearch()}
                                         size={isMobile ? "small" : "medium"}
                                         InputProps={{
                                             startAdornment: (
@@ -416,14 +473,14 @@ export default function GalleryPage() {
                                     />
                                 </Grid>
 
-                                <Grid item xs={6} sm={3} md={3}>
+                                <Grid size={{ xs:6, sm:3, md:3 }}>
                                     <FormControl fullWidth size={isMobile ? "small" : "medium"}>
                                         <InputLabel>Sort By</InputLabel>
                                         <Select
                                             value={`${filters.sortBy}-${filters.sortDirection}`}
                                             label="Sort By"
-                                            onChange={(e) => handleSortChange(e.target.value)}
-                                         >
+                                            onChange={(e: SelectChangeEvent) => handleSortChange(e.target.value)}
+                                        >
                                             {SORT_OPTIONS.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
@@ -433,13 +490,15 @@ export default function GalleryPage() {
                                     </FormControl>
                                 </Grid>
 
-                                <Grid item xs={6} sm={3} md={2}>
+                                <Grid size={{ xs:6, sm:3, md:2 }}>
                                     <FormControl fullWidth size={isMobile ? "small" : "medium"}>
                                         <InputLabel>Per Page</InputLabel>
                                         <Select
                                             value={filters.pageSize}
                                             label="Per Page"
-                                            onChange={(e) => handleFilterChange('pageSize', e.target.value)}
+                                            onChange={(e: SelectChangeEvent<number>) =>
+                                                handleFilterChange('pageSize', e.target.value as number)
+                                            }
                                         >
                                             {PAGE_SIZE_OPTIONS.map((size) => (
                                                 <MenuItem key={size} value={size}>
@@ -450,7 +509,7 @@ export default function GalleryPage() {
                                     </FormControl>
                                 </Grid>
 
-                                <Grid item xs={12} md={3} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
+                                <Grid size={{ xs:12, md:3 }} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
                                     <Typography variant="body2" color="text.secondary" sx={{
                                         fontSize: { xs: '0.75rem', sm: '0.875rem' }
                                     }}>

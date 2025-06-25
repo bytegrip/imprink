@@ -5,8 +5,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { darkTheme } from './darkTheme';
 import { lightTheme } from './lightTheme';
 import { useTheme } from './ThemeContext';
+import { ReactNode } from 'react';
 
-export default function MuiThemeProvider({ children }) {
+interface MuiThemeProviderProps {
+    children: ReactNode;
+}
+
+export default function MuiThemeProvider({ children }: MuiThemeProviderProps) {
     const { isDarkMode } = useTheme();
 
     return (

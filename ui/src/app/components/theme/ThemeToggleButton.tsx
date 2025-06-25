@@ -2,8 +2,9 @@
 
 import { IconButton } from '@mui/material';
 import { useTheme } from './ThemeContext';
+import {JSX} from "react";
 
-export default function ThemeToggleButton() {
+export default function ThemeToggleButton(): JSX.Element {
     const { isDarkMode, toggleTheme } = useTheme();
 
     return (

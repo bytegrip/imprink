@@ -40,11 +40,11 @@ services:
     networks:
       - app-network
 
-  webui:
+  ui:
     image: node:18-alpine
     working_dir: /app
     volumes:
-      - ./webui:/app
+      - ./ui:/app
       - /app/node_modules
     ports:
       - "3000"
@@ -93,7 +93,7 @@ services:
       - ./ssl/impr.ink-key.pem:/etc/ssl/private/impr.ink.key:ro
     depends_on:
       - webapi
-      - webui
+      - ui
       - seq
       - upload-server
     networks:

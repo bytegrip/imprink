@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@auth0/nextjs-auth0';
 import clientApi from '@/lib/clientApi';
 
+interface RoleResponse {
+    roleName: string;
+}
+
 export const useRoles = () => {
     const { user } = useUser();
-    const [roles, setRoles] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [roles, setRoles] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         const fetchUserRoles = async () => {
@@ -20,12 +24,12 @@ export const useRoles = () => {
             setError(null);
 
             try {
-                const response = await clientApi.get('/users/me/roles');
+                const response = await clientApi.get<RoleResponse[]>('/users/me/roles');
                 const userRoles = response.data.map(role => role.roleName.toLowerCase());
                 setRoles(userRoles);
             } catch (err) {
                 console.error('Failed to fetch user roles:', err);
-                setError(err);
+                setError(err as Error);
                 setRoles([]);
             } finally {
                 setIsLoading(false);
@@ -35,19 +39,18 @@ export const useRoles = () => {
         fetchUserRoles().then(r => console.log(r));
     }, [user]);
 
-    const hasRole = (roleName) => {
+    const hasRole = (roleName: string): boolean => {
         return roles.includes(roleName.toLowerCase());
     };
 
-    const hasAnyRole = (roleNames) => {
+    const hasAnyRole = (roleNames: string[]): boolean => {
         return roleNames.some(roleName => hasRole(roleName));
     };
 
-    const hasAllRoles = (roleNames) => {
+    const hasAllRoles = (roleNames: string[]): boolean => {
         return roleNames.every(roleName => hasRole(roleName));
     };
 
-    // Common role checks based on your existing logic
     const isMerchant = hasAnyRole(['merchant', 'admin']);
     const isAdmin = hasRole('admin');
     const isCustomer = hasRole('customer');
@@ -61,7 +64,7 @@ export const useRoles = () => {
         hasAllRoles,
         isMerchant,
         isAdmin,
-        isCustomer
+        isCustomer,
     };
 };
 

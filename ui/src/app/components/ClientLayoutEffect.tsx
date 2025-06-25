@@ -1,20 +1,20 @@
 'use client';
 
 import { useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-export default function ClientLayoutEffect() {
+export default function ClientLayoutEffect(): null {
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData(): Promise<void> {
             try {
-                const res = await axios.get('/token');
+                const res: AxiosResponse = await axios.get('/token');
                 console.log('Token response:', res.data);
             } catch (error) {
                 console.error('Token fetch error:', error);
             }
         }
 
-        fetchData().then(r => console.log("Ok"));
+        fetchData().then(() => console.log('Ok'));
     }, []);
 
     return null;

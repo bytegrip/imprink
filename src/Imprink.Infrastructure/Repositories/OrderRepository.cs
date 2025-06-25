@@ -25,12 +25,6 @@ public class OrderRepository(ApplicationDbContext context) : IOrderRepository
             .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
 
-    public async Task<Order?> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
-    {
-        return await context.Orders
-            .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber, cancellationToken);
-    }
-
     public async Task<IEnumerable<Order>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
     {
         return await context.Orders
@@ -132,37 +126,6 @@ public class OrderRepository(ApplicationDbContext context) : IOrderRepository
     {
         return await context.Orders
             .AnyAsync(o => o.Id == id, cancellationToken);
-    }
-
-    public async Task<bool> IsOrderNumberUniqueAsync(string orderNumber, CancellationToken cancellationToken = default)
-    {
-        return !await context.Orders
-            .AnyAsync(o => o.OrderNumber == orderNumber, cancellationToken);
-    }
-
-    public async Task<bool> IsOrderNumberUniqueAsync(string orderNumber, Guid excludeOrderId, CancellationToken cancellationToken = default)
-    {
-        return !await context.Orders
-            .AnyAsync(o => o.OrderNumber == orderNumber && o.Id != excludeOrderId, cancellationToken);
-    }
-
-    public async Task<string> GenerateOrderNumberAsync(CancellationToken cancellationToken = default)
-    {
-        string orderNumber;
-        bool isUnique;
-
-        do
-        {
-            // Generate order number format: ORD-YYYYMMDD-XXXXXX (where X is random)
-            var datePart = DateTime.UtcNow.ToString("yyyyMMdd");
-            var randomPart = Random.Shared.Next(100000, 999999).ToString();
-            orderNumber = $"ORD-{datePart}-{randomPart}";
-
-            isUnique = await IsOrderNumberUniqueAsync(orderNumber, cancellationToken);
-        }
-        while (!isUnique);
-
-        return orderNumber;
     }
 
     public async Task UpdateStatusAsync(Guid orderId, int statusId, CancellationToken cancellationToken = default)

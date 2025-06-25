@@ -35,18 +35,11 @@ public class OrderConfiguration : EntityBaseConfiguration<Order>
         builder.Property(o => o.ShippingStatusId)
             .IsRequired();
             
-        builder.Property(o => o.OrderNumber)
-            .IsRequired()
-            .HasMaxLength(50);
-            
         builder.Property(o => o.Notes)
             .HasMaxLength(1000);
 
         builder.Property(o => o.MerchantId)
             .HasMaxLength(450);
-
-        builder.Property(o => o.ComposingImageUrl)
-            .HasMaxLength(1000);
 
         builder.Property(o => o.OriginalImageUrls)
             .HasConversion(
@@ -55,11 +48,9 @@ public class OrderConfiguration : EntityBaseConfiguration<Order>
             .HasColumnType("nvarchar(max)");
 
         builder.Property(o => o.CustomizationImageUrl)
-            .IsRequired()
             .HasMaxLength(1000);
 
         builder.Property(o => o.CustomizationDescription)
-            .IsRequired()
             .HasMaxLength(2000);
 
         builder.HasOne(o => o.OrderStatus)
@@ -80,13 +71,11 @@ public class OrderConfiguration : EntityBaseConfiguration<Order>
         builder.HasOne(o => o.User)
             .WithMany(u => u.Orders)
             .HasForeignKey(o => o.UserId)
-            .HasPrincipalKey(u => u.Id)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<User>()
+        builder.HasOne(o => o.Merchant)
             .WithMany(u => u.MerchantOrders)
             .HasForeignKey(o => o.MerchantId)
-            .HasPrincipalKey(u => u.Id)
             .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasOne(o => o.Product)
@@ -101,10 +90,6 @@ public class OrderConfiguration : EntityBaseConfiguration<Order>
 
         builder.HasIndex(o => o.UserId)
             .HasDatabaseName("IX_Order_UserId");
-            
-        builder.HasIndex(o => o.OrderNumber)
-            .IsUnique()
-            .HasDatabaseName("IX_Order_OrderNumber");
             
         builder.HasIndex(o => o.OrderDate)
             .HasDatabaseName("IX_Order_OrderDate");

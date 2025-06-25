@@ -1,13 +1,14 @@
 using AutoMapper;
 using Imprink.Application.Dtos;
+using Imprink.Application.Services;
 using Imprink.Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Imprink.Application.Commands.Addresses;
 
 public class CreateAddressCommand : IRequest<AddressDto>
 {
-    public string UserId { get; set; } = null!;
     public string AddressType { get; set; } = null!;
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
@@ -27,13 +28,22 @@ public class CreateAddressCommand : IRequest<AddressDto>
     public bool IsActive { get; set; } = true;
 }
 
-public class CreateAddressHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<CreateAddressCommand, AddressDto>
+public class CreateAddressHandler(
+    IUnitOfWork uw, 
+    IMapper mapper, 
+    ICurrentUserService userService, 
+    ILogger<CreateAddressHandler> logger) 
+    : IRequestHandler<CreateAddressCommand, AddressDto>
 {
     public async Task<AddressDto> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
         return await uw.TransactAsync(async () =>
         {
             var address = mapper.Map<Address>(request);
+            
+            address.UserId = userService.GetCurrentUserId()!;
+            address.CreatedAt = DateTime.UtcNow;
+            address.ModifiedAt = DateTime.UtcNow;
             
             if (address.IsDefault)
             {
@@ -46,6 +56,8 @@ public class CreateAddressHandler(IUnitOfWork uw, IMapper mapper) : IRequestHand
             }
             
             var createdAddress = await uw.AddressRepository.AddAsync(address, cancellationToken);
+            
+            await uw.SaveAsync(cancellationToken);
             return mapper.Map<AddressDto>(createdAddress);
         }, cancellationToken);
     }

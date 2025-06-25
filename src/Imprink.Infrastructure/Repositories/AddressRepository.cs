@@ -25,7 +25,7 @@ public class AddressRepository(ApplicationDbContext context) : IAddressRepositor
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Address?> GetDefaultByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    public async Task<Address?> GetDefaultByUserIdAsync(string? userId, CancellationToken cancellationToken = default)
     {
         return await context.Addresses
             .FirstOrDefaultAsync(a => a.UserId == userId && a.IsDefault && a.IsActive, cancellationToken);
@@ -103,7 +103,7 @@ public class AddressRepository(ApplicationDbContext context) : IAddressRepositor
         return true;
     }
 
-    public async Task SetDefaultAddressAsync(string userId, Guid addressId, CancellationToken cancellationToken = default)
+    public async Task SetDefaultAddressAsync(string? userId, Guid addressId, CancellationToken cancellationToken = default)
     {
         await UnsetDefaultAddressesAsync(userId, cancellationToken);
 
@@ -154,7 +154,7 @@ public class AddressRepository(ApplicationDbContext context) : IAddressRepositor
             .AnyAsync(a => a.Id == id && a.UserId == userId, cancellationToken);
     }
 
-    private async Task UnsetDefaultAddressesAsync(string userId, CancellationToken cancellationToken = default)
+    private async Task UnsetDefaultAddressesAsync(string? userId, CancellationToken cancellationToken = default)
     {
         var defaultAddresses = await context.Addresses
             .Where(a => a.UserId == userId && a.IsDefault)

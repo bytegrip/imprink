@@ -2,7 +2,7 @@ using Imprink.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Imprink.Infrastructure;
+namespace Imprink.Infrastructure.Configuration;
 
 public class EntityBaseConfiguration<T> : IEntityTypeConfiguration<T> where T : EntityBase
 {
@@ -12,20 +12,16 @@ public class EntityBaseConfiguration<T> : IEntityTypeConfiguration<T> where T : 
             
         builder.Property(e => e.Id)
             .HasDefaultValueSql("NEWID()");
-            
-        builder.Property(e => e.CreatedAt)
-            .IsRequired();
+
+        builder.Property(e => e.CreatedAt);
                 
         builder.Property(e => e.ModifiedAt)
-            .IsRequired()
             .HasDefaultValueSql("GETUTCDATE()");
                 
         builder.Property(e => e.CreatedBy)
-            .IsRequired()
             .HasMaxLength(450);
                 
         builder.Property(e => e.ModifiedBy)
-            .IsRequired()
             .HasMaxLength(450);
 
         builder.HasIndex(e => e.CreatedAt)

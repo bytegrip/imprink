@@ -52,7 +52,6 @@ public class UnitOfWork(
         try
         {
             var result = await operation();
-            await SaveAsync(cancellationToken);
             await CommitTransactionAsync(cancellationToken);
             return result;
         }
@@ -69,7 +68,6 @@ public class UnitOfWork(
         try
         {
             await operation();
-            await SaveAsync(cancellationToken);
             await CommitTransactionAsync(cancellationToken);
         }
         catch

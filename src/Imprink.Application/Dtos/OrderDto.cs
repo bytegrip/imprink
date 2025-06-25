@@ -11,13 +11,11 @@ public class OrderDto
     public Guid? ProductVariantId { get; set; }
     public int OrderStatusId { get; set; }
     public int ShippingStatusId { get; set; }
-    public string OrderNumber { get; set; } = null!;
     public string? Notes { get; set; }
     public string? MerchantId { get; set; }
-    public string? ComposingImageUrl { get; set; }
-    public string[] OriginalImageUrls { get; set; } = [];
-    public string CustomizationImageUrl { get; set; } = null!;
-    public string CustomizationDescription { get; set; } = null!;
+    public string? CustomizationImageUrl { get; set; }
+    public string[]? OriginalImageUrls { get; set; } = [];
+    public string? CustomizationDescription { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     

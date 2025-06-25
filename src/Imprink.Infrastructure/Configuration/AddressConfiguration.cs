@@ -75,7 +75,6 @@ public class AddressConfiguration : EntityBaseConfiguration<Address>
         builder.HasOne(a => a.User)
             .WithMany(u => u.Addresses)
             .HasForeignKey(a => a.UserId)
-            .HasPrincipalKey(u => u.Id)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(a => a.UserId)

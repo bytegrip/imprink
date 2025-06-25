@@ -7,7 +7,6 @@ public interface IOrderRepository
 {
     Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Order?> GetByIdWithDetailsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Order?> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
     Task<IEnumerable<Order>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Order>> GetByUserIdWithDetailsAsync(string userId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Order>> GetByMerchantIdAsync(string merchantId, CancellationToken cancellationToken = default);
@@ -19,9 +18,6 @@ public interface IOrderRepository
     Task<Order> UpdateAsync(Order order, CancellationToken cancellationToken = default);
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<bool> IsOrderNumberUniqueAsync(string orderNumber, CancellationToken cancellationToken = default);
-    Task<bool> IsOrderNumberUniqueAsync(string orderNumber, Guid excludeOrderId, CancellationToken cancellationToken = default);
-    Task<string> GenerateOrderNumberAsync(CancellationToken cancellationToken = default);
     Task UpdateStatusAsync(Guid orderId, int statusId, CancellationToken cancellationToken = default);
     Task UpdateShippingStatusAsync(Guid orderId, int shippingStatusId, CancellationToken cancellationToken = default);
     Task AssignMerchantAsync(Guid orderId, string merchantId, CancellationToken cancellationToken = default);

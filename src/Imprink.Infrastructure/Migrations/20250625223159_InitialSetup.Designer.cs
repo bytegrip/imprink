@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imprink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250625211612_InitialSetup")]
+    [Migration("20250625223159_InitialSetup")]
     partial class InitialSetup
     {
         /// <inheritdoc />

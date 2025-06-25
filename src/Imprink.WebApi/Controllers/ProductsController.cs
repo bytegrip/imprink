@@ -21,6 +21,18 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
     
+    [HttpGet("{id:guid}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<PagedResultDto<ProductDto>>> GetProductById(
+        Guid id,  
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator
+            .Send(new GetProductByIdQuery { ProductId = id}, cancellationToken);
+        
+        return Ok(result);
+    }
+    
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<PagedResultDto<ProductDto>>> CreateProduct(

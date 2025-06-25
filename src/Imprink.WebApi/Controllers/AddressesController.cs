@@ -11,27 +11,16 @@ namespace Imprink.WebApi.Controllers;
 public class AddressesController(IMediator mediator) : ControllerBase
 {
     
-    [HttpGet("{id:guid}")]
+    [HttpGet("me")]
     [Authorize]
-    public async Task<ActionResult<AddressDto>> GetAddressById(
-        Guid id, 
-        [FromQuery] string? userId = null, 
-        CancellationToken cancellationToken = default)
+    public async Task<ActionResult<IEnumerable<AddressDto?>>> GetMyAddresses(CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetAddressByIdQuery 
-        { 
-            Id = id, 
-            UserId = userId 
-        }, cancellationToken);
-        
-        if (result == null)
-            return NotFound();
-            
+        var result = await mediator.Send(new GetMyAddressesQuery(), cancellationToken);
         return Ok(result);
     }
     
     [HttpGet("user/{userId}")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<AddressDto>>> GetAddressesByUserId(
         string userId, 
         [FromQuery] bool activeOnly = false,
@@ -55,6 +44,6 @@ public class AddressesController(IMediator mediator) : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(GetAddressById), new { id = result.Id }, result);
+        return CreatedAtAction(nameof(CreateAddress), new { id = result.Id }, result);
     }
 }

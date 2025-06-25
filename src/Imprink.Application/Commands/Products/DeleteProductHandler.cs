@@ -8,13 +8,18 @@ public class DeleteProductCommand : IRequest
     public Guid Id { get; set; }
 }
 
-public class DeleteProductHandler(IUnitOfWork uw) : IRequestHandler<DeleteProductCommand>
+public class DeleteProductHandler(
+    IUnitOfWork uw) 
+    : IRequestHandler<DeleteProductCommand>
 {
-    public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+    public async Task Handle(
+        DeleteProductCommand request, 
+        CancellationToken cancellationToken)
     {
         await uw.TransactAsync(async () =>
         {
-            var exists = await uw.ProductRepository.ExistsAsync(request.Id, cancellationToken);
+            var exists = await uw.ProductRepository
+                .ExistsAsync(request.Id, cancellationToken);
 
             if (!exists)
             {

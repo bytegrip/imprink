@@ -8,9 +8,14 @@ namespace Imprink.Application.Commands.Users;
 
 public record SetUserRoleCommand(string Sub, Guid RoleId) : IRequest<UserRoleDto?>;
 
-public class SetUserRoleHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<SetUserRoleCommand, UserRoleDto?>
+public class SetUserRoleHandler(
+    IUnitOfWork uw, 
+    IMapper mapper) 
+    : IRequestHandler<SetUserRoleCommand, UserRoleDto?>
 {
-    public async Task<UserRoleDto?> Handle(SetUserRoleCommand request, CancellationToken cancellationToken)
+    public async Task<UserRoleDto?> Handle(
+        SetUserRoleCommand request, 
+        CancellationToken cancellationToken)
     {
         await uw.BeginTransactionAsync(cancellationToken);
 
@@ -25,7 +30,8 @@ public class SetUserRoleHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandle
                 RoleId = request.RoleId
             };
 
-            var addedRole = await uw.UserRoleRepository.AddUserRoleAsync(userRole, cancellationToken);
+            var addedRole = await uw.UserRoleRepository
+                .AddUserRoleAsync(userRole, cancellationToken);
 
             await uw.SaveAsync(cancellationToken);
             await uw.CommitTransactionAsync(cancellationToken);

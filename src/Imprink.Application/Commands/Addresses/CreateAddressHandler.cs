@@ -3,7 +3,6 @@ using Imprink.Application.Dtos;
 using Imprink.Application.Services;
 using Imprink.Domain.Entities;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Imprink.Application.Commands.Addresses;
 
@@ -31,21 +30,23 @@ public class CreateAddressCommand : IRequest<AddressDto>
 public class CreateAddressHandler(
     IUnitOfWork uw, 
     IMapper mapper, 
-    ICurrentUserService userService, 
-    ILogger<CreateAddressHandler> logger) 
+    ICurrentUserService userService) 
     : IRequestHandler<CreateAddressCommand, AddressDto>
 {
-    public async Task<AddressDto> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
+    public async Task<AddressDto> Handle(
+        CreateAddressCommand request, 
+        CancellationToken cancellationToken)
     {
         return await uw.TransactAsync(async () =>
         {
             var address = mapper.Map<Address>(request);
-            
-            address.UserId = userService.GetCurrentUserId()!;
+            address.UserId = userService.GetCurrentUserId();
             
             if (address.IsDefault)
             {
-                var currentDefault = await uw.AddressRepository.GetDefaultByUserIdAsync(address.UserId, cancellationToken);
+                var currentDefault = await uw.AddressRepository
+                    .GetDefaultByUserIdAsync(address.UserId, cancellationToken);
+                
                 if (currentDefault != null)
                 {
                     currentDefault.IsDefault = false;

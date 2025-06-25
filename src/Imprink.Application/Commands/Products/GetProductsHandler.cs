@@ -9,11 +9,16 @@ public class GetProductsQuery : IRequest<PagedResultDto<ProductDto>>
     public ProductFilterParameters FilterParameters { get; set; } = new();
 }
 
-public class GetProductsHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetProductsQuery, PagedResultDto<ProductDto>>
+public class GetProductsHandler(
+    IUnitOfWork unitOfWork) 
+    : IRequestHandler<GetProductsQuery, PagedResultDto<ProductDto>>
 {
-    public async Task<PagedResultDto<ProductDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResultDto<ProductDto>> Handle(
+        GetProductsQuery request, 
+        CancellationToken cancellationToken)
     {
-        var pagedResult = await unitOfWork.ProductRepository.GetPagedAsync(request.FilterParameters, cancellationToken);
+        var pagedResult = await unitOfWork.ProductRepository
+            .GetPagedAsync(request.FilterParameters, cancellationToken);
         
         var productDtos = pagedResult.Items.Select(p => new ProductDto
         {

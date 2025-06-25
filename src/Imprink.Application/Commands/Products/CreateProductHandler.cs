@@ -16,9 +16,14 @@ public class CreateProductCommand : IRequest<ProductDto>
     public Guid? CategoryId { get; set; }
 }
 
-public class CreateProductHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<CreateProductCommand, ProductDto>
+public class CreateProductHandler(
+    IUnitOfWork uw, 
+    IMapper mapper) 
+    : IRequestHandler<CreateProductCommand, ProductDto>
 {
-    public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<ProductDto> Handle(
+        CreateProductCommand request, 
+        CancellationToken cancellationToken)
     {
         return await uw.TransactAsync(async () =>
         {

@@ -8,9 +8,15 @@ namespace Imprink.Application.Commands.Users;
 
 public record SetUserFullNameCommand(string FirstName, string LastName) : IRequest<UserDto?>;
 
-public class SetUserFullNameHandler(IUnitOfWork uw, IMapper mapper, ICurrentUserService userService) : IRequestHandler<SetUserFullNameCommand, UserDto?>
+public class SetUserFullNameHandler(
+    IUnitOfWork uw, 
+    IMapper mapper, 
+    ICurrentUserService userService) 
+    : IRequestHandler<SetUserFullNameCommand, UserDto?>
 {
-    public async Task<UserDto?> Handle(SetUserFullNameCommand request, CancellationToken cancellationToken)
+    public async Task<UserDto?> Handle(
+        SetUserFullNameCommand request, 
+        CancellationToken cancellationToken)
     {
         await uw.BeginTransactionAsync(cancellationToken);
 
@@ -21,7 +27,8 @@ public class SetUserFullNameHandler(IUnitOfWork uw, IMapper mapper, ICurrentUser
             if (currentUser == null)
                 throw new NotFoundException("User token could not be accessed.");
 
-            var user = await uw.UserRepository.SetUserFullNameAsync(currentUser, request.FirstName, request.LastName, cancellationToken);
+            var user = await uw.UserRepository
+                .SetUserFullNameAsync(currentUser, request.FirstName, request.LastName, cancellationToken);
             
             if (user == null)
                 throw new DataUpdateException("User name could not be updated.");

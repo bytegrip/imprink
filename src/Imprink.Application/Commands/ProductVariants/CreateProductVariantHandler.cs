@@ -17,10 +17,14 @@ public class CreateProductVariantCommand : IRequest<ProductVariantDto>
     public bool IsActive { get; set; } = true;
 }
 
-public class CreateProductVariantHandler(IUnitOfWork unitOfWork, IMapper mapper)
+public class CreateProductVariantHandler(
+    IUnitOfWork unitOfWork, 
+    IMapper mapper)
     : IRequestHandler<CreateProductVariantCommand, ProductVariantDto>
 {
-    public async Task<ProductVariantDto> Handle(CreateProductVariantCommand request, CancellationToken cancellationToken)
+    public async Task<ProductVariantDto> Handle(
+        CreateProductVariantCommand request, 
+        CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         
@@ -30,7 +34,8 @@ public class CreateProductVariantHandler(IUnitOfWork unitOfWork, IMapper mapper)
             
             productVariant.Product = null!;
 
-            var createdVariant = await unitOfWork.ProductVariantRepository.AddAsync(productVariant, cancellationToken);
+            var createdVariant = await unitOfWork.ProductVariantRepository
+                .AddAsync(productVariant, cancellationToken);
             
             await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);

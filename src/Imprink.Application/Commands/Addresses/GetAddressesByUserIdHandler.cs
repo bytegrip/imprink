@@ -8,23 +8,30 @@ namespace Imprink.Application.Commands.Addresses;
 public class GetAddressesByUserIdQuery : IRequest<IEnumerable<AddressDto>>
 {
     public string UserId { get; set; } = null!;
-    public bool ActiveOnly { get; set; } = false;
+    public bool ActiveOnly { get; set; }
     public string? AddressType { get; set; }
 }
 
-public class GetAddressesByUserIdHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<GetAddressesByUserIdQuery, IEnumerable<AddressDto>>
+public class GetAddressesByUserIdHandler(
+    IUnitOfWork uw, 
+    IMapper mapper) 
+    : IRequestHandler<GetAddressesByUserIdQuery, IEnumerable<AddressDto>>
 {
-    public async Task<IEnumerable<AddressDto>> Handle(GetAddressesByUserIdQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AddressDto>> Handle(
+        GetAddressesByUserIdQuery request, 
+        CancellationToken cancellationToken)
     {
         IEnumerable<Address> addresses;
         
         if (!string.IsNullOrEmpty(request.AddressType))
         {
-            addresses = await uw.AddressRepository.GetByUserIdAndTypeAsync(request.UserId, request.AddressType, cancellationToken);
+            addresses = await uw.AddressRepository
+                .GetByUserIdAndTypeAsync(request.UserId, request.AddressType, cancellationToken);
         }
         else if (request.ActiveOnly)
         {
-            addresses = await uw.AddressRepository.GetActiveByUserIdAsync(request.UserId, cancellationToken);
+            addresses = await uw.AddressRepository
+                .GetActiveByUserIdAsync(request.UserId, cancellationToken);
         }
         else
         {

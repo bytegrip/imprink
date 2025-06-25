@@ -22,25 +22,35 @@ public class CreateOrderCommand : IRequest<OrderDto>
     public Guid AddressId { get; set; }
 }
 
-public class CreateOrderHandler(IUnitOfWork uw, IMapper mapper, ICurrentUserService userService) : IRequestHandler<CreateOrderCommand, OrderDto>
+public class CreateOrderHandler(
+    IUnitOfWork uw, 
+    IMapper mapper, 
+    ICurrentUserService userService) 
+    : IRequestHandler<CreateOrderCommand, OrderDto>
 {
-    public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<OrderDto> Handle(
+        CreateOrderCommand request, 
+        CancellationToken cancellationToken)
     {
         return await uw.TransactAsync(async () =>
         {
-            var sourceAddress = await uw.AddressRepository.GetByIdAndUserIdAsync(request.AddressId, userService.GetCurrentUserId()!, cancellationToken);
+            var userId = userService.GetCurrentUserId()!;
+            
+            var sourceAddress = await uw.AddressRepository
+                .GetByIdAndUserIdAsync(request.AddressId, userId, cancellationToken);
+            
             if (sourceAddress == null)
-            {
-                throw new NotFoundException($"Address with ID {request.AddressId} not found for user {userService.GetCurrentUserId()!}");
-            }
+                throw new NotFoundException($"Address {request.AddressId} not found for {userId}");
 
             var order = mapper.Map<Order>(request);
-            order.UserId = userService.GetCurrentUserId()!;
+            order.UserId = userService.GetCurrentUserId();
             order.OrderDate = DateTime.UtcNow;
             order.OrderStatusId = 0; 
             order.ShippingStatusId = 0; 
             
-            var variant = uw.ProductVariantRepository.GetByIdAsync(request.ProductVariantId, cancellationToken).Result;
+            var variant = uw.ProductVariantRepository
+                .GetByIdAsync(request.ProductVariantId, cancellationToken).Result;
+            
             if (variant == null)
                 throw new NotFoundException("Product variant not found");
             
@@ -72,12 +82,14 @@ public class CreateOrderHandler(IUnitOfWork uw, IMapper mapper, ICurrentUserServ
             
             await uw.OrderAddressRepository.AddAsync(orderAddress, cancellationToken);
             
-            createdOrder.Product = (await uw.ProductRepository.GetByIdAsync(createdOrder.ProductId, cancellationToken))!;
+            createdOrder.Product = (await uw.ProductRepository
+                .GetByIdAsync(createdOrder.ProductId, cancellationToken))!;
             
             if (!createdOrder.ProductVariantId.HasValue) 
                 throw new NotFoundException("Product variant not found");
             
-            createdOrder.ProductVariant = await uw.ProductVariantRepository.GetByIdAsync(createdOrder.ProductVariantId.Value, cancellationToken);
+            createdOrder.ProductVariant = await uw.ProductVariantRepository
+                .GetByIdAsync(createdOrder.ProductVariantId.Value, cancellationToken);
 
             await uw.SaveAsync(cancellationToken);
             

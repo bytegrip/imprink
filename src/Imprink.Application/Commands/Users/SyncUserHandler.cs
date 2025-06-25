@@ -7,15 +7,21 @@ namespace Imprink.Application.Commands.Users;
 
 public record SyncUserCommand(Auth0User User) : IRequest<UserDto?>;
 
-public class SyncUserHandler(IUnitOfWork uw, IMapper mapper): IRequestHandler<SyncUserCommand, UserDto?>
+public class SyncUserHandler(
+    IUnitOfWork uw, 
+    IMapper mapper)
+    : IRequestHandler<SyncUserCommand, UserDto?>
 {
-    public async Task<UserDto?> Handle(SyncUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserDto?> Handle(
+        SyncUserCommand request, 
+        CancellationToken cancellationToken)
     {
         await uw.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var user = await uw.UserRepository.UpdateOrCreateUserAsync(request.User, cancellationToken);
+            var user = await uw.UserRepository
+                .UpdateOrCreateUserAsync(request.User, cancellationToken);
             
             if (user == null) 
                 throw new Exception("User exists but could not be updated");

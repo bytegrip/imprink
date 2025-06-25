@@ -16,15 +16,20 @@ public class UpdateProductCommand : IRequest<ProductDto>
     public Guid? CategoryId { get; set; }
 }
 
-public class UpdateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateProductCommand, ProductDto>
+public class UpdateProductHandler(
+    IUnitOfWork unitOfWork) 
+    : IRequestHandler<UpdateProductCommand, ProductDto>
 {
-    public async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    public async Task<ProductDto> Handle(
+        UpdateProductCommand request, 
+        CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         
         try
         {
-            var existingProduct = await unitOfWork.ProductRepository.GetByIdAsync(request.Id, cancellationToken);
+            var existingProduct = await unitOfWork.ProductRepository
+                .GetByIdAsync(request.Id, cancellationToken);
             
             if (existingProduct == null) 
                 throw new NotFoundException($"Product with ID {request.Id} not found.");
@@ -37,7 +42,8 @@ public class UpdateProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<Upda
             existingProduct.ImageUrl = request.ImageUrl;
             existingProduct.CategoryId = request.CategoryId;
 
-            var updatedProduct = await unitOfWork.ProductRepository.UpdateAsync(existingProduct, cancellationToken);
+            var updatedProduct = await unitOfWork.ProductRepository
+                .UpdateAsync(existingProduct, cancellationToken);
 
             var categoryDto = new CategoryDto
             {

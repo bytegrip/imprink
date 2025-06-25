@@ -11,19 +11,26 @@ public class GetOrdersByMerchantIdQuery : IRequest<IEnumerable<OrderDto>>
     public bool IncludeDetails { get; set; }
 }
 
-public class GetOrdersByMerchantIdHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<GetOrdersByMerchantIdQuery, IEnumerable<OrderDto>>
+public class GetOrdersByMerchantIdHandler(
+    IUnitOfWork uw, 
+    IMapper mapper) 
+    : IRequestHandler<GetOrdersByMerchantIdQuery, IEnumerable<OrderDto>>
 {
-    public async Task<IEnumerable<OrderDto>> Handle(GetOrdersByMerchantIdQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderDto>> Handle(
+        GetOrdersByMerchantIdQuery request, 
+        CancellationToken cancellationToken)
     {
         IEnumerable<Order> orders;
         
         if (request.IncludeDetails)
         {
-            orders = await uw.OrderRepository.GetByMerchantIdWithDetailsAsync(request.MerchantId, cancellationToken);
+            orders = await uw.OrderRepository
+                .GetByMerchantIdWithDetailsAsync(request.MerchantId, cancellationToken);
         }
         else
         {
-            orders = await uw.OrderRepository.GetByMerchantIdAsync(request.MerchantId, cancellationToken);
+            orders = await uw.OrderRepository
+                .GetByMerchantIdAsync(request.MerchantId, cancellationToken);
         }
         
         return mapper.Map<IEnumerable<OrderDto>>(orders);

@@ -14,9 +14,13 @@ public class CreateCategoryCommand : IRequest<CategoryDto>
     public Guid? ParentCategoryId { get; set; }
 }
 
-public class CreateCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateCategoryCommand, CategoryDto>
+public class CreateCategoryHandler(
+    IUnitOfWork unitOfWork) 
+    : IRequestHandler<CreateCategoryCommand, CategoryDto>
 {
-    public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<CategoryDto> Handle(
+        CreateCategoryCommand request, 
+        CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         
@@ -32,7 +36,9 @@ public class CreateCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Cre
                 ParentCategoryId = request.ParentCategoryId
             };
 
-            var createdCategory = await unitOfWork.CategoryRepository.AddAsync(category, cancellationToken);
+            var createdCategory = await unitOfWork
+                .CategoryRepository.AddAsync(category, cancellationToken);
+            
             await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
 

@@ -11,9 +11,14 @@ public class GetOrderByIdQuery : IRequest<OrderDto?>
     public bool IncludeDetails { get; set; }
 }
 
-public class GetOrderByIdHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<GetOrderByIdQuery, OrderDto?>
+public class GetOrderByIdHandler(
+    IUnitOfWork uw, 
+    IMapper mapper) 
+    : IRequestHandler<GetOrderByIdQuery, OrderDto?>
 {
-    public async Task<OrderDto?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
+    public async Task<OrderDto?> Handle(
+        GetOrderByIdQuery request, 
+        CancellationToken cancellationToken)
     {
         Order? order;
         

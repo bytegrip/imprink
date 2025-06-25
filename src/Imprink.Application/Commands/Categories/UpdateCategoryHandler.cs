@@ -15,15 +15,20 @@ public class UpdateCategoryCommand : IRequest<CategoryDto>
     public Guid? ParentCategoryId { get; set; }
 }
 
-public class UpdateCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateCategoryCommand, CategoryDto>
+public class UpdateCategoryHandler(
+    IUnitOfWork unitOfWork) 
+    : IRequestHandler<UpdateCategoryCommand, CategoryDto>
 {
-    public async Task<CategoryDto> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<CategoryDto> Handle(
+        UpdateCategoryCommand request, 
+        CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         
         try
         {
-            var existingCategory = await unitOfWork.CategoryRepository.GetByIdAsync(request.Id, cancellationToken);
+            var existingCategory = await unitOfWork.CategoryRepository
+                .GetByIdAsync(request.Id, cancellationToken);
             
             if (existingCategory == null)
             {
@@ -37,7 +42,9 @@ public class UpdateCategoryHandler(IUnitOfWork unitOfWork) : IRequestHandler<Upd
             existingCategory.IsActive = request.IsActive;
             existingCategory.ParentCategoryId = request.ParentCategoryId;
 
-            var updatedCategory = await unitOfWork.CategoryRepository.UpdateAsync(existingCategory, cancellationToken);
+            var updatedCategory = await unitOfWork.CategoryRepository
+                .UpdateAsync(existingCategory, cancellationToken);
+            
             await unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return new CategoryDto

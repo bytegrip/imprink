@@ -10,10 +10,13 @@ public class GetCategoriesQuery : IRequest<IEnumerable<CategoryDto>>
     public bool RootCategoriesOnly { get; set; } = false;
 }
 
-public class GetCategoriesHandler(IUnitOfWork unitOfWork)
+public class GetCategoriesHandler(
+    IUnitOfWork unitOfWork)
     : IRequestHandler<GetCategoriesQuery, IEnumerable<CategoryDto>>
 {
-    public async Task<IEnumerable<CategoryDto>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryDto>> Handle(
+        GetCategoriesQuery request, 
+        CancellationToken cancellationToken)
     {
         IEnumerable<Category> categories;
 

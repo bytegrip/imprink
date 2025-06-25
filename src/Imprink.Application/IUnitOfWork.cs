@@ -12,6 +12,7 @@ public interface IUnitOfWork
     public IRoleRepository RoleRepository { get; }
     public IOrderRepository OrderRepository { get; }
     public IAddressRepository AddressRepository { get; }
+    public IOrderAddressRepository OrderAddressRepository { get; }
 
     Task SaveAsync(CancellationToken cancellationToken = default);
     Task BeginTransactionAsync(CancellationToken cancellationToken = default);

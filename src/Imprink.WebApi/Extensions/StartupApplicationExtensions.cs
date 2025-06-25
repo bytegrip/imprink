@@ -20,6 +20,7 @@ public static class StartupApplicationExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderAddressRepository, OrderAddressRepository>();
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();

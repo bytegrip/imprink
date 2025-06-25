@@ -8,7 +8,7 @@ namespace Imprink.Application.Commands.Orders;
 public class GetOrderByIdQuery : IRequest<OrderDto?>
 {
     public Guid Id { get; set; }
-    public bool IncludeDetails { get; set; } = false;
+    public bool IncludeDetails { get; set; }
 }
 
 public class GetOrderByIdHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<GetOrderByIdQuery, OrderDto?>

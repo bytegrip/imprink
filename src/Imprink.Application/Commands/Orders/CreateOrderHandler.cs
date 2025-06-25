@@ -9,10 +9,9 @@ namespace Imprink.Application.Commands.Orders;
 
 public class CreateOrderCommand : IRequest<OrderDto>
 {
-    public decimal Amount { get; set; }
     public int Quantity { get; set; }
     public Guid ProductId { get; set; }
-    public Guid? ProductVariantId { get; set; }
+    public Guid ProductVariantId { get; set; }
     public string? Notes { get; set; }
     public string? MerchantId { get; set; }
     public string? ComposingImageUrl { get; set; }
@@ -41,6 +40,13 @@ public class CreateOrderHandler(IUnitOfWork uw, IMapper mapper, ICurrentUserServ
             order.OrderStatusId = 0; 
             order.ShippingStatusId = 0; 
             
+            var variant = uw.ProductVariantRepository.GetByIdAsync(request.ProductVariantId, cancellationToken).Result;
+            if (variant == null)
+                throw new NotFoundException("Product variant not found");
+            
+            order.Amount = variant.Price * request.Quantity;
+
+
             var createdOrder = await uw.OrderRepository.AddAsync(order, cancellationToken);
             
             var orderAddress = new OrderAddress
@@ -68,10 +74,10 @@ public class CreateOrderHandler(IUnitOfWork uw, IMapper mapper, ICurrentUserServ
             
             createdOrder.Product = (await uw.ProductRepository.GetByIdAsync(createdOrder.ProductId, cancellationToken))!;
             
-            if (createdOrder.ProductVariantId.HasValue)
-            {
-                createdOrder.ProductVariant = await uw.ProductVariantRepository.GetByIdAsync(createdOrder.ProductVariantId.Value, cancellationToken);
-            }
+            if (!createdOrder.ProductVariantId.HasValue) 
+                throw new NotFoundException("Product variant not found");
+            
+            createdOrder.ProductVariant = await uw.ProductVariantRepository.GetByIdAsync(createdOrder.ProductVariantId.Value, cancellationToken);
 
             await uw.SaveAsync(cancellationToken);
             

@@ -42,8 +42,6 @@ public class CreateAddressHandler(
             var address = mapper.Map<Address>(request);
             
             address.UserId = userService.GetCurrentUserId()!;
-            address.CreatedAt = DateTime.UtcNow;
-            address.ModifiedAt = DateTime.UtcNow;
             
             if (address.IsDefault)
             {

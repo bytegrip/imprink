@@ -8,7 +8,7 @@ namespace Imprink.Application.Commands.Orders;
 public class GetOrdersByMerchantIdQuery : IRequest<IEnumerable<OrderDto>>
 {
     public string MerchantId { get; set; } = null!;
-    public bool IncludeDetails { get; set; } = false;
+    public bool IncludeDetails { get; set; }
 }
 
 public class GetOrdersByMerchantIdHandler(IUnitOfWork uw, IMapper mapper) : IRequestHandler<GetOrdersByMerchantIdQuery, IEnumerable<OrderDto>>

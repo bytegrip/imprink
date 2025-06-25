@@ -23,7 +23,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
-    public async Task<ActionResult<PagedResultDto<ProductDto>>> GetProductById(
+    public async Task<ActionResult<ProductDto>> GetProductById(
         Guid id,  
         CancellationToken cancellationToken)
     {

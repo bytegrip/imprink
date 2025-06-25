@@ -10,11 +10,12 @@ namespace Imprink.WebApi.Controllers;
 [Route("/api/products/variants")]
 public class ProductVariantsController(IMediator mediator) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("{id:guid}")]
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ProductVariantDto>>> GetProductVariants(
-        [FromQuery] GetProductVariantsQuery query)
+        Guid id)
     {
+        var query = new GetProductVariantsQuery { ProductId = id };
         return Ok(await mediator.Send(query));
     }
     

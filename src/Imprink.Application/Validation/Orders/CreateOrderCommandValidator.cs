@@ -25,13 +25,6 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
             .NotEmpty()
             .WithMessage("Address ID is required.");
 
-        RuleFor(x => x.ComposingImageUrl)
-            .MaximumLength(2048)
-            .WithMessage("Composing image URL must not exceed 2048 characters.")
-            .Must(BeValidUrl)
-            .When(x => !string.IsNullOrEmpty(x.ComposingImageUrl))
-            .WithMessage("Composing image URL must be a valid URL.");
-
         RuleFor(x => x.CustomizationImageUrl)
             .MaximumLength(2048)
             .WithMessage("Customization image URL must not exceed 2048 characters.")

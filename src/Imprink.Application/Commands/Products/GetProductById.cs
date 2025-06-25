@@ -17,7 +17,7 @@ public class GetProductById(
         CancellationToken cancellationToken)
     {
         var product = await unitOfWork.ProductRepository
-            .GetByIdAsync(request.ProductId, cancellationToken);
+            .GetByIdWithCategoryAsync(request.ProductId, cancellationToken);
         
         if (product == null)
             return null;

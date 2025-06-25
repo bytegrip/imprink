@@ -15,7 +15,7 @@ public class UpdateCategoryCommand : IRequest<CategoryDto>
     public Guid? ParentCategoryId { get; set; }
 }
 
-public class UpdateCategoryHandler(
+public class UpdateCategory(
     IUnitOfWork unitOfWork) 
     : IRequestHandler<UpdateCategoryCommand, CategoryDto>
 {

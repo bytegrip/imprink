@@ -7,7 +7,7 @@ public class DeleteProductVariantCommand : IRequest<bool>
     public Guid Id { get; set; }
 }
 
-public class DeleteProductVariantHandler(
+public class DeleteProductVariant(
     IUnitOfWork unitOfWork) 
     : IRequestHandler<DeleteProductVariantCommand, bool>
 {

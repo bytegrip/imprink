@@ -7,7 +7,7 @@ namespace Imprink.Application.Commands.Users;
 
 public record SyncUserCommand(Auth0User User) : IRequest<UserDto?>;
 
-public class SyncUserHandler(
+public class SyncUser(
     IUnitOfWork uw, 
     IMapper mapper)
     : IRequestHandler<SyncUserCommand, UserDto?>

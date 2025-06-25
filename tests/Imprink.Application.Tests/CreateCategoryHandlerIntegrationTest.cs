@@ -15,7 +15,7 @@ public class CreateCategoryHandlerIntegrationTest : IDisposable
 {
     private readonly ApplicationDbContext _context;
     private readonly IServiceProvider _serviceProvider;
-    private readonly CreateCategoryHandler _handler;
+    private readonly CreateCategory _handler;
     private readonly SqliteConnection _connection;
 
     public CreateCategoryHandlerIntegrationTest()
@@ -38,11 +38,11 @@ public class CreateCategoryHandlerIntegrationTest : IDisposable
         services.AddScoped<IAddressRepository, AddressRepository>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<CreateCategoryHandler>();
+        services.AddScoped<CreateCategory>();
 
         _serviceProvider = services.BuildServiceProvider();
         _context = _serviceProvider.GetRequiredService<ApplicationDbContext>();
-        _handler = _serviceProvider.GetRequiredService<CreateCategoryHandler>();
+        _handler = _serviceProvider.GetRequiredService<CreateCategory>();
 
         _context.Database.EnsureCreated();
     }
@@ -216,7 +216,7 @@ public class CreateCategoryHandlerIntegrationTest : IDisposable
 
         var initialCount = await _context.Categories.CountAsync();
 
-        var handler = _serviceProvider.GetRequiredService<CreateCategoryHandler>();
+        var handler = _serviceProvider.GetRequiredService<CreateCategory>();
 
         var result = await handler.Handle(command, CancellationToken.None);
         

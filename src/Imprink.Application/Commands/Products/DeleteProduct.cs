@@ -8,7 +8,7 @@ public class DeleteProductCommand : IRequest
     public Guid Id { get; set; }
 }
 
-public class DeleteProductHandler(
+public class DeleteProduct(
     IUnitOfWork uw) 
     : IRequestHandler<DeleteProductCommand>
 {

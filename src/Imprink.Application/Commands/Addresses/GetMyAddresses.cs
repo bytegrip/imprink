@@ -8,7 +8,7 @@ namespace Imprink.Application.Commands.Addresses;
 
 public class GetMyAddressesQuery : IRequest<IEnumerable<AddressDto?>>;
 
-public class GetMyAddressesHandler(
+public class GetMyAddresses(
     IUnitOfWork uw, 
     IMapper mapper, 
     ICurrentUserService userService) 

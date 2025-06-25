@@ -12,7 +12,7 @@ public class GetAddressesByUserIdQuery : IRequest<IEnumerable<AddressDto>>
     public string? AddressType { get; set; }
 }
 
-public class GetAddressesByUserIdHandler(
+public class GetAddressesByUserId(
     IUnitOfWork uw, 
     IMapper mapper) 
     : IRequestHandler<GetAddressesByUserIdQuery, IEnumerable<AddressDto>>

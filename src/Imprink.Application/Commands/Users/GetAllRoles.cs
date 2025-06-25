@@ -6,7 +6,7 @@ namespace Imprink.Application.Commands.Users;
 
 public record GetAllRolesCommand : IRequest<IEnumerable<RoleDto>>;
 
-public class GetAllRolesHandler(
+public class GetAllRoles(
     IUnitOfWork uw, 
     IMapper mapper): IRequestHandler<GetAllRolesCommand, IEnumerable<RoleDto>>
 {

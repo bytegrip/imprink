@@ -11,7 +11,7 @@ public class GetOrderByIdQuery : IRequest<OrderDto?>
     public bool IncludeDetails { get; set; }
 }
 
-public class GetOrderByIdHandler(
+public class GetOrderById(
     IUnitOfWork uw, 
     IMapper mapper) 
     : IRequestHandler<GetOrderByIdQuery, OrderDto?>

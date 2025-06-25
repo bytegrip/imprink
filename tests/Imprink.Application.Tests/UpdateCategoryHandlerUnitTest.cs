@@ -6,13 +6,13 @@ using Moq;
 
 namespace Imprink.Application.Tests;
 
-public class UpdateCategoryHandlerTests
+public class UpdateCategoryTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
-    private readonly UpdateCategoryHandler _handler;
+    private readonly UpdateCategory _handler;
 
-    public UpdateCategoryHandlerTests()
+    public UpdateCategoryTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
@@ -20,7 +20,7 @@ public class UpdateCategoryHandlerTests
         _unitOfWorkMock.Setup(x => x.CategoryRepository)
             .Returns(_categoryRepositoryMock.Object);
         
-        _handler = new UpdateCategoryHandler(_unitOfWorkMock.Object);
+        _handler = new UpdateCategory(_unitOfWorkMock.Object);
     }
 
     [Fact]

@@ -16,7 +16,7 @@ public class CreateProductCommand : IRequest<ProductDto>
     public Guid? CategoryId { get; set; }
 }
 
-public class CreateProductHandler(
+public class CreateProduct(
     IUnitOfWork uw, 
     IMapper mapper) 
     : IRequestHandler<CreateProductCommand, ProductDto>

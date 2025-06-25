@@ -6,16 +6,16 @@ using MediatR;
 
 namespace Imprink.Application.Commands.Users;
 
-public record SetUserFullNameCommand(string FirstName, string LastName) : IRequest<UserDto?>;
+public record SetUserPhoneCommand(string PhoneNumber) : IRequest<UserDto?>;
 
-public class SetUserFullNameHandler(
+public class SetUserPhone(
     IUnitOfWork uw, 
     IMapper mapper, 
     ICurrentUserService userService) 
-    : IRequestHandler<SetUserFullNameCommand, UserDto?>
+    : IRequestHandler<SetUserPhoneCommand, UserDto?>
 {
     public async Task<UserDto?> Handle(
-        SetUserFullNameCommand request, 
+        SetUserPhoneCommand request, 
         CancellationToken cancellationToken)
     {
         await uw.BeginTransactionAsync(cancellationToken);
@@ -28,10 +28,10 @@ public class SetUserFullNameHandler(
                 throw new NotFoundException("User token could not be accessed.");
 
             var user = await uw.UserRepository
-                .SetUserFullNameAsync(currentUser, request.FirstName, request.LastName, cancellationToken);
+                .SetUserPhoneAsync(currentUser, request.PhoneNumber, cancellationToken);
             
             if (user == null)
-                throw new DataUpdateException("User name could not be updated.");
+                throw new DataUpdateException("User phone could not be updated.");
 
             await uw.SaveAsync(cancellationToken);
             await uw.CommitTransactionAsync(cancellationToken);

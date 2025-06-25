@@ -9,7 +9,7 @@ public class GetProductsQuery : IRequest<PagedResultDto<ProductDto>>
     public ProductFilterParameters FilterParameters { get; set; } = new();
 }
 
-public class GetProductsHandler(
+public class GetProducts(
     IUnitOfWork unitOfWork) 
     : IRequestHandler<GetProductsQuery, PagedResultDto<ProductDto>>
 {

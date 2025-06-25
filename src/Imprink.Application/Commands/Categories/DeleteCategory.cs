@@ -7,7 +7,7 @@ public class DeleteCategoryCommand : IRequest<bool>
     public Guid Id { get; init; }
 }
 
-public class DeleteCategoryHandler(
+public class DeleteCategory(
     IUnitOfWork unitOfWork) 
     : IRequestHandler<DeleteCategoryCommand, bool>
 {

@@ -10,7 +10,7 @@ public class GetCategoriesQuery : IRequest<IEnumerable<CategoryDto>>
     public bool RootCategoriesOnly { get; set; } = false;
 }
 
-public class GetCategoriesHandler(
+public class GetCategories(
     IUnitOfWork unitOfWork)
     : IRequestHandler<GetCategoriesQuery, IEnumerable<CategoryDto>>
 {

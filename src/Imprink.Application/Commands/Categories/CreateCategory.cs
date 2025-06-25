@@ -14,7 +14,7 @@ public class CreateCategoryCommand : IRequest<CategoryDto>
     public Guid? ParentCategoryId { get; set; }
 }
 
-public class CreateCategoryHandler(
+public class CreateCategory(
     IUnitOfWork unitOfWork) 
     : IRequestHandler<CreateCategoryCommand, CategoryDto>
 {

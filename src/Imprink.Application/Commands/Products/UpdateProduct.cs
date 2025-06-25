@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Imprink.Application.Commands.Products;
 
-public class UpdateProductCommand : IRequest<ProductDto>
+public class UpdateProduct : IRequest<ProductDto>
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
@@ -18,10 +18,10 @@ public class UpdateProductCommand : IRequest<ProductDto>
 
 public class UpdateProductHandler(
     IUnitOfWork unitOfWork) 
-    : IRequestHandler<UpdateProductCommand, ProductDto>
+    : IRequestHandler<UpdateProduct, ProductDto>
 {
     public async Task<ProductDto> Handle(
-        UpdateProductCommand request, 
+        UpdateProduct request, 
         CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);

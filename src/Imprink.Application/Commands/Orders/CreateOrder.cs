@@ -12,17 +12,14 @@ public class CreateOrderCommand : IRequest<OrderDto>
     public int Quantity { get; set; }
     public Guid ProductId { get; set; }
     public Guid ProductVariantId { get; set; }
-    public string? Notes { get; set; }
-    public string? MerchantId { get; set; }
     public string? ComposingImageUrl { get; set; }
     public string[]? OriginalImageUrls { get; set; } = [];
     public string? CustomizationImageUrl { get; set; } = null!;
     public string? CustomizationDescription { get; set; } = null!;
-    
     public Guid AddressId { get; set; }
 }
 
-public class CreateOrderHandler(
+public class CreateOrder(
     IUnitOfWork uw, 
     IMapper mapper, 
     ICurrentUserService userService) 

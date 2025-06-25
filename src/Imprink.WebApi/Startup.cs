@@ -24,7 +24,7 @@ public static class Startup
 
         services.AddDatabaseContexts(builder.Configuration);
         
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProduct).Assembly));
         
         services.AddValidatorsFromAssembly(typeof(Auth0UserValidator).Assembly);
         

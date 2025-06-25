@@ -5,19 +5,19 @@ using MediatR;
 
 namespace Imprink.Application.Commands.Orders;
 
-public class GetOrdersByUserIdQuery : IRequest<IEnumerable<OrderDto>>
+public class GetOrdersByMerchantIdQuery : IRequest<IEnumerable<OrderDto>>
 {
-    public string UserId { get; set; } = null!;
+    public string MerchantId { get; set; } = null!;
     public bool IncludeDetails { get; set; }
 }
 
-public class GetOrdersByUserIdHandler(
+public class GetOrdersByMerchantId(
     IUnitOfWork uw, 
     IMapper mapper) 
-    : IRequestHandler<GetOrdersByUserIdQuery, IEnumerable<OrderDto>>
+    : IRequestHandler<GetOrdersByMerchantIdQuery, IEnumerable<OrderDto>>
 {
     public async Task<IEnumerable<OrderDto>> Handle(
-        GetOrdersByUserIdQuery request, 
+        GetOrdersByMerchantIdQuery request, 
         CancellationToken cancellationToken)
     {
         IEnumerable<Order> orders;
@@ -25,12 +25,12 @@ public class GetOrdersByUserIdHandler(
         if (request.IncludeDetails)
         {
             orders = await uw.OrderRepository
-                .GetByUserIdWithDetailsAsync(request.UserId, cancellationToken);
+                .GetByMerchantIdWithDetailsAsync(request.MerchantId, cancellationToken);
         }
         else
         {
             orders = await uw.OrderRepository
-                .GetByUserIdAsync(request.UserId, cancellationToken);
+                .GetByMerchantIdAsync(request.MerchantId, cancellationToken);
         }
         
         return mapper.Map<IEnumerable<OrderDto>>(orders);

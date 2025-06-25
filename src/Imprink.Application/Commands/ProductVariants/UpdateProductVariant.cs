@@ -1,12 +1,13 @@
 using AutoMapper;
 using Imprink.Application.Dtos;
-using Imprink.Domain.Entities;
+using Imprink.Application.Exceptions;
 using MediatR;
 
 namespace Imprink.Application.Commands.ProductVariants;
 
-public class CreateProductVariantCommand : IRequest<ProductVariantDto>
+public class UpdateProductVariantCommand : IRequest<ProductVariantDto>
 {
+    public Guid Id { get; set; }
     public Guid ProductId { get; set; }
     public string Size { get; set; } = null!;
     public string? Color { get; set; }
@@ -14,33 +15,37 @@ public class CreateProductVariantCommand : IRequest<ProductVariantDto>
     public string? ImageUrl { get; set; }
     public string Sku { get; set; } = null!;
     public int StockQuantity { get; set; }
-    public bool IsActive { get; set; } = true;
+    public bool IsActive { get; set; }
 }
 
-public class CreateProductVariantHandler(
+public class UpdateProductVariant(
     IUnitOfWork unitOfWork, 
     IMapper mapper)
-    : IRequestHandler<CreateProductVariantCommand, ProductVariantDto>
+    : IRequestHandler<UpdateProductVariantCommand, ProductVariantDto>
 {
     public async Task<ProductVariantDto> Handle(
-        CreateProductVariantCommand request, 
+        UpdateProductVariantCommand request, 
         CancellationToken cancellationToken)
     {
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         
         try
         {
-            var productVariant = mapper.Map<ProductVariant>(request);
+            var existingVariant = await unitOfWork.ProductVariantRepository
+                .GetByIdAsync(request.Id, cancellationToken);
             
-            productVariant.Product = null!;
+            if (existingVariant == null)
+                throw new NotFoundException($"Product variant with ID {request.Id} not found.");
+            
+            mapper.Map(request, existingVariant);
 
-            var createdVariant = await unitOfWork.ProductVariantRepository
-                .AddAsync(productVariant, cancellationToken);
+            var updatedVariant = await unitOfWork.ProductVariantRepository
+                .UpdateAsync(existingVariant, cancellationToken);
             
             await unitOfWork.SaveAsync(cancellationToken);
             await unitOfWork.CommitTransactionAsync(cancellationToken);
-            
-            return mapper.Map<ProductVariantDto>(createdVariant);
+
+            return mapper.Map<ProductVariantDto>(updatedVariant);
         }
         catch
         {

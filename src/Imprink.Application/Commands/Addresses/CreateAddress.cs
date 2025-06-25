@@ -27,7 +27,7 @@ public class CreateAddressCommand : IRequest<AddressDto>
     public bool IsActive { get; set; } = true;
 }
 
-public class CreateAddressHandler(
+public class CreateAddress(
     IUnitOfWork uw, 
     IMapper mapper, 
     ICurrentUserService userService) 

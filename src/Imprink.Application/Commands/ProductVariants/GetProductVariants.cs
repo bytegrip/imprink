@@ -12,7 +12,7 @@ public class GetProductVariantsQuery : IRequest<IEnumerable<ProductVariantDto>>
     public bool InStockOnly { get; set; } = false;
 }
 
-public class GetProductVariantsHandler(
+public class GetProductVariants(
     IUnitOfWork unitOfWork, 
     IMapper mapper)
     : IRequestHandler<GetProductVariantsQuery, IEnumerable<ProductVariantDto>>

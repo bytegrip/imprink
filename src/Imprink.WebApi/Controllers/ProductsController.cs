@@ -34,7 +34,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProductDto>> UpdateProduct(
         Guid id,
-        [FromBody] UpdateProductCommand command)
+        [FromBody] UpdateProduct command)
     {
         if (id != command.Id) return BadRequest("ID mismatch");
             

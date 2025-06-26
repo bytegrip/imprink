@@ -3,7 +3,7 @@ using Imprink.Application.Commands.Products;
 
 namespace Imprink.Application.Validation.Products;
 
-public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProduct>
 {
     public UpdateProductCommandValidator()
     {

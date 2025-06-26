@@ -17,10 +17,31 @@ public class AddressConfiguration : EntityBaseConfiguration<Address>
         builder.Property(a => a.AddressType)
             .IsRequired()
             .HasMaxLength(50);
+
+        builder.Property(a => a.FirstName)
+            .HasMaxLength(100);
+
+        builder.Property(a => a.LastName)
+            .HasMaxLength(100);
+
+        builder.Property(a => a.Company)
+            .HasMaxLength(200);
                 
-        builder.Property(a => a.Street)
+        builder.Property(a => a.AddressLine1)
             .IsRequired()
             .HasMaxLength(200);
+
+        builder.Property(a => a.AddressLine2)
+            .HasMaxLength(200);
+
+        builder.Property(a => a.ApartmentNumber)
+            .HasMaxLength(20);
+
+        builder.Property(a => a.BuildingNumber)
+            .HasMaxLength(20);
+
+        builder.Property(a => a.Floor)
+            .HasMaxLength(20);
                 
         builder.Property(a => a.City)
             .IsRequired()
@@ -36,6 +57,12 @@ public class AddressConfiguration : EntityBaseConfiguration<Address>
         builder.Property(a => a.Country)
             .IsRequired()
             .HasMaxLength(100);
+
+        builder.Property(a => a.PhoneNumber)
+            .HasMaxLength(20);
+
+        builder.Property(a => a.Instructions)
+            .HasMaxLength(500);
                 
         builder.Property(a => a.IsDefault)
             .IsRequired()
@@ -44,6 +71,11 @@ public class AddressConfiguration : EntityBaseConfiguration<Address>
         builder.Property(a => a.IsActive)
             .IsRequired()
             .HasDefaultValue(true);
+
+        builder.HasOne(a => a.User)
+            .WithMany(u => u.Addresses)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(a => a.UserId)
             .HasDatabaseName("IX_Address_UserId");

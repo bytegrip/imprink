@@ -8,6 +8,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.HasKey(u => u.Id);
+        
         builder.Property(u => u.Id)
             .HasMaxLength(450)
             .ValueGeneratedNever();
@@ -23,10 +25,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Nickname)
             .IsRequired()
             .HasMaxLength(100);
-        
+
         builder.Property(u => u.EmailVerified)
-            .IsRequired()
-            .HasMaxLength(100);
+            .IsRequired();
         
         builder.Property(u => u.FirstName)
             .HasMaxLength(100);
@@ -47,12 +48,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             
         builder.HasIndex(u => u.IsActive)
             .HasDatabaseName("IX_User_IsActive");
-
-        builder.HasMany(u => u.Addresses)
-            .WithOne()
-            .HasForeignKey(a => a.UserId)
-            .HasPrincipalKey(u => u.Id)
-            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Ignore(u => u.DefaultAddress);
         builder.Ignore(u => u.Roles);

@@ -12,5 +12,5 @@ public class ProductVariant : EntityBase
     public bool IsActive { get; set; }
         
     public virtual required Product Product { get; set; }
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>(); 
 }

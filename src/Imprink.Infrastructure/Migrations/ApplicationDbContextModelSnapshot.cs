@@ -22,128 +22,94 @@ namespace Imprink.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("AddressLine1")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                    b.Property<string>("AddressLine2")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OrderNumber")
+                    b.Property<string>("AddressType")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("OrderStatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApartmentNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("ShippingStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_Order_CreatedAt");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("IX_Order_CreatedBy");
-
-                    b.HasIndex("ModifiedAt")
-                        .HasDatabaseName("IX_Order_ModifiedAt");
-
-                    b.HasIndex("OrderDate")
-                        .HasDatabaseName("IX_Order_OrderDate");
-
-                    b.HasIndex("OrderNumber")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Order_OrderNumber");
-
-                    b.HasIndex("OrderStatusId")
-                        .HasDatabaseName("IX_Order_OrderStatusId");
-
-                    b.HasIndex("ShippingStatusId")
-                        .HasDatabaseName("IX_Order_ShippingStatusId");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("IX_Order_UserId");
-
-                    b.HasIndex("UserId", "OrderDate")
-                        .HasDatabaseName("IX_Order_User_Date");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderAddress", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                    b.Property<string>("BuildingNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Company")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("ModifiedAt")
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Floor")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Instructions")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDefault")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
@@ -155,193 +121,35 @@ namespace Imprink.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_OrderAddress_CreatedAt");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("IX_OrderAddress_CreatedBy");
-
-                    b.HasIndex("ModifiedAt")
-                        .HasDatabaseName("IX_OrderAddress_ModifiedAt");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_OrderAddress_OrderId");
-
-                    b.ToTable("OrderAddresses");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CustomizationDescription")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("CustomizationImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductVariantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_OrderItem_CreatedAt");
+                        .HasDatabaseName("IX_Address_CreatedAt");
 
                     b.HasIndex("CreatedBy")
-                        .HasDatabaseName("IX_OrderItem_CreatedBy");
+                        .HasDatabaseName("IX_Address_CreatedBy");
 
                     b.HasIndex("ModifiedAt")
-                        .HasDatabaseName("IX_OrderItem_ModifiedAt");
+                        .HasDatabaseName("IX_Address_ModifiedAt");
 
-                    b.HasIndex("OrderId")
-                        .HasDatabaseName("IX_OrderItem_OrderId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_Address_UserId");
 
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("IX_OrderItem_ProductId");
+                    b.HasIndex("UserId", "AddressType")
+                        .HasDatabaseName("IX_Address_User_Type");
 
-                    b.HasIndex("ProductVariantId")
-                        .HasDatabaseName("IX_OrderItem_ProductVariantId");
+                    b.HasIndex("UserId", "IsDefault")
+                        .HasDatabaseName("IX_Address_User_Default");
 
-                    b.HasIndex("OrderId", "ProductId")
-                        .HasDatabaseName("IX_OrderItem_Order_Product");
-
-                    b.ToTable("OrderItems");
+                    b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("IX_OrderStatus_Name");
-
-                    b.ToTable("OrderStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 0,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Name = "Processing"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Completed"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cancelled"
-                        });
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.ShippingStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("IX_ShippingStatus_Name");
-
-                    b.ToTable("ShippingStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 0,
-                            Name = "Prepping"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Name = "Packaging"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Shipped"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Delivered"
-                        });
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.Category", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -458,7 +266,273 @@ namespace Imprink.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.Product", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CustomizationDescription")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("CustomizationImageUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("MerchantId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OriginalImageUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ProductVariantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("ShippingStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Order_CreatedAt");
+
+                    b.HasIndex("CreatedBy")
+                        .HasDatabaseName("IX_Order_CreatedBy");
+
+                    b.HasIndex("MerchantId")
+                        .HasDatabaseName("IX_Order_MerchantId");
+
+                    b.HasIndex("ModifiedAt")
+                        .HasDatabaseName("IX_Order_ModifiedAt");
+
+                    b.HasIndex("OrderDate")
+                        .HasDatabaseName("IX_Order_OrderDate");
+
+                    b.HasIndex("OrderStatusId")
+                        .HasDatabaseName("IX_Order_OrderStatusId");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("IX_Order_ProductId");
+
+                    b.HasIndex("ProductVariantId")
+                        .HasDatabaseName("IX_Order_ProductVariantId");
+
+                    b.HasIndex("ShippingStatusId")
+                        .HasDatabaseName("IX_Order_ShippingStatusId");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_Order_UserId");
+
+                    b.HasIndex("MerchantId", "OrderDate")
+                        .HasDatabaseName("IX_Order_Merchant_Date");
+
+                    b.HasIndex("ProductId", "OrderDate")
+                        .HasDatabaseName("IX_Order_Product_Date");
+
+                    b.HasIndex("UserId", "OrderDate")
+                        .HasDatabaseName("IX_Order_User_Date");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.OrderAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("AddressLine2")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("AddressType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ApartmentNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("BuildingNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Company")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Floor")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Instructions")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_OrderAddress_CreatedAt");
+
+                    b.HasIndex("CreatedBy")
+                        .HasDatabaseName("IX_OrderAddress_CreatedBy");
+
+                    b.HasIndex("ModifiedAt")
+                        .HasDatabaseName("IX_OrderAddress_ModifiedAt");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_OrderAddress_OrderId");
+
+                    b.ToTable("OrderAddresses");
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.OrderStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_OrderStatus_Name");
+
+                    b.ToTable("OrderStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 0,
+                            Name = "Pending"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Name = "Processing"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Completed"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Cancelled"
+                        });
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -542,7 +616,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.ProductVariant", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.ProductVariant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -628,100 +702,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.ToTable("ProductVariants");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.Address", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("AddressType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsDefault")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_Address_CreatedAt");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("IX_Address_CreatedBy");
-
-                    b.HasIndex("ModifiedAt")
-                        .HasDatabaseName("IX_Address_ModifiedAt");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("IX_Address_UserId");
-
-                    b.HasIndex("UserId", "AddressType")
-                        .HasDatabaseName("IX_Address_User_Type");
-
-                    b.HasIndex("UserId", "IsDefault")
-                        .HasDatabaseName("IX_Address_User_Default");
-
-                    b.ToTable("Addresses");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.Role", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -752,7 +733,48 @@ namespace Imprink.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.User", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.ShippingStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_ShippingStatus_Name");
+
+                    b.ToTable("ShippingStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 0,
+                            Name = "Prepping"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Name = "Packaging"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Shipped"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Delivered"
+                        });
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(450)
@@ -764,7 +786,6 @@ namespace Imprink.Infrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailVerified")
-                        .HasMaxLength(100)
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
@@ -806,7 +827,7 @@ namespace Imprink.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.UserRole", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.UserRole", b =>
                 {
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
@@ -826,73 +847,20 @@ namespace Imprink.Infrastructure.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("Imprink.Domain.Entities.Orders.OrderStatus", "OrderStatus")
-                        .WithMany("Orders")
-                        .HasForeignKey("OrderStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Imprink.Domain.Entities.Orders.ShippingStatus", "ShippingStatus")
-                        .WithMany("Orders")
-                        .HasForeignKey("ShippingStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Imprink.Domain.Entities.Users.User", "User")
-                        .WithMany("Orders")
+                    b.HasOne("Imprink.Domain.Entities.User", "User")
+                        .WithMany("Addresses")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("OrderStatus");
-
-                    b.Navigation("ShippingStatus");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderAddress", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Category", b =>
                 {
-                    b.HasOne("Imprink.Domain.Entities.Orders.Order", "Order")
-                        .WithOne("OrderAddress")
-                        .HasForeignKey("Imprink.Domain.Entities.Orders.OrderAddress", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderItem", b =>
-                {
-                    b.HasOne("Imprink.Domain.Entities.Orders.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Imprink.Domain.Entities.Product.Product", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Imprink.Domain.Entities.Product.ProductVariant", "ProductVariant")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("ProductVariant");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.Category", b =>
-                {
-                    b.HasOne("Imprink.Domain.Entities.Product.Category", "ParentCategory")
+                    b.HasOne("Imprink.Domain.Entities.Category", "ParentCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -900,9 +868,69 @@ namespace Imprink.Infrastructure.Migrations
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.Product", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("Imprink.Domain.Entities.Product.Category", "Category")
+                    b.HasOne("Imprink.Domain.Entities.User", "Merchant")
+                        .WithMany("MerchantOrders")
+                        .HasForeignKey("MerchantId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Imprink.Domain.Entities.OrderStatus", "OrderStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Imprink.Domain.Entities.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Imprink.Domain.Entities.ProductVariant", "ProductVariant")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Imprink.Domain.Entities.ShippingStatus", "ShippingStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("ShippingStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Imprink.Domain.Entities.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Merchant");
+
+                    b.Navigation("OrderStatus");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ProductVariant");
+
+                    b.Navigation("ShippingStatus");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.OrderAddress", b =>
+                {
+                    b.HasOne("Imprink.Domain.Entities.Order", "Order")
+                        .WithOne("OrderAddress")
+                        .HasForeignKey("Imprink.Domain.Entities.OrderAddress", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("Imprink.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -910,9 +938,9 @@ namespace Imprink.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.ProductVariant", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.ProductVariant", b =>
                 {
-                    b.HasOne("Imprink.Domain.Entities.Product.Product", "Product")
+                    b.HasOne("Imprink.Domain.Entities.Product", "Product")
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -921,24 +949,15 @@ namespace Imprink.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.Address", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.UserRole", b =>
                 {
-                    b.HasOne("Imprink.Domain.Entities.Users.User", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.UserRole", b =>
-                {
-                    b.HasOne("Imprink.Domain.Entities.Users.Role", "Role")
+                    b.HasOne("Imprink.Domain.Entities.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Imprink.Domain.Entities.Users.User", "User")
+                    b.HasOne("Imprink.Domain.Entities.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -949,51 +968,51 @@ namespace Imprink.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.Order", b =>
-                {
-                    b.Navigation("OrderAddress")
-                        .IsRequired();
-
-                    b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.OrderStatus", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Orders.ShippingStatus", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.Category", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.Product", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("OrderAddress")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.OrderStatus", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("Orders");
 
                     b.Navigation("ProductVariants");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Product.ProductVariant", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.ProductVariant", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.Role", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Imprink.Domain.Entities.Users.User", b =>
+            modelBuilder.Entity("Imprink.Domain.Entities.ShippingStatus", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Imprink.Domain.Entities.User", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("MerchantOrders");
 
                     b.Navigation("Orders");
 

@@ -34,18 +34,6 @@ public class ProductConfiguration : EntityBaseConfiguration<Product>
 
         builder.Property(p => p.CategoryId)
             .IsRequired(false);
-        
-        builder.Property(c => c.CreatedAt)
-            .IsRequired(false);
-        
-        builder.Property(c => c.CreatedBy)
-            .IsRequired(false);
-        
-        builder.Property(c => c.ModifiedAt)
-            .IsRequired(false);
-        
-        builder.Property(c => c.ModifiedBy)
-            .IsRequired(false);
 
         builder.HasOne(p => p.Category)
             .WithMany(c => c.Products)

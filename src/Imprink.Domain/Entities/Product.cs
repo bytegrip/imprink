@@ -12,5 +12,5 @@ public class Product : EntityBase
         
     public virtual required Category Category { get; set; }
     public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

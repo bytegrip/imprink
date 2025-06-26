@@ -21,6 +21,18 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
     
+    [HttpGet("{id:guid}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<ProductDto>> GetProductById(
+        Guid id,  
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator
+            .Send(new GetProductByIdQuery { ProductId = id}, cancellationToken);
+        
+        return Ok(result);
+    }
+    
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<PagedResultDto<ProductDto>>> CreateProduct(
@@ -34,7 +46,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProductDto>> UpdateProduct(
         Guid id,
-        [FromBody] UpdateProductCommand command)
+        [FromBody] UpdateProduct command)
     {
         if (id != command.Id) return BadRequest("ID mismatch");
             

@@ -44,13 +44,21 @@ export default function MobileFilterDrawer({
             ModalProps={{ keepMounted: true }}
             PaperProps={{
                 sx: {
-                    width: 280,
+                    width: '100vw',
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    overflow: 'hidden'
                 }
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', p: 2, borderBottom: 1, borderColor: 'divider', flexShrink: 0 }}>
+            <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                p: 2, 
+                borderBottom: 1, 
+                borderColor: 'divider', 
+                flexShrink: 0 
+            }}>
                 <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
                     Filters
                 </Typography>
@@ -63,16 +71,22 @@ export default function MobileFilterDrawer({
                     <CircularProgress size={40} />
                 </Box>
             ) : (
-                <CategorySidebar
-                    categories={categories}
-                    filters={filters}
-                    expandedCategories={expandedCategories}
-                    priceRange={priceRange}
-                    onFilterChange={onFilterChange}
-                    onToggleCategoryExpansion={onToggleCategoryExpansion}
-                    onPriceRangeChange={onPriceRangeChange}
-                    onPriceRangeCommitted={onPriceRangeCommitted}
-                />
+                <Box sx={{ 
+                    flex: 1, 
+                    overflow: 'auto',
+                    px: 0
+                }}>
+                    <CategorySidebar
+                        categories={categories}
+                        filters={filters}
+                        expandedCategories={expandedCategories}
+                        priceRange={priceRange}
+                        onFilterChange={onFilterChange}
+                        onToggleCategoryExpansion={onToggleCategoryExpansion}
+                        onPriceRangeChange={onPriceRangeChange}
+                        onPriceRangeCommitted={onPriceRangeCommitted}
+                    />
+                </Box>
             )}
         </Drawer>
     );

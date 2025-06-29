@@ -12,7 +12,8 @@ import {
     useMediaQuery,
     useTheme,
     SelectChangeEvent,
-    Box
+    Box,
+    Button
 } from '@mui/material';
 import {
     Search,
@@ -52,28 +53,144 @@ export default function SearchFilters({
         onFilterChange('sortDirection', sortDirection);
     };
 
+    if (isMobile) {
+        return (
+            <Paper elevation={1} sx={{
+                p: { xs: 1, sm: 1.25 },
+                mb: { xs: 1, sm: 1.5 }
+            }}>
+                <Box sx={{ mb: 1 }}>
+                    <TextField
+                        fullWidth
+                        placeholder="Search products..."
+                        value={searchInput}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
+                        onKeyPress={(e: KeyboardEvent) => e.key === 'Enter' && handleSearch()}
+                        size="small"
+                        sx={{
+                            '& .MuiInputBase-input': {
+                                fontSize: '0.85rem',
+                                py: 1.25
+                            }
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                            endAdornment: searchInput && (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        size="small"
+                                        onClick={handleSearch}
+                                        edge="end"
+                                    >
+                                        <Search />
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                </Box>
+
+                <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    gap: 1,
+                    mb: 1
+                }}>
+                    <Button
+                        variant="outlined"
+                        onClick={onOpenMobileDrawer}
+                        startIcon={<TuneIcon />}
+                        size="small"
+                        sx={{ 
+                            fontSize: '0.8rem',
+                            px: 1.5,
+                            py: 0.75,
+                            flexShrink: 0,
+                            minWidth: 'fit-content'
+                        }}
+                    >
+                        Filters
+                    </Button>
+
+                    <FormControl size="small" sx={{ flex: 1 }}>
+                        <InputLabel sx={{ fontSize: '0.8rem' }}>
+                            Sort
+                        </InputLabel>
+                        <Select
+                            value={`${filters.sortBy}-${filters.sortDirection}`}
+                            label="Sort"
+                            onChange={(e: SelectChangeEvent) => handleSortChange(e.target.value)}
+                            sx={{
+                                '& .MuiSelect-select': {
+                                    fontSize: '0.8rem',
+                                    py: 0.75
+                                }
+                            }}
+                        >
+                            {SORT_OPTIONS.map((option) => (
+                                <MenuItem 
+                                    key={option.value} 
+                                    value={option.value}
+                                    sx={{ fontSize: '0.8rem' }}
+                                >
+                                    {option.label.split(' ')[0]}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl size="small" sx={{ flex: 1 }}>
+                        <InputLabel sx={{ fontSize: '0.8rem' }}>
+                            Per
+                        </InputLabel>
+                        <Select
+                            value={filters.pageSize}
+                            label="Per"
+                            onChange={(e: SelectChangeEvent<number>) =>
+                                onFilterChange('pageSize', e.target.value as number)
+                            }
+                            sx={{
+                                '& .MuiSelect-select': {
+                                    fontSize: '0.8rem',
+                                    py: 0.75
+                                }
+                            }}
+                        >
+                            {PAGE_SIZE_OPTIONS.map((size) => (
+                                <MenuItem 
+                                    key={size} 
+                                    value={size}
+                                    sx={{ fontSize: '0.8rem' }}
+                                >
+                                    {size}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
+
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" color="text.secondary" sx={{
+                        fontSize: '0.75rem'
+                    }}>
+                        {productsCount} of {totalCount} products
+                    </Typography>
+                </Box>
+            </Paper>
+        );
+    }
+
     return (
         <Paper elevation={1} sx={{
             p: { xs: 0.75, sm: 1, md: 1.25 },
             mb: { xs: 1, sm: 1.5 }
         }}>
             <Grid container spacing={{ xs: 0.75, sm: 1, md: 1.5 }} alignItems="center">
-                {isMobile && (
-                    <Grid>
-                        <IconButton
-                            onClick={onOpenMobileDrawer}
-                            size="small"
-                            sx={{ 
-                                mr: { xs: 0.5, sm: 1 },
-                                p: { xs: 0.5, sm: 0.75 }
-                            }}
-                        >
-                            <TuneIcon fontSize="small" />
-                        </IconButton>
-                    </Grid>
-                )}
-
-                <Grid size={{ xs: isMobile ? 8 : 12, sm: 6, md: 5 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 5 }}>
                     <TextField
                         fullWidth
                         placeholder="Search products..."

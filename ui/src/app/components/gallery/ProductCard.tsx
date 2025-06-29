@@ -27,10 +27,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         router.push(`/products/${product.id}`);
     };
 
-    const handleLoginRedirect = () => {
-        router.push('/auth/login');
-    };
-
     const handleBuild = () => {
         router.push(`/builder/${product.id}`);
     };
@@ -147,69 +143,33 @@ export default function ProductCard({ product }: ProductCardProps) {
                         gap: { xs: 0.5, sm: 0.75 },
                         flexDirection: { xs: 'column', sm: user ? 'row' : 'column' }
                     }}>
-                        {user ? (
-                            <>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
-                                    onClick={handleViewProduct}
-                                    sx={{
-                                        fontSize: { xs: '0.65rem', sm: '0.7rem' },
-                                        py: { xs: 0.25, sm: 0.5 },
-                                        flex: 1,
-                                        minHeight: { xs: 24, sm: 32 }
-                                    }}
-                                >
-                                    View
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    size="small"
-                                    onClick={handleBuild}
-                                    sx={{
-                                        fontSize: { xs: '0.65rem', sm: '0.7rem' },
-                                        py: { xs: 0.25, sm: 0.5 },
-                                        flex: 1,
-                                        minHeight: { xs: 24, sm: 32 }
-                                    }}
-                                >
-                                    Build
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    variant="contained"
-                                    size="small"
-                                    onClick={handleViewProduct}
-                                    sx={{
-                                        fontSize: { xs: '0.65rem', sm: '0.7rem' },
-                                        py: { xs: 0.25, sm: 0.5 },
-                                        minHeight: { xs: 24, sm: 32 }
-                                    }}
-                                >
-                                    View Product
-                                </Button>
-                                <Typography
-                                    component="button"
-                                    onClick={handleLoginRedirect}
-                                    sx={{
-                                        fontSize: { xs: '0.6rem', sm: '0.65rem' },
-                                        color: 'primary.main',
-                                        textDecoration: 'underline',
-                                        cursor: 'pointer',
-                                        border: 'none',
-                                        background: 'none',
-                                        p: 0,
-                                        textAlign: 'center',
-                                        '&:hover': {
-                                            color: 'primary.dark'
-                                        }
-                                    }}
-                                >
-                                    Login to customize
-                                </Typography>
-                            </>
+                        <Button
+                            variant={user ? "outlined" : "contained"}
+                            size="small"
+                            onClick={handleViewProduct}
+                            sx={{
+                                fontSize: { xs: '0.65rem', sm: '0.7rem' },
+                                py: { xs: 0.25, sm: 0.5 },
+                                flex: 1,
+                                minHeight: { xs: 24, sm: 32 }
+                            }}
+                        >
+                            {user ? "View" : "View Product"}
+                        </Button>
+                        {user && (
+                            <Button
+                                variant="contained"
+                                size="small"
+                                onClick={handleBuild}
+                                sx={{
+                                    fontSize: { xs: '0.65rem', sm: '0.7rem' },
+                                    py: { xs: 0.25, sm: 0.5 },
+                                    flex: 1,
+                                    minHeight: { xs: 24, sm: 32 }
+                                }}
+                            >
+                                Build
+                            </Button>
                         )}
                     </Box>
                 )}

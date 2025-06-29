@@ -17,6 +17,27 @@ import {useState, useEffect, JSX} from 'react';
 import { ShoppingCart, Palette, ImageOutlined, CreditCard, LocalShipping, CheckCircle } from '@mui/icons-material';
 import clientApi from "@/lib/clientApi";
 
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl?: string;
+  basePrice: number;
+  isCustomizable: boolean;
+}
+
+interface ApiResponse {
+  items: Product[];
+}
+
+interface Step {
+  number: number;
+  label: string;
+  description: string;
+  icon: JSX.Element;
+  details: string;
+}
+
 export default function HomePage(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

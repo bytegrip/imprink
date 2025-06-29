@@ -184,17 +184,17 @@ export default function GalleryPage() {
                         minHeight: 0,
                         pr: { xs: 0, md: 0.5 }
                     }}>
-                        <Box sx={{ mb: { xs: 1, sm: 1.5, md: 2 } }}>
+                        <Box sx={{ my: { xs: 1.5, sm: 2, md: 3 } }}>
                             <Typography variant="h3" gutterBottom sx={{
                                 fontWeight: 700,
-                                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+                                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' },
                                 lineHeight: 1.2,
                                 mb: { xs: 0.5, sm: 0.75 }
                             }}>
                                 Product Gallery
                             </Typography>
                             <Typography variant="h6" color="text.secondary" sx={{
-                                fontSize: { xs: '0.8rem', sm: '0.9rem' },
+                                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
                                 lineHeight: 1.3
                             }}>
                                 Explore our complete collection of customizable products

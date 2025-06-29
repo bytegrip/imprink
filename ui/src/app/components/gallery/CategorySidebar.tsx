@@ -46,7 +46,6 @@ export default function CategorySidebar({
 
     return (
         <Box sx={{
-            width: 300,
             height: '100%',
             display: 'flex',
             flexDirection: 'column'
@@ -56,9 +55,7 @@ export default function CategorySidebar({
                 mb: 2,
                 p: 2,
                 pb: 1,
-                flexShrink: 0,
-                borderBottom: 1,
-                borderColor: 'divider'
+                flexShrink: 0
             }}>
                 Categories
             </Typography>
@@ -90,7 +87,7 @@ export default function CategorySidebar({
                                 <ListItem disablePadding>
                                     <ListItemButton
                                         selected={filters.categoryId === category.id}
-                                        onClick={() => onFilterChange('categoryId', category.id)}
+                                        onClick={() => onToggleCategoryExpansion(category.id)}
                                         sx={{ borderRadius: 1, mb: 0.5 }}
                                     >
                                         <ListItemText primary={category.name} />
@@ -151,7 +148,7 @@ export default function CategorySidebar({
                         onChangeCommitted={onPriceRangeCommitted}
                         valueLabelDisplay="auto"
                         min={0}
-                        max={1000}
+                        max={100}
                         step={5}
                         valueLabelFormat={(value) => `$${value}`}
                     />

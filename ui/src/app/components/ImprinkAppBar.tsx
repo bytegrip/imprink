@@ -58,14 +58,13 @@ export default function ImprinkAppBar() {
     const navigationLinks: NavLink[] = [
         { label: 'Home', href: '/', icon: <Home />, show: true },
         { label: 'Gallery', href: '/gallery', icon: <PhotoLibrary />, show: true },
-        { label: 'Orders', href: '/orders', icon: <ShoppingBag />, show: true },
+        { label: 'Orders', href: '/orders', icon: <ShoppingBag />, show: !!user },
         { label: 'Merchant', href: '/merchant', icon: <Store />, show: isMerchant },
     ];
 
     const adminLinks: NavLink[] = [
         { label: 'Dashboard', href: '/dashboard', icon: <Dashboard />, show: isMerchant },
         { label: 'Admin', href: '/admin', icon: <AdminPanelSettings />, show: isAdmin },
-        { label: 'Swagger', href: '/swagger', icon: <Api />, show: isAdmin },
         { label: 'SEQ', href: '/seq', icon: <BugReport />, show: isAdmin },
     ];
 
@@ -164,14 +163,6 @@ export default function ImprinkAppBar() {
                                     <Avatar src={user.picture ?? undefined} alt={user.name ?? 'User'} sx={{ width: 24, height: 24 }} />
                                     <Typography variant="body2" noWrap>{user.name}</Typography>
                                 </MenuItem>
-                                <MenuItem onClick={e => e.stopPropagation()}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
-                                        <Typography variant="body2">Theme</Typography>
-                                        <Box sx={{ ml: 'auto' }}>
-                                            <ThemeToggleButton />
-                                        </Box>
-                                    </Box>
-                                </MenuItem>
                                 <MenuItem component="a" href="/auth/logout" onClick={handleMenuClose} sx={{ color: 'error.main' }}>
                                     <Typography variant="body2">Logout</Typography>
                                 </MenuItem>
@@ -183,12 +174,6 @@ export default function ImprinkAppBar() {
                                 </MenuItem>
                                 <MenuItem component="a" href="/auth/login" onClick={handleMenuClose} sx={{ color: 'primary.main', fontWeight: 'bold' }}>
                                     <Typography variant="body2">Sign Up</Typography>
-                                </MenuItem>
-                                <MenuItem onClick={toggleTheme}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
-                                        <Typography variant="body2">Theme</Typography>
-                                        <Box sx={{ ml: 'auto' }}>{isDarkMode ? '🌙' : '☀️'}</Box>
-                                    </Box>
                                 </MenuItem>
                             </>
                         )}
@@ -229,6 +214,11 @@ export default function ImprinkAppBar() {
                                 </Box>
                             )}
                         </>
+                    )}
+                    {isMobile && (
+                        <Box sx={{ ml: 'auto' }}>
+                            <ThemeToggleButton />
+                        </Box>
                     )}
                 </Toolbar>
             </AppBar>

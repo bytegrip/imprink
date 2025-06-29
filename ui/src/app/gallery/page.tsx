@@ -4,125 +4,36 @@ import {
     Box,
     Container,
     Typography,
-    Button,
-    Card,
-    CardContent,
-    CardMedia,
-    Grid,
-    Chip,
     CircularProgress,
     Alert,
-    TextField,
-    InputAdornment,
     Pagination,
-    FormControl,
-    Select,
-    MenuItem,
-    InputLabel,
-    Drawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    Collapse,
-    IconButton,
     useMediaQuery,
     useTheme,
-    Paper,
-    Slider,
-    Switch,
-    FormControlLabel,
-    SelectChangeEvent
+    Paper
 } from '@mui/material';
-import {useState, useEffect, useCallback, KeyboardEvent, ChangeEvent, JSX} from 'react';
-import {
-    Search,
-    ExpandLess,
-    ExpandMore,
-    Close as CloseIcon,
-    Tune as TuneIcon
-} from '@mui/icons-material';
+import {useState, useEffect, useCallback} from 'react';
 import clientApi from "@/lib/clientApi";
 import useRoles from "@/app/components/hooks/useRoles";
+import ProductCard from '@/app/components/gallery/ProductCard';
+import CategorySidebar from '@/app/components/gallery/CategorySidebar';
+import SearchFilters from '@/app/components/gallery/SearchFilters';
+import MobileFilterDrawer from '@/app/components/gallery/MobileFilterDrawer';
+import { GalleryProduct, GalleryCategory, Filters, ProductsResponse, ApiParams } from '@/types';
 
-interface SortOption {
-    value: string;
-    label: string;
-}
-
-interface Category {
-    id: string;
-    name: string;
-    parentCategoryId?: string;
-}
-
-interface Product {
-    id: string;
-    name: string;
-    description: string;
-    basePrice: number;
-    imageUrl?: string;
-    isCustomizable: boolean;
-    category?: Category;
-}
-
-interface ProductsResponse {
-    items: Product[];
-    totalPages: number;
-    totalCount: number;
-}
-
-interface Filters {
-    pageNumber: number;
-    pageSize: number;
-    searchTerm: string;
-    categoryId: string;
-    minPrice: number;
-    maxPrice: number;
-    isActive: boolean;
-    isCustomizable: boolean | null;
-    sortBy: string;
-    sortDirection: string;
-}
-
-interface ApiParams {
-    PageNumber: number;
-    PageSize: number;
-    IsActive: boolean;
-    SortBy: string;
-    SortDirection: string;
-    SearchTerm?: string;
-    CategoryId?: string;
-    MinPrice?: number;
-    MaxPrice?: number;
-    IsCustomizable?: boolean;
-}
-
-const SORT_OPTIONS: SortOption[] = [
-    { value: 'Name-ASC', label: 'Name (A-Z)' },
-    { value: 'Name-DESC', label: 'Name (Z-A)' },
-    { value: 'Price-ASC', label: 'Price (Low to High)' },
-    { value: 'Price-DESC', label: 'Price (High to Low)' },
-    { value: 'CreatedDate-DESC', label: 'Newest First' },
-    { value: 'CreatedDate-ASC', label: 'Oldest First' }
-];
-
-const PAGE_SIZE_OPTIONS: number[] = [12, 24, 48, 96];
-
-export default function GalleryPage(): JSX.Element {
+export default function GalleryPage() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const { isAdmin } = useRoles();
 
     const heightOffset = isAdmin ? 192 : 128;
 
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<GalleryProduct[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [totalCount, setTotalCount] = useState<number>(0);
 
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<GalleryCategory[]>([]);
     const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
     const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
@@ -141,12 +52,11 @@ export default function GalleryPage(): JSX.Element {
 
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
     const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
-    const [searchInput, setSearchInput] = useState<string>('');
 
     useEffect(() => {
         const fetchCategories = async (): Promise<void> => {
             try {
-                const response = await clientApi.get<Category[]>('/products/categories');
+                const response = await clientApi.get<GalleryCategory[]>('/products/categories');
                 setCategories(response.data);
             } catch (err) {
                 console.error('Error fetching categories:', err);
@@ -200,10 +110,6 @@ export default function GalleryPage(): JSX.Element {
         }));
     };
 
-    const handleSearch = (): void => {
-        handleFilterChange('searchTerm', searchInput);
-    };
-
     const handlePriceRangeChange = (event: Event, newValue: number | number[]): void => {
         setPriceRange(newValue as number[]);
     };
@@ -212,12 +118,6 @@ export default function GalleryPage(): JSX.Element {
         const range = newValue as number[];
         handleFilterChange('minPrice', range[0]);
         handleFilterChange('maxPrice', range[1]);
-    };
-
-    const handleSortChange = (value: string): void => {
-        const [sortBy, sortDirection] = value.split('-');
-        handleFilterChange('sortBy', sortBy);
-        handleFilterChange('sortDirection', sortDirection);
     };
 
     const toggleCategoryExpansion = (categoryId: string): void => {
@@ -230,152 +130,14 @@ export default function GalleryPage(): JSX.Element {
         setExpandedCategories(newExpanded);
     };
 
-    const getChildCategories = (parentId: string): Category[] => {
-        return categories.filter(cat => cat.parentCategoryId === parentId);
-    };
-
-    const getParentCategories = (): Category[] => {
-        return categories.filter(cat => !cat.parentCategoryId);
-    };
-
-    const CategorySidebar = (): JSX.Element => (
-        <Box sx={{
-            width: 300,
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column'
-        }}>
-            <Typography variant="h6" gutterBottom sx={{
-                fontWeight: 'bold',
-                mb: 2,
-                p: 2,
-                pb: 1,
-                flexShrink: 0,
-                borderBottom: 1,
-                borderColor: 'divider'
-            }}>
-                Categories
-            </Typography>
-
-            <Box sx={{
-                flex: 1,
-                overflowY: 'auto',
-                px: 2,
-                minHeight: 0
-            }}>
-                <List dense>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            selected={!filters.categoryId}
-                            onClick={() => handleFilterChange('categoryId', '')}
-                            sx={{ borderRadius: 1, mb: 0.5 }}
-                        >
-                            <ListItemText primary="All Products" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    {getParentCategories().map((category) => {
-                        const childCategories = getChildCategories(category.id);
-                        const hasChildren = childCategories.length > 0;
-                        const isExpanded = expandedCategories.has(category.id);
-
-                        return (
-                            <Box key={category.id}>
-                                <ListItem disablePadding>
-                                    <ListItemButton
-                                        selected={filters.categoryId === category.id}
-                                        onClick={() => handleFilterChange('categoryId', category.id)}
-                                        sx={{ borderRadius: 1, mb: 0.5 }}
-                                    >
-                                        <ListItemText primary={category.name} />
-                                        {hasChildren && (
-                                            <IconButton
-                                                size="small"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    toggleCategoryExpansion(category.id);
-                                                }}
-                                            >
-                                                {isExpanded ? <ExpandLess /> : <ExpandMore />}
-                                            </IconButton>
-                                        )}
-                                    </ListItemButton>
-                                </ListItem>
-
-                                {hasChildren && (
-                                    <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                                        <List component="div" disablePadding>
-                                            {childCategories.map((childCategory) => (
-                                                <ListItem key={childCategory.id} disablePadding sx={{ pl: 3 }}>
-                                                    <ListItemButton
-                                                        selected={filters.categoryId === childCategory.id}
-                                                        onClick={() => handleFilterChange('categoryId', childCategory.id)}
-                                                        sx={{ borderRadius: 1, mb: 0.5 }}
-                                                    >
-                                                        <ListItemText
-                                                            primary={childCategory.name}
-                                                            sx={{ '& .MuiListItemText-primary': { fontSize: '0.9rem' } }}
-                                                        />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            ))}
-                                        </List>
-                                    </Collapse>
-                                )}
-                            </Box>
-                        );
-                    })}
-                </List>
-            </Box>
-
-            <Box sx={{
-                p: 2,
-                borderTop: 1,
-                borderColor: 'divider',
-                flexShrink: 0,
-                backgroundColor: 'background.paper'
-            }}>
-                <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold' }}>
-                    Price Range
-                </Typography>
-                <Box sx={{ px: 1, mb: 2 }}>
-                    <Slider
-                        value={priceRange}
-                        onChange={handlePriceRangeChange}
-                        onChangeCommitted={handlePriceRangeCommitted}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={1000}
-                        step={5}
-                        valueLabelFormat={(value) => `$${value}`}
-                    />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                        <Typography variant="caption">${priceRange[0]}</Typography>
-                        <Typography variant="caption">${priceRange[1]}</Typography>
-                    </Box>
-                </Box>
-
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={filters.isCustomizable === true}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                handleFilterChange('isCustomizable', e.target.checked ? true : null)
-                            }
-                        />
-                    }
-                    label="Customizable Only"
-                    sx={{ mb: 0 }}
-                />
-            </Box>
-        </Box>
-    );
-
     return (
-        <Container maxWidth="xl" sx={{ py: { xs: 1, sm: 2, md: 4 } }}>
+        <Container maxWidth="xl" sx={{ 
+            py: { xs: 0.75, sm: 1.5, md: 3 },
+            px: { xs: 1, sm: 2 }
+        }}>
             <Box sx={{
                 display: 'flex',
-                gap: { xs: 0, md: 3 },
+                gap: { xs: 0, md: 2 },
                 minHeight: { xs: 'auto', md: `calc(100vh - ${heightOffset}px)` }
             }}>
                 {!isMobile && (
@@ -390,11 +152,20 @@ export default function GalleryPage(): JSX.Element {
                             }}
                         >
                             {categoriesLoading ? (
-                                <Box sx={{ p: 3, textAlign: 'center' }}>
-                                    <CircularProgress size={40} />
+                                <Box sx={{ p: 2, textAlign: 'center' }}>
+                                    <CircularProgress size={32} />
                                 </Box>
                             ) : (
-                                <CategorySidebar />
+                                <CategorySidebar
+                                    categories={categories}
+                                    filters={filters}
+                                    expandedCategories={expandedCategories}
+                                    priceRange={priceRange}
+                                    onFilterChange={handleFilterChange}
+                                    onToggleCategoryExpansion={toggleCategoryExpansion}
+                                    onPriceRangeChange={handlePriceRangeChange}
+                                    onPriceRangeCommitted={handlePriceRangeCommitted}
+                                />
                             )}
                         </Paper>
                     </Box>
@@ -411,132 +182,58 @@ export default function GalleryPage(): JSX.Element {
                         flex: 1,
                         overflowY: { xs: 'visible', md: 'auto' },
                         minHeight: 0,
-                        pr: { xs: 0, md: 1 }
+                        pr: { xs: 0, md: 0.5 }
                     }}>
-                        <Box sx={{ mb: { xs: 2, sm: 2, md: 3 } }}>
+                        <Box sx={{ my: { xs: 1.5, sm: 2, md: 3 } }}>
                             <Typography variant="h3" gutterBottom sx={{
-                                fontWeight: 'bold',
-                                fontSize: { xs: '2rem', sm: '2rem', md: '2rem' }
+                                fontWeight: 700,
+                                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' },
+                                lineHeight: 1.2,
+                                mb: { xs: 0.5, sm: 0.75 }
                             }}>
                                 Product Gallery
                             </Typography>
                             <Typography variant="h6" color="text.secondary" sx={{
-                                fontSize: { xs: '1rem', sm: '1rem' }
+                                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                                lineHeight: 1.3
                             }}>
                                 Explore our complete collection of customizable products
                             </Typography>
                         </Box>
 
-                        <Paper elevation={1} sx={{
-                            p: { xs: 1, sm: 1, md: 1.5 },
-                            mb: { xs: 1, sm: 2 }
-                        }}>
-                            <Grid container spacing={{ xs: 1, sm: 2 }} alignItems="center">
-                                {isMobile && (
-                                    <Grid>
-                                        <IconButton
-                                            onClick={() => setMobileDrawerOpen(true)}
-                                            sx={{ mr: 1 }}
-                                            size="small"
-                                        >
-                                            <TuneIcon />
-                                        </IconButton>
-                                    </Grid>
-                                )}
-
-                                <Grid size={{ xs:12, sm:6, md:4 }}>
-                                    <TextField
-                                        fullWidth
-                                        placeholder="Search products..."
-                                        value={searchInput}
-                                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
-                                        onKeyPress={(e: KeyboardEvent) => e.key === 'Enter' && handleSearch()}
-                                        size={isMobile ? "small" : "medium"}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <Search fontSize={isMobile ? "small" : "medium"} />
-                                                </InputAdornment>
-                                            ),
-                                            endAdornment: searchInput && (
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        size="small"
-                                                        onClick={handleSearch}
-                                                        edge="end"
-                                                    >
-                                                        <Search fontSize="small" />
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            )
-                                        }}
-                                    />
-                                </Grid>
-
-                                <Grid size={{ xs:6, sm:3, md:3 }}>
-                                    <FormControl fullWidth size={isMobile ? "small" : "medium"}>
-                                        <InputLabel>Sort By</InputLabel>
-                                        <Select
-                                            value={`${filters.sortBy}-${filters.sortDirection}`}
-                                            label="Sort By"
-                                            onChange={(e: SelectChangeEvent) => handleSortChange(e.target.value)}
-                                        >
-                                            {SORT_OPTIONS.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-
-                                <Grid size={{ xs:6, sm:3, md:2 }}>
-                                    <FormControl fullWidth size={isMobile ? "small" : "medium"}>
-                                        <InputLabel>Per Page</InputLabel>
-                                        <Select
-                                            value={filters.pageSize}
-                                            label="Per Page"
-                                            onChange={(e: SelectChangeEvent<number>) =>
-                                                handleFilterChange('pageSize', e.target.value as number)
-                                            }
-                                        >
-                                            {PAGE_SIZE_OPTIONS.map((size) => (
-                                                <MenuItem key={size} value={size}>
-                                                    {size}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-
-                                <Grid size={{ xs:12, md:3 }} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
-                                    <Typography variant="body2" color="text.secondary" sx={{
-                                        fontSize: { xs: '0.75rem', sm: '0.875rem' }
-                                    }}>
-                                        Showing {products.length} of {totalCount} products
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Paper>
+                        <SearchFilters
+                            filters={filters}
+                            totalCount={totalCount}
+                            productsCount={products.length}
+                            onFilterChange={handleFilterChange}
+                            onOpenMobileDrawer={() => setMobileDrawerOpen(true)}
+                        />
 
                         {loading && (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', py: { xs: 4, md: 8 } }}>
-                                <CircularProgress size={isMobile ? 40 : 60} />
+                            <Box sx={{ display: 'flex', justifyContent: 'center', py: { xs: 3, md: 6 } }}>
+                                <CircularProgress size={isMobile ? 32 : 48} />
                             </Box>
                         )}
 
                         {error && (
-                            <Alert severity="error" sx={{ mb: { xs: 2, md: 4 } }}>
+                            <Alert severity="error" sx={{ 
+                                mb: { xs: 1.5, md: 3 },
+                                fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                            }}>
                                 {error}
                             </Alert>
                         )}
 
                         {!loading && !error && products.length === 0 && (
-                            <Paper sx={{ p: { xs: 3, md: 6 }, textAlign: 'center' }}>
-                                <Typography variant="h6" color="text.secondary" gutterBottom>
+                            <Paper sx={{ p: { xs: 2, md: 4 }, textAlign: 'center' }}>
+                                <Typography variant="h6" color="text.secondary" gutterBottom sx={{
+                                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                                }}>
                                     No products found
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" color="text.secondary" sx={{
+                                    fontSize: { xs: '0.75rem', sm: '0.85rem' }
+                                }}>
                                     Try adjusting your search criteria or filters
                                 </Typography>
                             </Paper>
@@ -546,121 +243,11 @@ export default function GalleryPage(): JSX.Element {
                             <Box sx={{
                                 display: 'flex',
                                 flexWrap: 'wrap',
-                                gap: { xs: 1, sm: 1.5, md: 2 },
-                                mb: { xs: 2, md: 4 }
+                                gap: { xs: 0.75, sm: 1, md: 1.5 },
+                                mb: { xs: 1.5, md: 3 }
                             }}>
                                 {products.map((product) => (
-                                    <Card
-                                        key={product.id}
-                                        sx={{
-                                            width: {
-                                                xs: 'calc(50% - 4px)',
-                                                sm: 'calc(50% - 12px)',
-                                                lg: 'calc(33.333% - 16px)'
-                                            },
-                                            maxWidth: { xs: 'none', sm: 350, lg: 370 },
-                                            height: { xs: 300, sm: 380, lg: 420 },
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                                            '&:hover': {
-                                                transform: { xs: 'none', sm: 'translateY(-4px)', md: 'translateY(-8px)' },
-                                                boxShadow: { xs: 2, sm: 4, md: 6 }
-                                            }
-                                        }}
-                                    >
-                                        <CardMedia
-                                            component="img"
-                                            image={product.imageUrl || '/placeholder-product.jpg'}
-                                            alt={product.name}
-                                            sx={{
-                                                objectFit: 'cover',
-                                                height: { xs: 120, sm: 160, lg: 180 }
-                                            }}
-                                        />
-                                        <CardContent sx={{
-                                            flexGrow: 1,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            p: { xs: 1, sm: 1.5, lg: 2 },
-                                            '&:last-child': { pb: { xs: 1, sm: 1.5, lg: 2 } }
-                                        }}>
-                                            <Typography variant="h6" gutterBottom sx={{
-                                                fontWeight: 'bold',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap',
-                                                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-                                                mb: { xs: 0.5, sm: 1 }
-                                            }}>
-                                                {product.name}
-                                            </Typography>
-
-                                            {product.category && (
-                                                <Chip
-                                                    label={product.category.name}
-                                                    size="small"
-                                                    color="secondary"
-                                                    sx={{
-                                                        alignSelf: 'flex-start',
-                                                        mb: { xs: 0.5, sm: 1 },
-                                                        fontSize: { xs: '0.65rem', sm: '0.75rem' },
-                                                        height: { xs: 20, sm: 24 }
-                                                    }}
-                                                />
-                                            )}
-
-                                            <Typography variant="body2" color="text.secondary" sx={{
-                                                flexGrow: 1,
-                                                mb: { xs: 1, sm: 1.5 },
-                                                overflow: 'hidden',
-                                                display: '-webkit-box',
-                                                WebkitLineClamp: { xs: 2, sm: 2, md: 3 },
-                                                WebkitBoxOrient: 'vertical',
-                                                minHeight: { xs: 28, sm: 32, md: 48 },
-                                                fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' }
-                                            }}>
-                                                {product.description}
-                                            </Typography>
-
-                                            <Box sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between',
-                                                mb: { xs: 1, sm: 1.5 }
-                                            }}>
-                                                <Typography variant="subtitle1" color="primary" sx={{
-                                                    fontWeight: 'bold',
-                                                    fontSize: { xs: '0.85rem', sm: '0.95rem', md: '1rem' }
-                                                }}>
-                                                    From ${product.basePrice?.toFixed(2)}
-                                                </Typography>
-                                                {product.isCustomizable && (
-                                                    <Chip
-                                                        label="Custom"
-                                                        color="primary"
-                                                        size="small"
-                                                        sx={{
-                                                            fontSize: { xs: '0.65rem', sm: '0.75rem' },
-                                                            height: { xs: 20, sm: 24 }
-                                                        }}
-                                                    />
-                                                )}
-                                            </Box>
-
-                                            <Button
-                                                variant="contained"
-                                                fullWidth
-                                                size={isMobile ? "small" : "medium"}
-                                                sx={{
-                                                    fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' },
-                                                    py: { xs: 0.5, sm: 1, md: 1.5 }
-                                                }}
-                                            >
-                                                Customize
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
+                                    <ProductCard key={product.id} product={product} />
                                 ))}
                             </Box>
                         )}
@@ -669,14 +256,14 @@ export default function GalleryPage(): JSX.Element {
                             <Box sx={{
                                 display: 'flex',
                                 justifyContent: 'center',
-                                pb: { xs: 2, md: 4 }
+                                pb: { xs: 1.5, md: 3 }
                             }}>
                                 <Pagination
                                     count={totalPages}
                                     page={filters.pageNumber}
                                     onChange={(e, page) => handleFilterChange('pageNumber', page)}
                                     color="primary"
-                                    size={isMobile ? 'small' : 'large'}
+                                    size={isMobile ? 'small' : 'medium'}
                                     showFirstButton={!isMobile}
                                     showLastButton={!isMobile}
                                 />
@@ -686,35 +273,19 @@ export default function GalleryPage(): JSX.Element {
                 </Box>
             </Box>
 
-            <Drawer
-                anchor="left"
+            <MobileFilterDrawer
                 open={mobileDrawerOpen}
+                categories={categories}
+                categoriesLoading={categoriesLoading}
+                filters={filters}
+                expandedCategories={expandedCategories}
+                priceRange={priceRange}
                 onClose={() => setMobileDrawerOpen(false)}
-                ModalProps={{ keepMounted: true }}
-                PaperProps={{
-                    sx: {
-                        width: 280,
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }
-                }}
-            >
-                <Box sx={{ display: 'flex', alignItems: 'center', p: 2, borderBottom: 1, borderColor: 'divider', flexShrink: 0 }}>
-                    <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-                        Filters
-                    </Typography>
-                    <IconButton onClick={() => setMobileDrawerOpen(false)}>
-                        <CloseIcon />
-                    </IconButton>
-                </Box>
-                {categoriesLoading ? (
-                    <Box sx={{ p: 3, textAlign: 'center' }}>
-                        <CircularProgress size={40} />
-                    </Box>
-                ) : (
-                    <CategorySidebar />
-                )}
-            </Drawer>
+                onFilterChange={handleFilterChange}
+                onToggleCategoryExpansion={toggleCategoryExpansion}
+                onPriceRangeChange={handlePriceRangeChange}
+                onPriceRangeCommitted={handlePriceRangeCommitted}
+            />
         </Container>
     );
 }

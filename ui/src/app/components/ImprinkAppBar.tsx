@@ -215,7 +215,6 @@ export default function ImprinkAppBar() {
                             )}
                         </>
                     )}
-                    {/* Add theme toggle button to the right side of the toolbar on mobile */}
                     {isMobile && (
                         <Box sx={{ ml: 'auto' }}>
                             <ThemeToggleButton />

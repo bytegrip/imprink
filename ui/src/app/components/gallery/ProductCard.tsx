@@ -34,12 +34,24 @@ export default function ProductCard({ product }: ProductCardProps) {
     return (
         <Card
             sx={{
-                width: {
+                minWidth: {
                     xs: 'calc(50% - 6px)',
                     sm: 'calc(50% - 8px)',
-                    lg: 'calc(33.333% - 12px)'
+                    md: '280px',
+                    lg: '320px'
                 },
-                maxWidth: { xs: 'none', sm: 280, lg: 320 },
+                flex: {
+                    xs: '0 0 calc(50% - 6px)',
+                    sm: '0 0 calc(50% - 8px)', 
+                    md: '1 1 280px',
+                    lg: '1 1 320px'
+                },
+                maxWidth: {
+                    xs: 'calc(50% - 6px)',
+                    sm: 'calc(50% - 8px)',
+                    md: 'none',
+                    lg: 'none'
+                },
                 height: { xs: 240, sm: 300, lg: 340 },
                 display: 'flex',
                 flexDirection: 'column',
